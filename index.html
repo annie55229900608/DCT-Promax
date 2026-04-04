@@ -463,13 +463,13 @@
         </div>
     </div>
 
-    <div class="card" style="background:var(--dark2); border-color:var(--gold-deep);">
-        <div class="card-header" style="color:var(--gold-light);">培育皇家獎金</div>
-        <div class="nurture-input-wrap">
-            <span class="nurture-label-text">本筆培育獎金</span>
-            <input type="number" id="nurtureBonus" class="nurture-input" placeholder="手動輸入金額" oninput="updateCalc()">
+    <div class="card">
+        <div class="card-header">培育皇家獎金</div>
+        <div style="display:flex; align-items:center; gap:12px;">
+            <span style="font-size:0.82rem; color:var(--text-sub); flex:1;">本筆培育獎金</span>
+            <input type="number" id="nurtureBonus" class="custom-input" style="width:130px; text-align:right; color:var(--gold-deep); font-weight:700;" placeholder="輸入金額" oninput="updateCalc()">
         </div>
-        <div style="font-size:0.7rem; color:var(--gold-deep); margin-top:8px; letter-spacing:0.4px;">* 此獎金為培育收入，獨立計算、不影響成本計算</div>
+        <div style="font-size:0.68rem; color:var(--text-muted); margin-top:8px;">* 培育收入，獨立計算、不影響成本</div>
     </div>
 
     <div class="result-card">
@@ -639,20 +639,10 @@ const products = {
         L1:470, royal:430,
         to_L2:520, to_L3sup:560, to_L3ret:580, to_intern:660, to_consumer:880,
     },
-    "植萃纖酵素": {
+    "植萃纖酵宿": {
         cat:"纖體", unit:"盒",
         L1:510, royal:440,
         to_L2:580, to_L3sup:635, to_L3ret:660, to_intern:780, to_consumer:990,
-    },
-    "肽纖飲": {
-        cat:"纖體", unit:"盒",
-        L1:510, royal:440,
-        to_L2:580, to_L3sup:635, to_L3ret:660, to_intern:780, to_consumer:990,
-    },
-    "纖酵宿": {
-        cat:"纖體", unit:"盒",
-        L1:510, royal:440,
-        to_L2:635, to_L3sup:660, to_L3ret:690, to_intern:780, to_consumer:990,
     },
     // ── 美肌 ──
     "水光錠": {
@@ -705,6 +695,64 @@ const products = {
         cat:"保健", unit:"盒",
         L1:830, royal:740,
         to_L2:920, to_L3sup:1040, to_L3ret:1080, to_intern:1260, to_consumer:1680,
+    },
+    // ── 纖體 補充 ──
+    "肽纖飲（可可風味）": {
+        cat:"纖體", unit:"盒",
+        L1:510, royal:440,
+        to_L2:580, to_L3sup:635, to_L3ret:660, to_intern:780, to_consumer:990,
+    },
+    "肽纖飲（奶茶風味）": {
+        cat:"纖體", unit:"盒",
+        L1:510, royal:440,
+        to_L2:580, to_L3sup:635, to_L3ret:660, to_intern:780, to_consumer:990,
+    },
+    "爆纖錠體驗包": {
+        cat:"纖體", unit:"包",
+        L1:133, royal:120,
+        to_L2:146, to_L3sup:158, to_L3ret:164, to_intern:190, to_consumer:240,
+    },
+    "植萃纖酵宿體驗包": {
+        cat:"纖體", unit:"包",
+        L1:89, royal:75,
+        to_L2:103, to_L3sup:113, to_L3ret:117, to_intern:145, to_consumer:190,
+    },
+    // ── 美肌 補充 ──
+    "法樂蓬洗髮露": {
+        cat:"美肌", unit:"瓶",
+        L1:690, royal:620,
+        to_L2:770, to_L3sup:830, to_L3ret:860, to_intern:990, to_consumer:1280,
+    },
+    "法樂蓬洗髮露體驗包": {
+        cat:"美肌", unit:"包",
+        L1:14, royal:12,
+        to_L2:17, to_L3sup:20, to_L3ret:21, to_intern:24, to_consumer:30,
+    },
+    "法樂蓬養髮原液": {
+        cat:"美肌", unit:"瓶",
+        L1:570, royal:500,
+        to_L2:640, to_L3sup:695, to_L3ret:720, to_intern:840, to_consumer:1080,
+    },
+    "婕肌零體驗包": {
+        cat:"美肌", unit:"包",
+        L1:17, royal:15,
+        to_L2:20, to_L3sup:24, to_L3ret:25, to_intern:30, to_consumer:40,
+    },
+    // ── 保健 補充 ──
+    "葉黃素EX飲": {
+        cat:"保健", unit:"盒",
+        L1:570, royal:500,
+        to_L2:640, to_L3sup:695, to_L3ret:720, to_intern:840, to_consumer:1080,
+    },
+    "9國英雄TURBO極速錠": {
+        cat:"保健", unit:"盒",
+        L1:365, royal:320,
+        to_L2:410, to_L3sup:440, to_L3ret:455, to_intern:530, to_consumer:680,
+    },
+    "療肺草正冠茶": {
+        cat:"保健", unit:"盒",
+        L1:510, royal:440,
+        to_L2:580, to_L3sup:635, to_L3ret:660, to_intern:780, to_consumer:990,
     },
 };
 
