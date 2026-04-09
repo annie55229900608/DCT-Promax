@@ -556,10 +556,22 @@ function loadDashboards(){
 }
 
 // ══ History ══
+
+function getBuyerDisplayName(r){
+    const allBuyers=[...buyersByLevel.L1,...buyersByLevel.royal];
+    const found=allBuyers.find(b=>b.id===r.buyerType);
+    if(found) return found.name;
+    // Fallback for old records
+    if(r.type==='retail') return '消費者零售';
+    if(r.type==='team') return '團隊業績';
+    if(r.type==='nurture') return '培育獎金';
+    return r.type||'—';
+}
 function loadHistory(){const rs=getOrders();const set=new Set();rs.forEach(r=>{const d=new Date(r.orderDate||r.id);set.add(`${d.getFullYear()}-${d.getMonth()}`);});const keys=Array.from(set).sort((a,b)=>b.localeCompare(a));const sel=document.getElementById('monthSelect');const prev=sel.value||selectedHistoryKey;sel.innerHTML='<option value="">— 請選擇月份 —</option>';keys.forEach(k=>{const[y,mo]=k.split('-');const o=document.createElement('option');o.value=k;o.textContent=`${y}年${parseInt(mo)+1}月`;sel.appendChild(o);});if(keys.length){if(prev&&keys.includes(prev))sel.value=prev;else{sel.value=keys[0];selectedHistoryKey=keys[0];}}renderHistoryMonth();}
 function onMonthChange(){selectedHistoryKey=document.getElementById('monthSelect').value||null;renderHistoryMonth();}
-function renderHistoryMonth(){const c=document.getElementById('historyContent');if(!selectedHistoryKey){c.innerHTML='';return;}const[y,mo]=selectedHistoryKey.split('-');const rs=getOrders().filter(r=>{const d=new Date(r.orderDate||r.id);return d.getFullYear()==y&&d.getMonth()==mo;});if(!rs.length){c.innerHTML='<div class="card"><div style="font-size:.82rem;color:var(--text-muted);text-align:center;padding:8px">本月暫無訂單</div></div>';return;}let tR=0,tP=0,tC=0,tN=0,rP=0,tP2=0;rs.forEach(r=>{tR+=r.rev;tP+=r.profit;tC+=r.cost;tN+=(r.nurture||0);if(r.type==='retail')rP+=r.profit;else tP2+=r.profit;});let html=`<div class="card"><div class="card-header">${y}年${parseInt(mo)+1}月 · 共${rs.length}筆</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;"><div class="stat-box"><span class="stat-label">營業額</span><div class="stat-value">$${tR.toLocaleString()}</div></div><div class="stat-box"><span class="stat-label">成本</span><div class="stat-value muted">$${tC.toLocaleString()}</div></div><div class="stat-box gold-box"><span class="stat-label">淨利</span><div class="stat-value">$${tP.toLocaleString()}</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div style="background:#FFF8EC;border:1px solid #E8D5A0;border-radius:10px;padding:11px;text-align:center;"><div style="font-size:.67rem;color:#9A7830;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">零售淨利</div><div style="font-size:1rem;font-weight:700;color:#9A7830;">$${rP.toLocaleString()}</div></div><div style="background:#EEF3FD;border:1px solid #B5CFF4;border-radius:10px;padding:11px;text-align:center;"><div style="font-size:.67rem;color:#2A5BAD;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">團隊淨利</div><div style="font-size:1rem;font-weight:700;color:#2A5BAD;">$${tP2.toLocaleString()}</div></div></div>${tN>0?`<div style="background:#F0F9F0;border:1px solid #9DCFAC;border-radius:10px;padding:11px;text-align:center;margin-top:8px;"><div style="font-size:.67rem;color:#2E7D4A;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">培育獎金</div><div style="font-size:1rem;font-weight:700;color:#2E7D4A;">$${tN.toLocaleString()}</div></div>`:''}</div>`;rs.sort((a,b)=>new Date(b.orderDate||b.id)-new Date(a.orderDate||a.id)).forEach(r=>{const d=new Date(r.orderDate||r.id);const ds=`${d.getMonth()+1}/${d.getDate()} ${d.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})}`;const nTag=(r.nurture||0)>0?` <span style="color:#4BAE73;font-size:.72rem;">+培育$${r.nurture.toLocaleString()}</span>`:'';html+=`<div class="order-card"><div class="order-card-header"><div><div class="order-note">${r.note}</div><div style="font-size:.72rem;color:var(--text-muted);margin-top:2px">${ds}</div></div><div class="order-profit">+$${r.profit.toLocaleString()}${nTag}</div></div><div class="order-items">${r.items.map(i=>`${i.name} × ${i.qty}${i.unit}`).join(' · ')}</div><div class="order-actions"><button class="action-btn" style="color:var(--gold-deep);border-color:var(--gold-light);" onclick="openEditModal(${r.id})">✏ 編輯</button><button class="action-btn" onclick="deleteOrder(${r.id});loadHistory();">刪除</button></div></div>`;});c.innerHTML=html;}
-function onSearchInput(){const q=document.getElementById('historySearch').value.trim();const sr=document.getElementById('searchResults');const mc=document.getElementById('monthPickerCard');const hc=document.getElementById('historyContent');if(!q){sr.style.display='none';mc.style.display='';hc.style.display='';return;}mc.style.display='none';hc.style.display='none';sr.style.display='block';const all=getOrders().filter(r=>(r.note||'').toLowerCase().includes(q.toLowerCase()));if(!all.length){sr.innerHTML='<div style="text-align:center;font-size:.82rem;color:var(--text-muted);padding:12px">找不到符合的備註</div>';return;}all.sort((a,b)=>new Date(b.orderDate||b.id)-new Date(a.orderDate||a.id));let html=`<div style="font-size:.75rem;color:var(--text-muted);margin-bottom:10px">共找到 ${all.length} 筆含「${q}」的訂單</div>`;all.forEach(r=>{const d=new Date(r.orderDate||r.id);const ds=`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`;const nTag=(r.nurture||0)>0?` <span style="color:#4BAE73;">+培育$${r.nurture.toLocaleString()}</span>`:'';const regex=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');const hiNote=(r.note||'').replace(regex,'<mark style="background:#FFE566;border-radius:2px;padding:0 2px">$1</mark>');html+=`<div class="order-card"><div class="order-card-header"><div><div class="order-note">${hiNote}</div><div style="font-size:.72rem;color:var(--text-muted);margin-top:2px">${ds}</div></div><div class="order-profit">+$${r.profit.toLocaleString()}${nTag}</div></div><div class="order-items">${r.items.map(i=>`${i.name} × ${i.qty}${i.unit}`).join(' · ')}</div><div class="order-actions"><button class="action-btn" onclick="deleteOrder(${r.id});onSearchInput();">刪除</button></div></div>`;});sr.innerHTML=html;}
+function renderHistoryMonth(){const c=document.getElementById('historyContent');if(!selectedHistoryKey){c.innerHTML='';return;}const[y,mo]=selectedHistoryKey.split('-');const rs=getOrders().filter(r=>{const d=new Date(r.orderDate||r.id);return d.getFullYear()==y&&d.getMonth()==mo;});if(!rs.length){c.innerHTML='<div class="card"><div style="font-size:.82rem;color:var(--text-muted);text-align:center;padding:8px">本月暫無訂單</div></div>';return;}let tR=0,tP=0,tC=0,tN=0,rP=0,tP2=0;rs.forEach(r=>{tR+=r.rev;tP+=r.profit;tC+=r.cost;tN+=(r.nurture||0);if(r.type==='retail')rP+=r.profit;else tP2+=r.profit;});let html=`<div class="card"><div class="card-header">${y}年${parseInt(mo)+1}月 · 共${rs.length}筆</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;"><div class="stat-box"><span class="stat-label">營業額</span><div class="stat-value">$${tR.toLocaleString()}</div></div><div class="stat-box"><span class="stat-label">成本</span><div class="stat-value muted">$${tC.toLocaleString()}</div></div><div class="stat-box gold-box"><span class="stat-label">淨利</span><div class="stat-value">$${tP.toLocaleString()}</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;"><div style="background:#FFF8EC;border:1px solid #E8D5A0;border-radius:10px;padding:11px;text-align:center;"><div style="font-size:.67rem;color:#9A7830;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">零售淨利</div><div style="font-size:1rem;font-weight:700;color:#9A7830;">$${rP.toLocaleString()}</div></div><div style="background:#EEF3FD;border:1px solid #B5CFF4;border-radius:10px;padding:11px;text-align:center;"><div style="font-size:.67rem;color:#2A5BAD;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">團隊淨利</div><div style="font-size:1rem;font-weight:700;color:#2A5BAD;">$${tP2.toLocaleString()}</div></div><div style="background:#F0F9F0;border:1px solid #9DCFAC;border-radius:10px;padding:11px;text-align:center;"><div style="font-size:.67rem;color:#2E7D4A;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">培育獎金</div><div style="font-size:1rem;font-weight:700;color:#2E7D4A;">$${tN.toLocaleString()}</div></div></div></div>`;rs.sort((a,b)=>new Date(b.orderDate||b.id)-new Date(a.orderDate||a.id)).forEach(r=>{const d=new Date(r.orderDate||r.id);const ds=`${d.getMonth()+1}/${d.getDate()} ${d.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})}`;const nTag=(r.nurture||0)>0?` <span style="color:#4BAE73;font-size:.72rem;">+培育$${r.nurture.toLocaleString()}</span>`:'';const bName=getBuyerDisplayName(r);const bColor=r.type==='retail'?'#9A7830':'#2A5BAD';const bBg=r.type==='retail'?'rgba(201,168,76,.12)':'rgba(59,110,222,.08)';
+html+=`<div class="order-card"><div class="order-card-header"><div><div class="order-note">${r.note}</div><div style="font-size:.72rem;color:var(--text-muted);margin-top:2px">${ds} <span style="background:${bBg};color:${bColor};font-size:.68rem;padding:2px 7px;border-radius:5px;font-weight:600">${bName}</span></div></div><div style="text-align:right;"><div class="order-profit">+$${r.profit.toLocaleString()}</div>${(r.nurture||0)>0?`<div style="font-size:.72rem;color:#4BAE73;font-weight:600;">培育+$${r.nurture.toLocaleString()}</div>`:''}</div></div><div class="order-items">${r.items.map(i=>`${i.name} × ${i.qty}${i.unit}`).join(' · ')}</div><div class="order-actions"><button class="action-btn" style="color:var(--gold-deep);border-color:var(--gold-light);" onclick="openEditModal(${r.id})">✏ 編輯</button><button class="action-btn" onclick="deleteOrder(${r.id});loadHistory();">刪除</button></div></div>`;});c.innerHTML=html;}
+function onSearchInput(){const q=document.getElementById('historySearch').value.trim();const sr=document.getElementById('searchResults');const mc=document.getElementById('monthPickerCard');const hc=document.getElementById('historyContent');if(!q){sr.style.display='none';mc.style.display='';hc.style.display='';return;}mc.style.display='none';hc.style.display='none';sr.style.display='block';const all=getOrders().filter(r=>(r.note||'').toLowerCase().includes(q.toLowerCase()));if(!all.length){sr.innerHTML='<div style="text-align:center;font-size:.82rem;color:var(--text-muted);padding:12px">找不到符合的備註</div>';return;}all.sort((a,b)=>new Date(b.orderDate||b.id)-new Date(a.orderDate||a.id));let html=`<div style="font-size:.75rem;color:var(--text-muted);margin-bottom:10px">共找到 ${all.length} 筆含「${q}」的訂單</div>`;all.forEach(r=>{const d=new Date(r.orderDate||r.id);const ds=`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`;const nTag=(r.nurture||0)>0?` <span style="color:#4BAE73;">+培育$${r.nurture.toLocaleString()}</span>`:'';const bN=getBuyerDisplayName(r);const bCol=r.type==='retail'?'#9A7830':'#2A5BAD';const bBg2=r.type==='retail'?'rgba(201,168,76,.12)':'rgba(59,110,222,.08)';const regex=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');const hiNote=(r.note||'').replace(regex,'<mark style="background:#FFE566;border-radius:2px;padding:0 2px">$1</mark>');html+=`<div class="order-card"><div class="order-card-header"><div><div class="order-note">${hiNote}</div><div style="font-size:.72rem;color:var(--text-muted);margin-top:2px">${ds} <span style="background:${bBg2};color:${bCol};font-size:.68rem;padding:2px 7px;border-radius:5px;font-weight:600">${bN}</span></div></div><div style="text-align:right;"><div class="order-profit">+$${r.profit.toLocaleString()}</div>${(r.nurture||0)>0?`<div style="font-size:.72rem;color:#4BAE73;font-weight:600;">培育+$${r.nurture.toLocaleString()}</div>`:''}</div></div><div class="order-items">${r.items.map(i=>`${i.name} × ${i.qty}${i.unit}`).join(' · ')}</div><div class="order-actions"><button class="action-btn" style="color:var(--gold-deep);border-color:var(--gold-light);" onclick="openEditModal(${r.id})">✏ 編輯</button><button class="action-btn" onclick="deleteOrder(${r.id});onSearchInput();">刪除</button></div></div>`;});sr.innerHTML=html;}
 
 // ══ Chart ══
 function renderChart(){const rs=getOrders();const data={};rs.forEach(r=>{const d=new Date(r.orderDate||r.id);const k=`${d.getFullYear()}-${d.getMonth()}`;if(!data[k])data[k]={retail:0,team:0,nurture:0};if(r.type==='retail')data[k].retail+=r.profit;else if(r.type==='team')data[k].team+=r.profit;data[k].nurture+=(r.nurture||0);});const manD2=getManualData();Object.keys(manD2).forEach(k=>{if(!data[k])data[k]={retail:0,team:0,nurture:0};data[k].retail+=manD2[k].retail||0;data[k].team+=manD2[k].team||0;data[k].nurture+=manD2[k].nurture||0;});
@@ -671,34 +683,97 @@ function saveManualEntry(){
 }
 
 // ══ Edit Modal ══
-let editingId=null;
+let editingId=null, editCart={}, editSeller='L1', editBuyer='to_consumer';
+
 function openEditModal(id){
     const order=getOrders().find(r=>r.id===id);if(!order)return;
     editingId=id;
+    editCart={};order.items.forEach(i=>editCart[i.name]=i.qty);
+    editSeller=order.sellerLevel||'L1';
+    editBuyer=order.buyerType||'to_consumer';
+    // Validate editBuyer exists for this seller
+    if(!buyersByLevel[editSeller]?.find(b=>b.id===editBuyer)) editBuyer=buyersByLevel[editSeller][0].id;
     const d=new Date(order.orderDate||order.id);
     document.getElementById('editModalTitle').innerText=`編輯訂單 · ${d.getMonth()+1}/${d.getDate()}`;
-    const buyers=buyersByLevel[order.type==='retail'?'L1':'L1'];
-    document.getElementById('editModalContent').innerHTML=`
-        <div class="input-group"><span class="input-label">訂單日期</span><input type="datetime-local" id="editDate" class="custom-input" value="${toLocalISO(d)}" style="color:var(--gold-deep);"></div>
-        <div class="input-group"><span class="input-label">客戶備註</span><input type="text" id="editNote" class="custom-input" value="${order.note||''}"></div>
-        <div class="input-group"><span class="input-label">額外成本</span><input type="number" id="editExtra" class="custom-input cost-input" value="${order.cost - (order.itemsCost||order.cost)||0}"></div>
-        <div class="input-group"><span class="input-label" style="color:#4BAE73;">培育獎金</span><input type="number" id="editNurture" class="custom-input" value="${order.nurture||0}" style="border-left:3px solid #4BAE73;"></div>
-        <div style="background:var(--gold-pale);border-radius:12px;padding:12px;margin-bottom:14px;">
-            <div style="font-size:.72rem;font-weight:700;color:var(--gold-deep);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">購買品項（不可修改）</div>
-            <div style="font-size:.8rem;color:var(--text-sub);">${order.items.map(i=>`${i.name} × ${i.qty}${i.unit}`).join('<br>')}</div>
-        </div>
-        <div style="background:var(--panel);border-radius:12px;padding:14px;text-align:center;margin-bottom:14px;">
-            <div style="font-size:.7rem;color:var(--text-muted);margin-bottom:4px;">銷售淨利</div>
-            <div style="font-size:1.5rem;font-weight:700;color:var(--gold-deep);">$${order.profit.toLocaleString()}</div>
-        </div>
-        <div style="display:flex;gap:10px;margin-top:8px;">
-            <button onclick="closeEditModal()" style="flex:0 0 auto;padding:14px 18px;background:var(--panel);color:var(--text-sub);border:1px solid var(--border-soft);border-radius:12px;font-size:.9rem;cursor:pointer;font-family:inherit;">取消</button>
-            <button onclick="deleteOrder(${order.id});closeEditModal();loadHistory();" style="flex:0 0 auto;padding:14px 16px;background:transparent;color:#c55;border:1px solid #fcc;border-radius:12px;font-size:.9rem;cursor:pointer;font-family:inherit;">刪除</button>
-            <button onclick="saveEditOrder()" style="flex:1;padding:14px;background:var(--gold);color:var(--dark);border:none;border-radius:12px;font-weight:700;font-size:.9rem;cursor:pointer;font-family:inherit;">儲存</button>
-        </div>`;
+    renderEditModal(order,d);
     const modal=document.getElementById('editModal');modal.style.display='flex';
 }
-function closeEditModal(){const modal=document.getElementById('editModal');if(modal)modal.style.display='none';editingId=null;}
+
+function renderEditModal(order,d){
+    const buyerOpts=buyersByLevel[editSeller].map(b=>`<option value="${b.id}"${b.id===editBuyer?' selected':''}>${b.name}</option>`).join('');
+    // Product list
+    const allNames=[...new Set([...order.items.map(i=>i.name),...Object.keys(editCart)])];
+    let iH='';
+    allNames.forEach(n=>{
+        const q=editCart[n]||0;if(q===0&&!order.items.find(i=>i.name===n))return;
+        const cp=products[n]?products[n][editSeller]:0,sp=products[n]?getSellingPrice(n,editSeller,editBuyer):0;
+        iH+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--panel-dark);">
+            <div style="flex:1;min-width:0;"><div style="font-size:.83rem;font-weight:600;">${n}</div><div style="font-size:.7rem;color:var(--text-muted);margin-top:2px">售$${sp.toLocaleString()} 利$${(sp-cp).toLocaleString()}</div></div>
+            <div class="qty-control"><button class="btn-qty" onclick="changeEditQty('${n}',-1)">−</button><div id="eq_${n.replace(/[^a-zA-Z0-9]/g,'_')}" class="qty-input">${q}</div><button class="btn-qty" onclick="changeEditQty('${n}',1)">+</button></div>
+        </div>`;
+    });
+    // Product picker
+    const catOpts=['活動','纖體','美肌','保健'].map(cat=>{
+        const opts=Object.keys(products).filter(n=>products[n].cat===cat).map(n=>`<option value="${n}">${n} (售$${products[n][editBuyer]?.toLocaleString()||0})</option>`).join('');
+        return `<optgroup label="── ${cat} ──">${opts}</optgroup>`;
+    }).join('');
+    // Calc profit
+    let rev=0,cost=0;
+    allNames.forEach(n=>{const q=editCart[n]||0;if(products[n]&&q>0){rev+=getSellingPrice(n,editSeller,editBuyer)*q;cost+=products[n][editSeller]*q;}});
+    const extra=parseInt(document.getElementById('editExtra')?.value)||order.extraCost||0;
+    const nurture=parseInt(document.getElementById('editNurture')?.value)||order.nurture||0;
+    const profit=rev-cost-extra;
+    document.getElementById('editModalContent').innerHTML=`
+        <div class="input-group"><span class="input-label">訂單日期</span><input type="datetime-local" id="editDate" class="custom-input" value="${toLocalISO(d||new Date(order.orderDate||order.id))}" style="color:var(--gold-deep);"></div>
+        <div class="input-group"><span class="input-label">客戶備註</span><input type="text" id="editNote" class="custom-input" value="${order.note||''}"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+            <div class="input-group" style="margin-bottom:0;"><span class="input-label">額外成本</span><input type="number" id="editExtra" class="custom-input cost-input" value="${order.extraCost||0}" oninput="recalcEdit()"></div>
+            <div class="input-group" style="margin-bottom:0;"><span class="input-label" style="color:#4BAE73;">培育獎金</span><input type="number" id="editNurture" class="custom-input" value="${order.nurture||0}" style="border-left:3px solid #4BAE73;" oninput="recalcEdit()"></div>
+        </div>
+        <div class="input-group"><span class="input-label">銷售對象</span>
+            <div style="position:relative;"><select id="editBuyerSel" class="month-select" style="border-color:var(--gold-light);" onchange="editBuyer=this.value;renderEditModal(getOrders().find(r=>r.id===editingId));">${buyerOpts}</select><span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;">▾</span></div>
+        </div>
+        <div style="font-size:.75rem;font-weight:700;color:var(--gold-deep);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-shine));border-radius:1px;"></span>購買品項</div>
+        <div id="editItemList" style="margin-bottom:12px;">${iH||'<div style="font-size:.8rem;color:var(--text-muted);text-align:center;padding:8px;">無品項</div>'}</div>
+        <div style="background:var(--panel);border-radius:12px;padding:12px;margin-bottom:12px;">
+            <div style="font-size:.72rem;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">新增品項</div>
+            <div style="position:relative;margin-bottom:8px;"><select id="addProdSel" class="month-select" style="font-size:.82rem;"><option value="">— 選擇商品 —</option>${catOpts}</select><span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;">▾</span></div>
+            <button onclick="addEditProduct()" class="save-btn" style="margin-top:0;padding:11px;font-size:.82rem;">＋ 加入</button>
+        </div>
+        <div id="editProfitBox" style="background:var(--dark);border-radius:12px;padding:14px;text-align:center;margin-bottom:4px;">
+            <div style="font-size:.7rem;color:var(--gold-light);opacity:.7;margin-bottom:4px;">銷售淨利</div>
+            <div style="font-size:1.5rem;font-weight:700;background:linear-gradient(135deg,#C9A84C,#F0D882,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">$${profit.toLocaleString()}</div>
+            <div style="font-size:.7rem;color:var(--gold-light);opacity:.5;margin-top:4px;">售$${rev.toLocaleString()} 成本$${(cost+extra).toLocaleString()}</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:12px;">
+            <button onclick="closeEditModal()" style="flex:0 0 auto;padding:14px 18px;background:var(--panel);color:var(--text-sub);border:1px solid var(--border-soft);border-radius:12px;font-size:.9rem;cursor:pointer;font-family:inherit;">取消</button>
+            <button onclick="deleteOrder(${order.id});closeEditModal();loadHistory();" style="flex:0 0 auto;padding:14px 16px;background:transparent;color:#c55;border:1px solid #fcc;border-radius:12px;font-size:.9rem;cursor:pointer;font-family:inherit;">刪除</button>
+            <button onclick="saveEditOrder()" style="flex:1;padding:14px;background:linear-gradient(135deg,#9A7830,#C9A84C,#9A7830);color:var(--dark);border:none;border-radius:12px;font-weight:700;font-size:.9rem;cursor:pointer;font-family:inherit;">儲存</button>
+        </div>`;
+}
+
+function changeEditQty(n,d){
+    editCart[n]=Math.max(0,(editCart[n]||0)+d);
+    const el=document.getElementById('eq_'+n.replace(/[^a-zA-Z0-9]/g,'_'));
+    if(el)el.innerText=editCart[n];
+    recalcEdit();
+}
+function addEditProduct(){
+    const sel=document.getElementById('addProdSel');const n=sel.value;if(!n)return;
+    editCart[n]=(editCart[n]||0)+1;
+    const order=getOrders().find(r=>r.id===editingId);if(order)renderEditModal(order);
+}
+function recalcEdit(){
+    const order=getOrders().find(r=>r.id===editingId);if(!order)return;
+    const extra=parseInt(document.getElementById('editExtra')?.value)||0;
+    const nurture=parseInt(document.getElementById('editNurture')?.value)||0;
+    let rev=0,cost=0;
+    Object.keys(editCart).forEach(n=>{const q=editCart[n]||0;if(products[n]&&q>0){rev+=getSellingPrice(n,editSeller,editBuyer)*q;cost+=products[n][editSeller]*q;}});
+    const profit=rev-cost-extra;
+    const box=document.getElementById('editProfitBox');
+    if(box)box.innerHTML=`<div style="font-size:.7rem;color:var(--gold-light);opacity:.7;margin-bottom:4px;">銷售淨利</div><div style="font-size:1.5rem;font-weight:700;background:linear-gradient(135deg,#C9A84C,#F0D882,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">$${profit.toLocaleString()}</div><div style="font-size:.7rem;color:var(--gold-light);opacity:.5;margin-top:4px;">售$${rev.toLocaleString()} 成本$${(cost+extra).toLocaleString()}</div>`;
+}
+function closeEditModal(){const m=document.getElementById('editModal');if(m)m.style.display='none';editingId=null;editCart={};}
 function saveEditOrder(){
     if(!editingId)return;
     const rs=getOrders();const idx=rs.findIndex(r=>r.id===editingId);if(idx<0)return;
@@ -706,8 +781,13 @@ function saveEditOrder(){
     const dateVal=document.getElementById('editDate')?.value;
     const newTs=dateVal?new Date(dateVal).getTime():order.orderDate||order.id;
     const nd=new Date(newTs);
+    const extra=parseInt(document.getElementById('editExtra')?.value)||0;
     const nurture=parseInt(document.getElementById('editNurture')?.value)||0;
-    rs[idx]={...order,orderDate:newTs,year:nd.getFullYear(),month:nd.getMonth(),note:document.getElementById('editNote')?.value||'無備註',nurture};
+    let rev=0,cost=0,items=[];
+    Object.keys(editCart).forEach(n=>{const q=editCart[n]||0;if(q>0&&products[n]){items.push({name:n,qty:q,unit:products[n].unit,cat:products[n].cat});rev+=getSellingPrice(n,editSeller,editBuyer)*q;cost+=products[n][editSeller]*q;}});
+    if(!items.length){showToast('⚠ 請保留至少一項商品');return;}
+    const buyerDef=buyersByLevel[editSeller]?.find(b=>b.id===editBuyer);
+    rs[idx]={...order,orderDate:newTs,year:nd.getFullYear(),month:nd.getMonth(),sellerLevel:editSeller,buyerType:editBuyer,type:buyerDef?.t||order.type,note:document.getElementById('editNote')?.value||'無備註',extraCost:extra,cost:cost+extra,itemsCost:cost,rev,profit:rev-cost-extra,nurture,items};
     saveOrders(rs);closeEditModal();loadHistory();loadDashboards();renderChart();
     showToast('✓ 訂單已更新');
 }
