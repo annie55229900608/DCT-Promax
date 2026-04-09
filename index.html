@@ -296,13 +296,17 @@
             <span style="font-size:.75rem;font-weight:700;color:var(--gold-deep);">月份明細</span>
             <div style="position:relative;flex:1;"><select id="chartYearFilter" class="month-select" style="font-size:.82rem;padding:8px 28px 8px 10px;" onchange="renderChartTable()"><option value="">全部年份</option></select><span style="position:absolute;right:8px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;font-size:.8rem;">▾</span></div>
         </div>
-        <div id="chartTable"></div>
+        <div id="chartTable"><div style="text-align:center;padding:20px;"><div style="font-size:.82rem;color:var(--text-muted);">開單後數據會自動出現在這裡</div><div style="font-size:.75rem;color:var(--text-muted);margin-top:6px;opacity:.7;">也可以用編輯按鈕補登歷史業績</div></div></div>
     </div>
 </div>
 
 <!-- ════════ 曲線圖 ════════ -->
 <div id="tab-curve" class="container">
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;" id="curve-stats2"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;" id="curve-stats2">
+        <div style="background:var(--white);border:1px solid var(--border-soft);border-radius:12px;padding:12px;text-align:center;"><div style="font-size:.67rem;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;">年度粉絲總增加</div><div style="font-size:1.1rem;font-weight:700;color:var(--text-muted);">—</div></div>
+        <div style="background:var(--white);border:1px solid var(--border-soft);border-radius:12px;padding:12px;text-align:center;"><div style="font-size:.67rem;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;">TikTok 增加</div><div style="font-size:1.1rem;font-weight:700;color:var(--text-muted);">—</div></div>
+        <div style="background:var(--white);border:1px solid var(--border-soft);border-radius:12px;padding:12px;text-align:center;"><div style="font-size:.67rem;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;">IG 增加</div><div style="font-size:1.1rem;font-weight:700;color:var(--text-muted);">—</div></div>
+    </div>
     <div class="card">
         <div class="card-header">魔術曲線圖<span style="font-size:.72rem;font-weight:400;color:var(--text-muted);text-transform:none;margin-left:6px;">（TikTok + IG 月度粉絲長條圖）</span></div>
         <div id="curveProfileBadge" style="display:none;margin-bottom:10px;padding:8px 12px;background:var(--gold-pale);border-radius:10px;border:1px solid var(--gold-light);align-items:center;gap:8px;"><div style="width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0;"></div><span id="curveProfileText" style="font-size:.8rem;color:var(--gold-deep);font-weight:500;"></span></div>
@@ -354,18 +358,8 @@
 </div>
 
 <!-- ════════ 指南 ════════ -->
-<div id="tab-guide" class="container">
-    <div style="text-align:center;padding:8px 0 18px;"><div style="font-size:1.6rem;font-weight:700;color:var(--gold-deep);letter-spacing:2px;">使用指南 📖</div><div style="font-size:.8rem;color:var(--text-muted);margin-top:4px;">了解每個功能，讓業績數字說話 ✨</div></div>
-    <div class="card"><div class="card-header">開單 ── 每筆成交都要記錄</div><div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;margin-bottom:10px;">每次成交後立即開單，系統自動計算<strong style="color:var(--gold-deep);">淨利、成本、營業額</strong>與<strong style="color:#4BAE73;">培育獎金</strong>。</div><div style="background:var(--panel);border-radius:12px;padding:12px;font-size:.79rem;color:var(--text-sub);line-height:1.9;"><div>① <strong>選我的等級</strong> — 一級輔導 / 皇家輔導</div><div>② <strong>選銷售對象</strong> — 消費者/VIP/兩盒 → 零售；各輔導 → 團隊</div><div>③ <strong>選產品</strong> — 可多品混搭</div><div>④ <strong>培育獎金</strong> — 獨立輸入，不影響成本計算</div><div>⑤ <strong>儲存</strong> 🎉</div></div><div style="background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.76rem;color:var(--gold-deep);">💡 補登過去訂單可在日期欄位更改日期！</div></div>
-    <div class="card"><div class="card-header">今日 / 月報表</div><div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;">今日頁顯示當天三口袋收入。月報表顯示本月累計、上月對照、系列佔比、收入結構比例。</div></div>
-    <div class="card"><div class="card-header">歷史 ── 找回任何一筆訂單</div><div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;">按月份查看訂單，或用備註關鍵字搜尋客戶名稱。每筆可刪除。</div></div>
-    <div class="card"><div class="card-header">淨利圖 ── 讓上家一眼看到你的成長</div><div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;">自動生成月度條狀圖（金=零售 / 藍=團隊 / 綠=培育），左右滑動查看歷史趨勢。</div><div style="background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.76rem;color:var(--gold-deep);">💡 每個月覆盤都拿這張圖給上家看！</div></div>
-    <div class="card"><div class="card-header">魔術曲線圖 ── 粉絲成長是收入的前驅</div><div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;">記錄每月 TikTok 和 IG 粉絲數，生成堆疊長條圖，看社群成長曲線。每月月底記錄一次。</div><div style="background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.76rem;color:var(--gold-deep);">💡 粉絲成長 → 客源源源不絕！🚀</div></div>
-    <div class="card"><div class="card-header">設定 ── 個人化 ＆ 備份</div><div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;">填寫姓名/等級/上家讓圖表顯示個人標示。每月匯出備份存至雲端，換裝置時匯入還原。</div><div style="background:#FFF8EE;border:1px solid #FAE5B8;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.76rem;color:#B08840;">⚠️ 清除瀏覽器快取會刪除資料！請養成定期備份習慣。</div></div>
-    <div style="text-align:center;padding:20px 0;font-size:.8rem;color:var(--text-muted);line-height:1.9;">有任何問題隨時詢問上家 💕<br><span style="color:var(--gold-deep);font-weight:500;">妳可以的！加油 ✨</span></div>
-</div>
-
 <script>
+
 const products = {
     "活動A 益生菌超值組":{cat:"活動",unit:"組",L1:2070,royal:1860,to_L2:2310,to_L3sup:2490,to_L3ret:2580,to_intern:2970,to_consumer:3300,to_consumer_vip:3300,to_consumer_2:3300},
     "活動B 晶亮凍超值組":{cat:"活動",unit:"組",L1:1095,royal:960,to_L2:1230,to_L3sup:1320,to_L3ret:1365,to_intern:1590,to_consumer:1800,to_consumer_vip:1800,to_consumer_2:1800},
@@ -548,8 +542,13 @@ function renderHistoryMonth(){const c=document.getElementById('historyContent');
 function onSearchInput(){const q=document.getElementById('historySearch').value.trim();const sr=document.getElementById('searchResults');const mc=document.getElementById('monthPickerCard');const hc=document.getElementById('historyContent');if(!q){sr.style.display='none';mc.style.display='';hc.style.display='';return;}mc.style.display='none';hc.style.display='none';sr.style.display='block';const all=getOrders().filter(r=>(r.note||'').toLowerCase().includes(q.toLowerCase()));if(!all.length){sr.innerHTML='<div style="text-align:center;font-size:.82rem;color:var(--text-muted);padding:12px">找不到符合的備註</div>';return;}all.sort((a,b)=>new Date(b.orderDate||b.id)-new Date(a.orderDate||a.id));let html=`<div style="font-size:.75rem;color:var(--text-muted);margin-bottom:10px">共找到 ${all.length} 筆含「${q}」的訂單</div>`;all.forEach(r=>{const d=new Date(r.orderDate||r.id);const ds=`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`;const nTag=(r.nurture||0)>0?` <span style="color:#4BAE73;">+培育$${r.nurture.toLocaleString()}</span>`:'';const regex=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');const hiNote=(r.note||'').replace(regex,'<mark style="background:#FFE566;border-radius:2px;padding:0 2px">$1</mark>');html+=`<div class="order-card"><div class="order-card-header"><div><div class="order-note">${hiNote}</div><div style="font-size:.72rem;color:var(--text-muted);margin-top:2px">${ds}</div></div><div class="order-profit">+$${r.profit.toLocaleString()}${nTag}</div></div><div class="order-items">${r.items.map(i=>`${i.name} × ${i.qty}${i.unit}`).join(' · ')}</div><div class="order-actions"><button class="action-btn" onclick="deleteOrder(${r.id});onSearchInput();">刪除</button></div></div>`;});sr.innerHTML=html;}
 
 // ══ Chart ══
-function renderChart(){const rs=getOrders();const data={};rs.forEach(r=>{const d=new Date(r.orderDate||r.id);const k=`${d.getFullYear()}-${d.getMonth()}`;if(!data[k])data[k]={retail:0,team:0,nurture:0};if(r.type==='retail')data[k].retail+=r.profit;else if(r.type==='team')data[k].team+=r.profit;data[k].nurture+=(r.nurture||0);});const keys=Object.keys(data).sort();if(!keys.length){document.getElementById('chartWrap').innerHTML='<div style="text-align:center;padding:20px;font-size:.82rem;color:var(--text-muted)">尚無數據</div>';document.getElementById('chartTable').innerHTML='';return;}const VISIBLE=18;const _wrap=document.getElementById('chartWrap');const _cW=(_wrap&&_wrap.offsetWidth>100)?_wrap.offsetWidth:360;const BW=Math.max(22,Math.floor((_cW-54-20-10*VISIBLE)/VISIBLE));const G=10,PL=54,PR=20,PT=50,PB=50,CH=260;const aMax=Math.max(...keys.map(k=>data[k].retail+data[k].team+data[k].nurture),1);const nM=Math.ceil(aMax/10000)*10000||10000;const TW=PL+keys.length*(BW+G)+PR;const ys=v=>PT+(CH*(1-v/nM));let tks='';for(let i=0;i<=5;i++){const v=nM*i/5,y=ys(v);tks+=`<line x1="${PL-6}" y1="${y}" x2="${TW-PR}" y2="${y}" stroke="#EAE0C4" stroke-width="1"/><text x="${PL-9}" y="${y+4}" text-anchor="end" font-size="9" fill="#A89060">${v>=10000?Math.round(v/1000)+'k':v}</text>`;}let bars='';keys.forEach((k,i)=>{const d=data[k],[yr,mo]=k.split('-');const x=PL+i*(BW+G),tot=d.retail+d.team+d.nurture;const yt_pos=ys(d.retail+d.team),yn_pos=ys(d.retail),ytot=ys(tot);if(d.nurture>0)bars+=`<rect x="${x}" y="${ytot}" width="${BW}" height="${Math.max(1,CH*d.nurture/nM)}" fill="#4BAE73" rx="2"/>`;if(d.team>0)bars+=`<rect x="${x}" y="${yt_pos}" width="${BW}" height="${Math.max(1,CH*d.team/nM)}" fill="#5A7EC7" rx="2"/>`;if(d.retail>0)bars+=`<rect x="${x}" y="${yn_pos}" width="${BW}" height="${Math.max(1,CH*d.retail/nM)}" fill="#C9A84C" rx="2"/>`;if(tot>0)bars+=`<text x="${x+BW/2}" y="${ytot-6}" text-anchor="middle" font-size="9.5" font-weight="600" fill="#1A1510">${tot>=1000?(tot/1000).toFixed(1).replace(/.0$/,'')+'k':tot}</text>`;bars+=`<text x="${x+BW/2}" y="${PT+CH+16}" text-anchor="middle" font-size="9.5" fill="#6B5A38">${parseInt(mo)+1}月</text>`;bars+=`<text x="${x+BW/2}" y="${PT+CH+28}" text-anchor="middle" font-size="8" fill="#A89060">${yr}</text>`;});updateAllBadges();document.getElementById('chartWrap').innerHTML=`<svg width="${TW}" height="${PT+CH+PB}" xmlns="http://www.w3.org/2000/svg" style="display:block;">${tks}<line x1="${PL}" y1="${PT}" x2="${PL}" y2="${PT+CH}" stroke="#EAE0C4" stroke-width="1.5"/>${bars}</svg>`;const curY=new Date().getFullYear().toString();let yR=0,yT=0,yN=0;Object.keys(data).filter(k=>k.startsWith(curY)).forEach(k=>{yR+=data[k].retail;yT+=data[k].team;yN+=data[k].nurture;});const srEl=document.getElementById('chartStatRetail');const stEl=document.getElementById('chartStatTeam');const snEl=document.getElementById('chartStatNurture');if(srEl)srEl.innerText='$'+yR.toLocaleString();if(stEl)stEl.innerText='$'+yT.toLocaleString();if(snEl)snEl.innerText='$'+yN.toLocaleString();const sel=document.getElementById('chartYearFilter');const years=[...new Set(keys.map(k=>k.split('-')[0]))].sort((a,b)=>b-a);const cur=sel.value;sel.innerHTML='<option value="">全部年份</option>'+years.map(y=>`<option value="${y}"${y===cur?'selected':''}>${y}年</option>`).join('');renderChartTable();}
-function renderChartTable(){const sel=document.getElementById('chartYearFilter');const yr=sel?sel.value:'';const rs=getOrders();const data={};rs.forEach(r=>{const d=new Date(r.orderDate||r.id);const k=`${d.getFullYear()}-${d.getMonth()}`;if(!data[k])data[k]={retail:0,team:0,nurture:0};if(r.type==='retail')data[k].retail+=r.profit;else if(r.type==='team')data[k].team+=r.profit;data[k].nurture+=(r.nurture||0);});let th='';Object.keys(data).filter(k=>!yr||k.startsWith(yr)).sort((a,b)=>b.localeCompare(a)).forEach(k=>{const d=data[k],[y,mo]=k.split('-'),tot=d.retail+d.team+d.nurture;th+=`<div style="padding:10px 0;border-bottom:1px solid var(--panel-dark);"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:.82rem;font-weight:600;">${y}年${parseInt(mo)+1}月 <span style="color:var(--gold)">$${tot.toLocaleString()}</span></span></div><div style="display:flex;gap:12px;flex-wrap:wrap;"><span style="font-size:.75rem"><span style="display:inline-block;width:7px;height:7px;background:#C9A84C;border-radius:2px;margin-right:3px;vertical-align:middle"></span>零售 $${d.retail.toLocaleString()}</span><span style="font-size:.75rem"><span style="display:inline-block;width:7px;height:7px;background:#5A7EC7;border-radius:2px;margin-right:3px;vertical-align:middle"></span>團隊 $${d.team.toLocaleString()}</span>${d.nurture>0?`<span style="font-size:.75rem"><span style="display:inline-block;width:7px;height:7px;background:#4BAE73;border-radius:2px;margin-right:3px;vertical-align:middle"></span>培育 $${d.nurture.toLocaleString()}</span>`:''}</div></div>`;});document.getElementById('chartTable').innerHTML=th||'<span style="font-size:.81rem;color:var(--text-muted)">無數據</span>';}
+function renderChart(){const rs=getOrders();const data={};rs.forEach(r=>{const d=new Date(r.orderDate||r.id);const k=`${d.getFullYear()}-${d.getMonth()}`;if(!data[k])data[k]={retail:0,team:0,nurture:0};if(r.type==='retail')data[k].retail+=r.profit;else if(r.type==='team')data[k].team+=r.profit;data[k].nurture+=(r.nurture||0);});const manD2=getManualData();Object.keys(manD2).forEach(k=>{if(!data[k])data[k]={retail:0,team:0,nurture:0};data[k].retail+=manD2[k].retail||0;data[k].team+=manD2[k].team||0;data[k].nurture+=manD2[k].nurture||0;});
+const keys=Object.keys(data).sort();if(!keys.length){document.getElementById('chartWrap').innerHTML='<div style="text-align:center;padding:20px;font-size:.82rem;color:var(--text-muted)">尚無數據</div>';document.getElementById('chartTable').innerHTML='';return;}const VISIBLE=18;const _wrap=document.getElementById('chartWrap');const _cW=(_wrap&&_wrap.offsetWidth>100)?_wrap.offsetWidth:360;const BW=Math.max(22,Math.floor((_cW-54-20-10*VISIBLE)/VISIBLE));const G=10,PL=54,PR=20,PT=50,PB=50,CH=260;const aMax=Math.max(...keys.map(k=>data[k].retail+data[k].team+data[k].nurture),1);const nM=Math.ceil(aMax/10000)*10000||10000;const TW=PL+keys.length*(BW+G)+PR;const ys=v=>PT+(CH*(1-v/nM));let tks='';for(let i=0;i<=5;i++){const v=nM*i/5,y=ys(v);tks+=`<line x1="${PL-6}" y1="${y}" x2="${TW-PR}" y2="${y}" stroke="#EAE0C4" stroke-width="1"/><text x="${PL-9}" y="${y+4}" text-anchor="end" font-size="9" fill="#A89060">${v>=10000?Math.round(v/1000)+'k':v}</text>`;}let bars='';keys.forEach((k,i)=>{const d=data[k],[yr,mo]=k.split('-');const x=PL+i*(BW+G),tot=d.retail+d.team+d.nurture;const yt_pos=ys(d.retail+d.team),yn_pos=ys(d.retail),ytot=ys(tot);if(d.nurture>0)bars+=`<rect x="${x}" y="${ytot}" width="${BW}" height="${Math.max(1,CH*d.nurture/nM)}" fill="#4BAE73" rx="2"/>`;if(d.team>0)bars+=`<rect x="${x}" y="${yt_pos}" width="${BW}" height="${Math.max(1,CH*d.team/nM)}" fill="#5A7EC7" rx="2"/>`;if(d.retail>0)bars+=`<rect x="${x}" y="${yn_pos}" width="${BW}" height="${Math.max(1,CH*d.retail/nM)}" fill="#C9A84C" rx="2"/>`;if(tot>0)bars+=`<text x="${x+BW/2}" y="${ytot-6}" text-anchor="middle" font-size="9.5" font-weight="600" fill="#1A1510">${tot>=1000?(tot/1000).toFixed(1).replace(/.0$/,'')+'k':tot}</text>`;bars+=`<text x="${x+BW/2}" y="${PT+CH+16}" text-anchor="middle" font-size="9.5" fill="#6B5A38">${parseInt(mo)+1}月</text>`;bars+=`<text x="${x+BW/2}" y="${PT+CH+28}" text-anchor="middle" font-size="8" fill="#A89060">${yr}</text>`;});updateAllBadges();document.getElementById('chartWrap').innerHTML=`<svg width="${TW}" height="${PT+CH+PB}" xmlns="http://www.w3.org/2000/svg" style="display:block;">${tks}<line x1="${PL}" y1="${PT}" x2="${PL}" y2="${PT+CH}" stroke="#EAE0C4" stroke-width="1.5"/>${bars}</svg>`;const curY=new Date().getFullYear().toString();let yR=0,yT=0,yN=0;Object.keys(data).filter(k=>k.startsWith(curY)).forEach(k=>{yR+=data[k].retail;yT+=data[k].team;yN+=data[k].nurture;});const srEl=document.getElementById('chartStatRetail');const stEl=document.getElementById('chartStatTeam');const snEl=document.getElementById('chartStatNurture');if(srEl)srEl.innerText='$'+yR.toLocaleString();if(stEl)stEl.innerText='$'+yT.toLocaleString();if(snEl)snEl.innerText='$'+yN.toLocaleString();const sel=document.getElementById('chartYearFilter');const years=[...new Set(keys.map(k=>k.split('-')[0]))].sort((a,b)=>b-a);const cur=sel.value;sel.innerHTML='<option value="">全部年份</option>'+years.map(y=>`<option value="${y}"${y===cur?'selected':''}>${y}年</option>`).join('');renderChartTable();}
+function getManualData(){return JSON.parse(localStorage.getItem('dctpro_manual')||'{}');}
+function saveManualData(d){localStorage.setItem('dctpro_manual',JSON.stringify(d));}
+function toggleChartEdit(k){const el=document.getElementById('cedit_'+k.replace('-','_'));if(el)el.style.display=el.style.display==='none'?'block':'none';}
+function saveChartEdit(k){const eid='cedit_'+k.replace('-','_');const retail=parseInt(document.getElementById(eid+'_r')?.value)||0,team=parseInt(document.getElementById(eid+'_t')?.value)||0,nurture=parseInt(document.getElementById(eid+'_n')?.value)||0;const d=getManualData();if(retail===0&&team===0&&nurture===0)delete d[k];else d[k]={retail,team,nurture};saveManualData(d);renderChart();showToast('✓ 已儲存');toggleChartEdit(k);}
+function renderChartTable(){const sel=document.getElementById('chartYearFilter');const yr=sel?sel.value:'';const rs=getOrders();const manD=getManualData();const data={};rs.forEach(r=>{const d=new Date(r.orderDate||r.id);const k=`${d.getFullYear()}-${d.getMonth()}`;if(!data[k])data[k]={retail:0,team:0,nurture:0};if(r.type==='retail')data[k].retail+=r.profit;else if(r.type==='team')data[k].team+=r.profit;data[k].nurture+=(r.nurture||0);});Object.keys(manD).forEach(k=>{if(!data[k])data[k]={retail:0,team:0,nurture:0};data[k].retail+=manD[k].retail||0;data[k].team+=manD[k].team||0;data[k].nurture+=manD[k].nurture||0;});const allKeys=Object.keys(data).filter(k=>!yr||k.startsWith(yr)).sort((a,b)=>b.localeCompare(a));if(!allKeys.length){document.getElementById('chartTable').innerHTML='<div style="text-align:center;padding:20px;font-size:.82rem;color:var(--text-muted)">尚無數據，開單後自動出現；也可按年份篩選後點 ✏ 補登歷史</div>';return;}let th='';allKeys.forEach(k=>{const d=data[k],[y,mo]=k.split('-'),tot=d.retail+d.team+d.nurture;const eid='cedit_'+k.replace('-','_');const hasM=!!manD[k];th+=`<div style="padding:12px 0;border-bottom:1px solid var(--panel-dark);"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:.82rem;font-weight:600;">${y}年${parseInt(mo)+1}月 <span style="color:var(--gold)">$${tot.toLocaleString()}</span>${hasM?'<span style="font-size:.65rem;background:var(--gold-pale);color:var(--gold-deep);padding:2px 6px;border-radius:5px;margin-left:5px">含手動</span>':''}</span><button onclick="toggleChartEdit('${k}')" style="background:transparent;border:1px solid var(--border-soft);border-radius:6px;padding:3px 9px;font-size:.7rem;color:var(--gold-deep);cursor:pointer;font-family:inherit;">✏ 編輯</button></div><div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:4px;"><span style="font-size:.75rem"><span style="display:inline-block;width:7px;height:7px;background:#C9A84C;border-radius:2px;margin-right:3px;vertical-align:middle"></span>零售 $${d.retail.toLocaleString()}</span><span style="font-size:.75rem"><span style="display:inline-block;width:7px;height:7px;background:#5A7EC7;border-radius:2px;margin-right:3px;vertical-align:middle"></span>團隊 $${d.team.toLocaleString()}</span><span style="font-size:.75rem"><span style="display:inline-block;width:7px;height:7px;background:#4BAE73;border-radius:2px;margin-right:3px;vertical-align:middle"></span>培育 $${d.nurture.toLocaleString()}</span></div><div id="${eid}" style="display:none;background:var(--gold-pale);border-radius:10px;padding:12px;margin-top:8px;"><div style="font-size:.72rem;color:var(--gold-deep);margin-bottom:8px;font-weight:700;">手動補登 / 修改（不影響已有訂單）</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;"><div><div style="font-size:.68rem;color:#C9A84C;margin-bottom:4px;text-transform:uppercase;">零售淨利</div><input type="number" id="${eid}_r" class="custom-input" value="${manD[k]?.retail||0}" style="border-left:3px solid #C9A84C;padding:9px 10px;"></div><div><div style="font-size:.68rem;color:#5A7EC7;margin-bottom:4px;text-transform:uppercase;">團隊淨利</div><input type="number" id="${eid}_t" class="custom-input" value="${manD[k]?.team||0}" style="border-left:3px solid #5A7EC7;padding:9px 10px;"></div><div><div style="font-size:.68rem;color:#4BAE73;margin-bottom:4px;text-transform:uppercase;">培育獎金</div><input type="number" id="${eid}_n" class="custom-input" value="${manD[k]?.nurture||0}" style="border-left:3px solid #4BAE73;padding:9px 10px;"></div></div><div style="display:flex;gap:8px;"><button onclick="saveChartEdit('${k}')" style="flex:1;padding:10px;background:var(--gold);color:var(--dark);border:none;border-radius:8px;font-size:.82rem;cursor:pointer;font-family:inherit;font-weight:700;">儲存</button><button onclick="toggleChartEdit('${k}')" style="padding:10px 14px;background:var(--panel);color:var(--text-sub);border:1px solid var(--border-soft);border-radius:8px;font-size:.82rem;cursor:pointer;font-family:inherit;">取消</button></div></div></div>`;});document.getElementById('chartTable').innerHTML=th;}
 
 // ══ Curve ══
 const CURVE_KEY='dctpro_curve_v1';let curveDB=JSON.parse(localStorage.getItem(CURVE_KEY)||'{}');
@@ -620,13 +619,127 @@ function renderCurveCharts(){const keys=getCurveSortedKeys();if(!keys.length){co
 
 // ══ Settings ══
 function loadProfileUI(){const p=getProfile();document.getElementById('settingName').value=p.name||'';document.getElementById('settingLevel').value=p.level||'';document.getElementById('settingUpline').value=p.upline||'';updateProfileDisplay(p);updateAllBadges();}
-function saveProfile(){const p={name:document.getElementById('settingName').value,level:document.getElementById('settingLevel').value,upline:document.getElementById('settingUpline').value};saveProfileLS(p);updateProfileDisplay(p);updateAllBadges();}
+function saveProfile(){const p={name:document.getElementById('settingName').value,level:document.getElementById('settingLevel').value,upline:document.getElementById('settingUpline').value};saveProfileLS(p);updateProfileDisplay(p);updateAllBadges();const lm={'一級輔導':'L1','皇家輔導':'royal'};if(p.level&&lm[p.level]){currentSeller=lm[p.level];currentBuyer=buyersByLevel[currentSeller][0].id;initUI();updateCalc();}}
 function updateProfileDisplay(p){document.getElementById('profileNameDisplay').innerText=p.name||'—';document.getElementById('profileSubDisplay').innerText=[p.level,p.upline?'上家：'+p.upline:''].filter(Boolean).join(' ｜ ')||'尚未設定';}
 function updateAllBadges(){const p=getProfile();const parts=[p.name,p.level,p.upline?'上家：'+p.upline:''].filter(Boolean);const txt=parts.join(' · ');['chartProfileBadge','curveProfileBadge'].forEach(bid=>{const badge=document.getElementById(bid);const tEl=document.getElementById(bid.replace('Badge','Text'));if(badge&&tEl){if(parts.length){tEl.innerText=txt;badge.style.display='flex';}else badge.style.display='none';}});}
 
 // ══ Backup ══
 function exportAllData(){const payload={exportDate:new Date().toISOString().slice(0,10),orders:JSON.parse(localStorage.getItem('dctpro_v1')||'[]'),curveData:JSON.parse(localStorage.getItem(CURVE_KEY)||'{}'),profile:JSON.parse(localStorage.getItem('dctpro_profile')||'{}'),goal:localStorage.getItem('dctpro_goal')||'0'};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='DCT_Promax_備份_'+payload.exportDate+'.json';a.click();showToast('✓ 備份已匯出！請存至安全的地方');}
 function importAllData(e){const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{try{const data=JSON.parse(ev.target.result);if(Array.isArray(data.orders)){const ex=getOrders();const merged=[...ex];data.orders.forEach(o=>{if(!merged.find(e=>e.id===o.id))merged.push(o);});saveOrders(merged);}if(data.curveData){const ex=JSON.parse(localStorage.getItem(CURVE_KEY)||'{}');localStorage.setItem(CURVE_KEY,JSON.stringify({...data.curveData,...ex}));curveDB=JSON.parse(localStorage.getItem(CURVE_KEY));}if(data.profile&&!getProfile().name){saveProfileLS(data.profile);loadProfileUI();}if(data.goal)localStorage.setItem('dctpro_goal',data.goal);loadDashboards();renderChart();renderCurveCharts();showToast('✓ 還原成功！資料已合併匯入');}catch(err){showToast('⚠ 檔案格式錯誤，請確認是正確的備份檔');}};reader.readAsText(file);e.target.value='';}
+
 </script>
+<div id="tab-guide" class="container">
+    <div style="text-align:center;padding:8px 0 18px;">
+        <div style="font-size:1.6rem;font-weight:700;color:var(--gold-deep);letter-spacing:2px;">使用指南 📖</div>
+        <div style="font-size:.8rem;color:var(--text-muted);margin-top:4px;">了解每個功能，讓業績數字說話 ✨</div>
+    </div>
+
+    <div class="card"><div class="card-header">開單 ── 每筆成交都要記錄</div>
+        <div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;margin-bottom:10px;">
+            這是最重要的功能！每次成交後立即開單，系統自動計算<strong style="color:var(--gold-deep);">零售淨利、團隊淨利、培育獎金</strong>三口袋收入。
+        </div>
+        <div style="background:var(--panel);border-radius:12px;padding:12px;font-size:.79rem;color:var(--text-sub);line-height:2;">
+            <div>① <strong>選我的等級</strong> — 一級輔導 或 皇家輔導（在設定頁設好後會自動帶入）</div>
+            <div>② <strong>選銷售對象</strong> — 消費者零售/VIP/兩盒優惠 → 計入零售淨利；各輔導/三級/實習 → 計入團隊淨利</div>
+            <div>③ <strong>選產品</strong> — 點 ＋ 號加入購物車，可同時選多種產品混搭</div>
+            <div>④ <strong>填訂單日期</strong> — 補登過去的訂單只需更改日期，系統會自動歸入正確月份</div>
+            <div>⑤ <strong>填額外成本</strong> — 運費、手續費、包材等額外支出</div>
+            <div>⑥ <strong>填培育獎金</strong> — 每筆收到的培育/皇家獎金，獨立計算不影響商品成本</div>
+            <div>⑦ <strong>填客戶備註</strong> — 輸入客戶 IG 帳號或姓名，方便日後搜尋</div>
+            <div>⑧ <strong>按「儲存」</strong> — 完成！今日頁和月報表即時更新 🎉</div>
+        </div>
+        <div style="background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.76rem;color:var(--gold-deep);">
+            💡 <strong>重要：</strong>培育獎金可以不選產品，單獨輸入培育金額後直接儲存！
+        </div>
+    </div>
+
+    <div class="card"><div class="card-header">今日 ── 今天賺了多少一目瞭然</div>
+        <div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;margin-bottom:10px;">
+            顯示今天的<strong style="color:var(--gold-deep);">三口袋收入總覽</strong>：零售收入、團隊收入、培育獎金，以及今日總營業額、成本、銷售淨利。
+        </div>
+        <div style="background:var(--panel);border-radius:12px;padding:12px;font-size:.79rem;color:var(--text-sub);line-height:1.9;">
+            <div>🟡 <strong>今日總收入</strong> = 銷售淨利 ＋ 培育獎金（最終實拿）</div>
+            <div>🟡 <strong>銷售淨利</strong> = 營業額 − 進貨成本 − 額外成本</div>
+            <div>📋 每筆訂單按時間新到舊排列，可隨時刪除</div>
+        </div>
+    </div>
+
+    <div class="card"><div class="card-header">月報表 ── 掌握整個月的節奏</div>
+        <div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;margin-bottom:10px;">
+            月底覆盤最好用！設定目標收入 → 看達成率，三口袋分項統計，以及上月數據對照。
+        </div>
+        <div style="background:var(--panel);border-radius:12px;padding:12px;font-size:.79rem;color:var(--text-sub);line-height:1.9;">
+            <div>🎯 <strong>設定月目標</strong> — 輸入本月目標總收入，進度條即時顯示達成百分比</div>
+            <div>📊 <strong>收入結構比例</strong> — 零售/團隊/培育佔比，觀察哪個口袋最強</div>
+            <div>📦 <strong>系列業績佔比</strong> — 活動/纖體/美肌/保健哪類產品賣最多</div>
+            <div>🔥 <strong>本月熱銷排行</strong> — 按數量排列，知道哪個產品最受歡迎</div>
+            <div>📅 <strong>上月對照</strong> — 四格同時對比上月數字，感受成長</div>
+        </div>
+    </div>
+
+    <div class="card"><div class="card-header">歷史 ── 找回任何一筆訂單</div>
+        <div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;margin-bottom:10px;">
+            用月份選單瀏覽，或直接在搜尋框輸入<strong style="color:var(--gold-deep);">客戶名稱或 IG 帳號</strong>快速定位任一筆訂單。
+        </div>
+        <div style="background:var(--panel);border-radius:12px;padding:12px;font-size:.79rem;color:var(--text-sub);line-height:1.9;">
+            <div>🔍 <strong>搜尋備註</strong> — 輸入客戶 IG 或姓名，自動高亮顯示關鍵字</div>
+            <div>🗓️ <strong>月份選單</strong> — 選擇月份後顯示當月所有訂單，並有三口袋統計</div>
+            <div>🗑️ <strong>刪除訂單</strong> — 每筆訂單都可單獨刪除，圖表與統計即時更新</div>
+        </div>
+    </div>
+
+    <div class="card"><div class="card-header">淨利圖 ── 讓上家一眼看到你的成長</div>
+        <div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;margin-bottom:10px;">
+            自動生成<strong style="color:var(--gold-deep);">三口袋月度條狀圖</strong>（金色=零售 / 藍色=團隊 / 綠色=培育），左右滑動查看歷史趨勢，每個月一根柱子。
+        </div>
+        <div style="background:var(--panel);border-radius:12px;padding:12px;font-size:.79rem;color:var(--text-sub);line-height:1.9;">
+            <div>📊 上方三格顯示<strong>今年度</strong>零售淨利、團隊淨利、培育獎金累計</div>
+            <div>✏️ <strong>月份明細可手動編輯</strong> — 點「✏ 編輯」可補登加入 App 前的歷史業績</div>
+            <div>🔍 <strong>年份篩選</strong> — 用選單切換查看指定年度的每月數字</div>
+            <div>🔄 補登的手動數字和系統訂單數字會自動合併顯示</div>
+        </div>
+        <div style="background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.76rem;color:var(--gold-deep);">
+            💡 每個月覆盤都拿這張圖給上家看，展現你的努力與成長！
+        </div>
+    </div>
+
+    <div class="card"><div class="card-header">魔術曲線圖 ── 粉絲成長是收入的前驅</div>
+        <div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;margin-bottom:10px;">
+            記錄每個月的 <strong style="color:#5BC8C0;">TikTok</strong> 和 <strong style="color:#D4607A;">IG</strong> 粉絲數，自動生成堆疊長條圖，清楚看到社群成長軌跡。
+        </div>
+        <div style="background:var(--panel);border-radius:12px;padding:12px;font-size:.79rem;color:var(--text-sub);line-height:1.9;">
+            <div>① 每個月月底，記錄當月最新的<strong>總粉絲數</strong>（不是增加量，是當前總數）</div>
+            <div>② 選年份 → 選月份 → 填 TikTok 粉絲數 → 填 IG 粉絲數 → 按「新增」</div>
+            <div>③ 圖表自動計算每月增減，綠色(↑)代表成長，紅色(↓)代表下降</div>
+            <div>④ 上方三格顯示<strong>今年度</strong>和去年同期相比的粉絲增加數</div>
+            <div>⑤ 月份資料可以隨時點「✏ 編輯」修改，或新增過去漏填的月份</div>
+        </div>
+        <div style="background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.76rem;color:var(--gold-deep);">
+            💡 粉絲數持續增長，代表你的影響力在擴大，客源才會源源不絕！🚀
+        </div>
+    </div>
+
+    <div class="card"><div class="card-header">設定 ── 個人化 ＆ 保護資料</div>
+        <div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;margin-bottom:10px;">
+            填寫個人資料讓圖表顯示你的名字，並透過備份功能保護所有數據不遺失。
+        </div>
+        <div style="background:var(--panel);border-radius:12px;padding:12px;font-size:.79rem;color:var(--text-sub);line-height:1.9;">
+            <div>👤 <strong>姓名 / 等級 / 上家</strong> — 填完後自動顯示在淨利圖和曲線圖上方，方便截圖給上家</div>
+            <div>⚡ <strong>等級自動同步</strong> — 設定等級後，開單頁會自動切換到對應的進貨等級</div>
+            <div>📥 <strong>每月匯出備份</strong> — 按「匯出備份」下載 JSON 檔，存到 iCloud / Google Drive</div>
+            <div>📤 <strong>換裝置時匯入</strong> — 換手機或重新安裝後，匯入備份檔即可完整還原所有數據</div>
+            <div>🔀 <strong>匯入只合併不覆蓋</strong> — 舊資料和新資料會自動合併，不會互相覆蓋</div>
+        </div>
+        <div style="background:#FFF8EE;border:1px solid #FAE5B8;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.76rem;color:#B08840;">
+            ⚠️ <strong>重要提醒：</strong>清除瀏覽器快取或重裝瀏覽器<strong>會刪除全部資料</strong>！請養成每月備份的習慣，備份檔請存到手機相簿或雲端硬碟。
+        </div>
+    </div>
+
+    <div style="text-align:center;padding:24px 0 8px;font-size:.8rem;color:var(--text-muted);line-height:2;">
+        有任何問題隨時詢問上家 💕<br>
+        <span style="color:var(--gold-deep);font-weight:700;font-size:.88rem;">妳可以的！加油 ✨</span>
+    </div>
+</div>
+
 </body>
 </html>
