@@ -458,12 +458,15 @@ function showToast(msg,col){let t=document.getElementById('toast');if(!t){t=docu
 
 function getSellingPrice(n,seller,buyer){const p=products[n];if(seller==='royal'&&buyer==='L1')return p.L1;if(buyer==='to_consumer_vip')return p.to_consumer_vip??p.to_consumer;if(buyer==='to_consumer_2')return p.to_consumer_2??p.to_consumer;return p[buyer];}
 
+function goTop(){window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}
 window.onload=()=>{
     document.getElementById('dailyQuote').innerText=quotes[Math.floor(Math.random()*quotes.length)];
     document.getElementById('orderDate').value=toLocalISO(new Date());
     initUI();loadDashboards();loadProfileUI();initCurveBasic();updateAllBadges();initManualYearSelect();
-    // Always start on 開單 tab at top
-    window.scrollTo({top:0,behavior:'instant'});
+    // Always start on 開單 tab at top - multiple attempts
+    goTop();
+    setTimeout(goTop,50);
+    setTimeout(goTop,200);
     document.querySelectorAll('.container').forEach(c=>c.classList.remove('active'));
     document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
     document.getElementById('tab-new').classList.add('active');
@@ -525,7 +528,7 @@ function switchTab(id,el){
     document.querySelectorAll('.container').forEach(c=>c.classList.remove('active'));
     document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
     document.getElementById(id).classList.add('active');if(el)el.classList.add('active');
-    window.scrollTo({top:0,behavior:'instant'});
+    goTop(); setTimeout(goTop,50);
     if(id==='tab-daily'||id==='tab-monthly')loadDashboards();
     if(id==='tab-history')loadHistory();
     if(id==='tab-chart'){renderChart();initManualYearSelect();}
