@@ -20,13 +20,13 @@
         }
         *{box-sizing:border-box;margin:0;padding:0;}
         body{font-family:'Noto Sans TC',"PingFang TC",sans-serif;background:var(--panel);color:var(--text-main);padding-bottom:100px;letter-spacing:.3px;}
-        header{background:var(--dark);padding:20px 20px 16px;position:sticky;top:0;z-index:100;text-align:center;border-bottom:1px solid var(--gold-deep);}
+        header{background:var(--dark);padding:20px 20px 16px;text-align:center;border-bottom:1px solid var(--gold-deep);}
         .header-crown{font-size:1rem;letter-spacing:6px;color:var(--gold-light);margin-bottom:4px;opacity:.7;}
         .header-title{font-size:2rem;font-weight:700;letter-spacing:4px;background:linear-gradient(135deg,#C9A84C 0%,#F0D882 45%,#C9A84C 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
         .header-sub{font-size:.68rem;color:var(--gold-light);opacity:.6;letter-spacing:2px;margin-top:3px;}
         .quote-bar{background:var(--dark2);padding:10px 20px;font-size:.78rem;color:var(--gold-light);text-align:center;letter-spacing:.8px;border-bottom:1px solid var(--dark3);font-style:italic;min-height:38px;display:flex;align-items:center;justify-content:center;opacity:.9;}
         /* ── Nav: scrollable for 8 tabs ── */
-        .nav-tabs{display:flex;background:var(--dark);border-bottom:2px solid var(--gold-deep);overflow-x:auto;-webkit-overflow-scrolling:touch;}
+        .nav-tabs{display:flex;background:var(--dark);border-bottom:2px solid var(--gold-deep);position:sticky;top:0;z-index:99;overflow-x:auto;-webkit-overflow-scrolling:touch;}
         .nav-tabs::-webkit-scrollbar{display:none;}
         .nav-tab{flex:0 0 auto;text-align:center;padding:13px 14px;font-size:.76rem;font-weight:600;color:var(--text-muted);cursor:pointer;letter-spacing:.8px;transition:all .2s;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;}
         .nav-tab.active{color:var(--gold-shine);border-bottom-color:var(--gold);}
