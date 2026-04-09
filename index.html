@@ -141,22 +141,22 @@
         .order-actions{display:flex;gap:6px;margin-top:10px;}
         .action-btn{background:transparent;color:var(--text-muted);border:1px solid var(--border-soft);padding:4px 10px;border-radius:6px;font-size:.69rem;cursor:pointer;font-family:inherit;}
     
-/* ── Sparkles ── */
-@keyframes sparkle-float {
-    0%   { opacity:0; transform:scale(0) rotate(0deg); }
-    20%  { opacity:1; transform:scale(1) rotate(15deg); }
-    80%  { opacity:.8; transform:scale(1.1) rotate(-10deg); }
-    100% { opacity:0; transform:scale(0) rotate(20deg); }
+/* ── Static star background ── */
+header,.result-card,.stat-hero-box,.goal-card{position:relative;}
+header::before,.result-card::after,.stat-hero-box::after,.goal-card::after{
+    content:'';
+    position:absolute;inset:0;pointer-events:none;
+    background-image:
+        radial-gradient(circle 1.5px at 8% 25%,rgba(240,216,130,.55) 0%,transparent 100%),
+        radial-gradient(circle 1px at 15% 70%,rgba(240,216,130,.4) 0%,transparent 100%),
+        radial-gradient(circle 2px at 5% 50%,rgba(240,216,130,.35) 0%,transparent 100%),
+        radial-gradient(circle 1px at 92% 20%,rgba(240,216,130,.5) 0%,transparent 100%),
+        radial-gradient(circle 1.5px at 88% 65%,rgba(240,216,130,.45) 0%,transparent 100%),
+        radial-gradient(circle 1px at 95% 45%,rgba(240,216,130,.4) 0%,transparent 100%),
+        radial-gradient(circle 2px at 12% 88%,rgba(240,216,130,.3) 0%,transparent 100%),
+        radial-gradient(circle 1px at 90% 85%,rgba(240,216,130,.35) 0%,transparent 100%);
+    border-radius:inherit;
 }
-.sparkle {
-    position:absolute; pointer-events:none;
-    animation: sparkle-float linear infinite;
-    font-style:normal;
-    user-select:none;
-}
-header { position:relative; overflow:hidden; }
-.quote-bar { position:relative; overflow:hidden; }
-.result-card { overflow:hidden; }
 </style>
 </head>
 <body>
@@ -208,6 +208,7 @@ header { position:relative; overflow:hidden; }
     <div class="nav-tab" onclick="switchTab('tab-chart',this)">淨利圖</div>
     <div class="nav-tab" onclick="switchTab('tab-curve',this)">曲線圖</div>
     <div class="nav-tab" onclick="switchTab('tab-settings',this)">設定</div>
+    <div class="nav-tab" onclick="switchTab('tab-review',this)">復盤</div>
     <div class="nav-tab" onclick="switchTab('tab-guide',this)">指南</div>
 </div>
 
@@ -435,6 +436,125 @@ header { position:relative; overflow:hidden; }
     </div>
 </div>
 
+<!-- ════════ 復盤 ════════ -->
+<div id="tab-review" class="container">
+
+    <div style="background:var(--dark);border-radius:16px;padding:20px;margin-bottom:14px;text-align:center;position:relative;overflow:hidden;border:1px solid var(--gold-deep);">
+        <div style="position:absolute;top:-30px;right:-20px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.12),transparent 70%);pointer-events:none;"></div>
+        <div style="font-size:.7rem;letter-spacing:3px;color:var(--gold-light);opacity:.7;margin-bottom:6px;">MONTHLY REVIEW</div>
+        <div id="reviewMonthTitle" style="font-size:1.4rem;font-weight:700;background:linear-gradient(135deg,#C9A84C,#F0D882,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">— 月復盤</div>
+        <div style="font-size:.78rem;color:var(--gold-light);opacity:.6;margin-top:8px;line-height:1.7;">每個月的覆盤＆檢核都會讓我們更清楚自己的成長進步<br>儘快填完傳給上家唷！</div>
+        <div style="font-size:.72rem;color:var(--gold);opacity:.8;margin-top:8px;font-style:italic;">「每個月完成覆盤者，通常是成長最快的」</div>
+    </div>
+
+    <!-- Month picker -->
+    <div class="card" style="margin-bottom:12px;">
+        <div class="card-header">選擇復盤月份</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+            <div style="position:relative;flex:1;"><select id="reviewYear" class="month-select" onchange="loadReviewData()" style="display:none;"></select><span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;">▾</span></div>
+            <div style="position:relative;flex:1;"><select id="reviewMonth" class="month-select" onchange="loadReviewData()">
+                <option value="0">1月</option><option value="1">2月</option><option value="2">3月</option><option value="3">4月</option><option value="4">5月</option><option value="5">6月</option><option value="6">7月</option><option value="7">8月</option><option value="8">9月</option><option value="9">10月</option><option value="10">11月</option><option value="11">12月</option>
+            </select><span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;">▾</span></div>
+        </div>
+        <div id="reviewAutoNote" style="font-size:.72rem;color:var(--gold-deep);margin-top:8px;padding:8px 10px;background:var(--gold-pale);border-radius:8px;display:none;"></div>
+    </div>
+
+    <!-- 活動庫存 -->
+    <div class="card">
+        <div class="card-header">🪐 活動庫存</div>
+        <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:10px;">益生菌 / 果凍各填叫貨、銷售、剩餘</div>
+        <div style="font-size:.8rem;font-weight:600;color:var(--gold-deep);margin-bottom:8px;">🪐 益生菌</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+            <div class="input-group" style="margin-bottom:0"><span class="input-label">叫貨</span><input type="number" id="rv_pro_order" class="custom-input" placeholder="0組"></div>
+            <div class="input-group" style="margin-bottom:0"><span class="input-label">銷售</span><input type="number" id="rv_pro_sell" class="custom-input" placeholder="0組"></div>
+            <div class="input-group" style="margin-bottom:0"><span class="input-label">剩餘</span><input type="number" id="rv_pro_left" class="custom-input" placeholder="0組"></div>
+        </div>
+        <div style="font-size:.8rem;font-weight:600;color:var(--gold-deep);margin-bottom:8px;">🪐 果凍</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+            <div class="input-group" style="margin-bottom:0"><span class="input-label">叫貨</span><input type="number" id="rv_jelly_order" class="custom-input" placeholder="0組"></div>
+            <div class="input-group" style="margin-bottom:0"><span class="input-label">銷售</span><input type="number" id="rv_jelly_sell" class="custom-input" placeholder="0組"></div>
+            <div class="input-group" style="margin-bottom:0"><span class="input-label">剩餘</span><input type="number" id="rv_jelly_left" class="custom-input" placeholder="0組"></div>
+        </div>
+    </div>
+
+    <!-- 業績數字 (auto-fill) -->
+    <div class="card">
+        <div class="card-header">🔹 業績數字</div>
+        <div style="font-size:.72rem;color:var(--gold-deep);background:var(--gold-pale);padding:8px 10px;border-radius:8px;margin-bottom:12px;">✦ 以下數字已從 App 自動帶入，可手動修正</div>
+        <div class="input-group"><span class="input-label">原設定目標淨利</span><input type="number" id="rv_target" class="custom-input" placeholder="$"></div>
+        <div class="input-group"><span class="input-label">🟡 零售淨利</span><input type="number" id="rv_retail" class="custom-input" style="border-left:3px solid #C9A84C;" placeholder="$"></div>
+        <div class="input-group"><span class="input-label">🔵 團隊淨利（無加盟商填0）</span><input type="number" id="rv_team" class="custom-input" style="border-left:3px solid #5A7EC7;" placeholder="$"></div>
+        <div class="input-group"><span class="input-label">🟢 培育獎金</span><input type="number" id="rv_nurture" class="custom-input" style="border-left:3px solid #4BAE73;" placeholder="$"></div>
+        <div style="background:var(--dark2);border:1px solid var(--gold-deep);border-radius:12px;padding:14px;text-align:center;margin-bottom:12px;">
+            <div style="font-size:.7rem;color:var(--gold-light);opacity:.7;margin-bottom:4px;">本月總淨利</div>
+            <div id="rv_total_display" style="font-size:1.6rem;font-weight:700;background:linear-gradient(135deg,#C9A84C,#F0D882,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">$0</div>
+        </div>
+        <div class="input-group"><span class="input-label">本月給自己打幾分？（1-10）</span><input type="number" id="rv_score" class="custom-input" placeholder="幾分" min="1" max="10"></div>
+        <div class="input-group" style="margin-bottom:0"><span class="input-label">為什麼？</span><textarea id="rv_score_reason" class="custom-input" placeholder="說說你的理由…" rows="2" style="resize:none;"></textarea></div>
+    </div>
+
+    <!-- 社群粉絲 -->
+    <div class="card">
+        <div class="card-header">📱 社群粉絲</div>
+        <div style="font-size:.72rem;color:var(--gold-deep);background:var(--gold-pale);padding:8px 10px;border-radius:8px;margin-bottom:12px;">✦ 填入本月底各平台最新粉絲數</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+            <div class="input-group" style="margin-bottom:0"><span class="input-label" style="color:#5BC8C0;">TikTok 粉絲數</span><input type="number" id="rv_tiktok" class="custom-input" style="border-left:3px solid #5BC8C0;" placeholder="0"></div>
+            <div class="input-group" style="margin-bottom:0"><span class="input-label" style="color:#D4607A;">IG 粉絲數</span><input type="number" id="rv_ig" class="custom-input" style="border-left:3px solid #D4607A;" placeholder="0"></div>
+        </div>
+        <div class="input-group"><span class="input-label">本月粉絲總成長數（各平台加總）</span><input type="number" id="rv_fans_growth" class="custom-input" placeholder="＋？"></div>
+        <div class="input-group"><span class="input-label">本月發布 Reels 數量</span><input type="number" id="rv_reels" class="custom-input" placeholder="幾則"></div>
+        <div class="input-group" style="margin-bottom:0"><span class="input-label">目標每天限動篇數</span><input type="number" id="rv_story" class="custom-input" placeholder="篇"></div>
+    </div>
+
+    <!-- 團隊 -->
+    <div class="card">
+        <div class="card-header">👥 團隊狀況</div>
+        <div class="input-group"><span class="input-label">此次活動新增加盟人數（填級別）</span><textarea id="rv_new_member" class="custom-input" placeholder="例：三級零售1人、實習2人" rows="2" style="resize:none;"></textarea></div>
+        <div class="input-group"><span class="input-label">目前直屬人數</span><input type="number" id="rv_direct" class="custom-input" placeholder="？人"></div>
+        <div class="input-group" style="margin-bottom:0"><span class="input-label">目前間系人數</span><input type="number" id="rv_indirect" class="custom-input" placeholder="？人"></div>
+    </div>
+
+    <!-- 反思 -->
+    <div class="card">
+        <div class="card-header">🔥 本月反思</div>
+        <div class="input-group"><span class="input-label">對比上月復盤，發現了什麼？</span><textarea id="rv_compare" class="custom-input" placeholder="和上個月比較，有什麼變化或發現？" rows="3" style="resize:none;"></textarea></div>
+        <div class="input-group"><span class="input-label">本月最大突破是？</span><textarea id="rv_breakthrough" class="custom-input" placeholder="說說你這個月最驕傲的事…" rows="2" style="resize:none;"></textarea></div>
+        <div class="input-group"><span class="input-label">哪裡可以做得更好？</span><textarea id="rv_improve" class="custom-input" placeholder="誠實面對自己，哪些地方需要調整？" rows="2" style="resize:none;"></textarea></div>
+    </div>
+
+    <!-- 下月目標 -->
+    <div class="card">
+        <div class="card-header">🔥 下月目標</div>
+        <div class="input-group"><span class="input-label">下個月淨利目標</span><input type="number" id="rv_next_profit" class="custom-input" placeholder="$"></div>
+        <div class="input-group"><span class="input-label">目標招商人數</span><input type="number" id="rv_next_recruit" class="custom-input" placeholder="？人"></div>
+        <div class="input-group"><span class="input-label">目標 Reels 則數</span><input type="number" id="rv_next_reels" class="custom-input" placeholder="幾則"></div>
+        <div class="input-group"><span class="input-label">下月要做到哪些事？</span><textarea id="rv_next_todo" class="custom-input" placeholder="列出最重要的 3 件事…" rows="3" style="resize:none;"></textarea></div>
+        <div class="input-group"><span class="input-label">下月要避免什麼事？</span><textarea id="rv_next_avoid" class="custom-input" placeholder="哪些壞習慣要戒掉？" rows="2" style="resize:none;"></textarea></div>
+        <div class="input-group"><span class="input-label">下個月要挑戰的目標？</span><textarea id="rv_next_challenge" class="custom-input" placeholder="更大的夢想是什麼？" rows="2" style="resize:none;"></textarea></div>
+    </div>
+
+    <!-- 給自己 + 問題 -->
+    <div class="card">
+        <div class="card-header">🌸 給自己</div>
+        <div class="input-group"><span class="input-label">給自己的話</span><textarea id="rv_self_note" class="custom-input" placeholder="親愛的自己，這個月…" rows="3" style="resize:none;"></textarea></div>
+        <div class="input-group" style="margin-bottom:0"><span class="input-label">提出一個問題（一定要問！）</span><textarea id="rv_question" class="custom-input" placeholder="有什麼想問上家的？" rows="2" style="resize:none;"></textarea></div>
+    </div>
+
+    <!-- Reminder -->
+    <div style="background:linear-gradient(135deg,#F0F9F0,#E8F5EC);border:1px solid #9DCFAC;border-radius:14px;padding:16px;margin-bottom:14px;text-align:center;">
+        <div style="font-size:.85rem;font-weight:700;color:#2E7D4A;margin-bottom:6px;">🌸 記得更新以下資料</div>
+        <div style="font-size:.78rem;color:#2E7D4A;line-height:2;">
+            魔術曲線圖 &nbsp;·&nbsp; 淨利圖 &nbsp;·&nbsp; 月報表<br>
+            <span style="opacity:.8;">截圖以上內容傳給上家 💕</span>
+        </div>
+    </div>
+
+    <!-- Buttons -->
+    <button class="save-btn" onclick="saveReview()" style="margin-bottom:10px;">💾 儲存這個月的復盤</button>
+    <button onclick="copyReview()" style="width:100%;padding:15px;background:var(--dark2);color:var(--gold-shine);border:1px solid var(--gold-deep);border-radius:14px;font-weight:700;font-size:.9rem;cursor:pointer;font-family:inherit;letter-spacing:1px;margin-bottom:10px;">📋 複製復盤內容傳給上家</button>
+    <div id="rv_past_container" style="margin-top:6px;"></div>
+</div>
+
 <!-- ════════ 指南 ════════ -->
 <div id="tab-guide" class="container">
     <div style="text-align:center;padding:8px 0 18px;"><div style="font-size:1.6rem;font-weight:700;color:var(--gold-deep);letter-spacing:2px;">使用指南 📖</div><div style="font-size:.8rem;color:var(--text-muted);margin-top:4px;">了解每個功能，讓業績數字說話 ✨</div></div>
@@ -508,60 +628,6 @@ function showToast(msg,col){let t=document.getElementById('toast');if(!t){t=docu
 
 function getSellingPrice(n,seller,buyer){const p=products[n];if(seller==='royal'&&buyer==='L1')return p.L1;if(buyer==='to_consumer_vip')return p.to_consumer_vip??p.to_consumer;if(buyer==='to_consumer_2')return p.to_consumer_2??p.to_consumer;return p[buyer];}
 
-// ── Sparkle generator ──
-(function(){
-    var glyphs = ['✦','✧','⋆','✺','⊹','✵','✴','✳'];
-    function rand(min,max){return Math.random()*(max-min)+min;}
-    function makeSparkle(parent){
-        var s=document.createElement('span');
-        s.className='sparkle';
-        s.innerText=glyphs[Math.floor(Math.random()*glyphs.length)];
-        var size=rand(8,16);
-        var dur=rand(2.5,5);
-        var delay=rand(0,dur);
-        s.style.cssText='left:'+rand(2,95)+'%;top:'+rand(5,90)+'%;'
-            +'font-size:'+size+'px;'
-            +'color:rgba(240,216,130,'+rand(.3,.85)+');'
-            +'animation-duration:'+dur+'s;'
-            +'animation-delay:'+delay+'s;'
-            +'text-shadow:0 0 '+rand(3,8)+'px rgba(201,168,76,.6);';
-        parent.appendChild(s);
-    }
-    function seedSparkles(selector,count){
-        document.querySelectorAll(selector).forEach(function(el){
-            for(var i=0;i<count;i++) makeSparkle(el);
-        });
-    }
-    function makeHeaderSparkle(parent){
-        var s=document.createElement('span');
-        s.className='sparkle';
-        s.innerText=glyphs[Math.floor(Math.random()*glyphs.length)];
-        var size=rand(8,15);
-        var dur=rand(2.5,5);
-        var delay=rand(0,dur);
-        // Only left side (2-22%) or right side (78-97%)
-        var leftSide=Math.random()<0.5;
-        var left=leftSide?rand(2,22):rand(78,97);
-        s.style.cssText='left:'+left+'%;top:'+rand(8,88)+'%;'
-            +'font-size:'+size+'px;'
-            +'color:rgba(240,216,130,'+rand(.35,.8)+');'
-            +'animation-duration:'+dur+'s;'
-            +'animation-delay:'+delay+'s;'
-            +'text-shadow:0 0 '+rand(3,8)+'px rgba(201,168,76,.6);';
-        parent.appendChild(s);
-    }
-    window.addEventListener('load',function(){
-        document.querySelectorAll('header').forEach(function(el){
-            for(var i=0;i<12;i++) makeHeaderSparkle(el);
-        });
-        seedSparkles('.quote-bar',5);
-        seedSparkles('.result-card',8);
-        seedSparkles('.card-dark',6);
-        seedSparkles('.stat-hero-box',6);
-        seedSparkles('.goal-card',5);
-        seedSparkles('#welcomeScreen',20);
-    });
-})();
 
 function goTop(){window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}
 window.onload=()=>{
@@ -569,9 +635,7 @@ window.onload=()=>{
     document.getElementById('orderDate').value=toLocalISO(new Date());
     initUI();loadDashboards();loadProfileUI();initCurveBasic();updateAllBadges();initManualYearSelect();
     // Always start on 開單 tab at top - multiple attempts
-    goTop();
-    setTimeout(goTop,50);
-    setTimeout(goTop,200);
+    setTimeout(goTop, 100);
     document.querySelectorAll('.container').forEach(c=>c.classList.remove('active'));
     document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
     document.getElementById('tab-new').classList.add('active');
@@ -633,7 +697,7 @@ function switchTab(id,el){
     document.querySelectorAll('.container').forEach(c=>c.classList.remove('active'));
     document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
     document.getElementById(id).classList.add('active');if(el)el.classList.add('active');
-    goTop(); setTimeout(goTop,50);
+    goTop();
     if(id==='tab-daily'||id==='tab-monthly')loadDashboards();
     if(id==='tab-history')loadHistory();
     if(id==='tab-chart'){renderChart();initManualYearSelect();}
@@ -1047,6 +1111,213 @@ function closeWelcome(){
     },80);
     setTimeout(function(){closeWelcome();},2000);
 })();
+
+// ══ Review ══
+const REVIEW_KEY = 'dctpro_review_v1';
+function getReviews(){return JSON.parse(localStorage.getItem(REVIEW_KEY)||'{}');}
+function saveReviews(d){localStorage.setItem(REVIEW_KEY,JSON.stringify(d));}
+
+function initReview(){
+    const sel=document.getElementById('reviewYear');
+    if(sel&&!sel.options.length){
+        sel.style.display='';
+        const cy=new Date().getFullYear();
+        for(let y=cy;y>=cy-3;y--){const o=document.createElement('option');o.value=y;o.textContent=y+'年';sel.appendChild(o);}
+    }
+    const cm=document.getElementById('reviewMonth');
+    if(cm) cm.value=new Date().getMonth();
+    loadReviewData();
+}
+
+function getReviewKey(){
+    const y=document.getElementById('reviewYear')?.value||new Date().getFullYear();
+    const m=document.getElementById('reviewMonth')?.value||new Date().getMonth();
+    return y+'-'+m;
+}
+
+function loadReviewData(){
+    const key=getReviewKey();
+    const [y,m]=key.split('-');
+    // Update title
+    const title=document.getElementById('reviewMonthTitle');
+    if(title) title.innerText=y+'年'+( parseInt(m)+1)+'月 復盤';
+    // Auto-fill from orders
+    const rs=getOrders();
+    let mR=0,mT=0,mN=0;
+    rs.forEach(function(r){
+        var d=new Date(r.orderDate||r.id);
+        if(String(d.getFullYear())===String(y)&&String(d.getMonth())===String(m)){
+            if(r.type==='retail') mR+=r.profit;
+            else if(r.type==='team') mT+=r.profit;
+            mN+=(r.nurture||0);
+        }
+    });
+    // Auto-fill from curve
+    var cKey=y+'-'+String(parseInt(m)+1).padStart(2,'0');
+    var cData=curveDB[cKey]||{};
+    // Load saved review
+    const saved=getReviews()[key]||{};
+    // Fields
+    const fields=['rv_target','rv_score','rv_score_reason','rv_compare','rv_breakthrough','rv_improve',
+        'rv_next_profit','rv_next_recruit','rv_next_reels','rv_next_todo','rv_next_avoid','rv_next_challenge',
+        'rv_self_note','rv_question','rv_new_member','rv_direct','rv_indirect','rv_reels','rv_story','rv_fans_growth',
+        'rv_pro_order','rv_pro_sell','rv_pro_left','rv_jelly_order','rv_jelly_sell','rv_jelly_left','rv_tiktok','rv_ig'];
+    fields.forEach(function(f){
+        var el=document.getElementById(f);
+        if(el) el.value=saved[f]!==undefined?saved[f]:'';
+    });
+    // Auto-fill profits if not saved
+    var retEl=document.getElementById('rv_retail');
+    if(retEl) retEl.value=saved.rv_retail!==undefined?saved.rv_retail:mR||'';
+    var teamEl=document.getElementById('rv_team');
+    if(teamEl) teamEl.value=saved.rv_team!==undefined?saved.rv_team:mT||'';
+    var nurEl=document.getElementById('rv_nurture');
+    if(nurEl) nurEl.value=saved.rv_nurture!==undefined?saved.rv_nurture:mN||'';
+    // Auto-fill TikTok/IG if not saved
+    var tikEl=document.getElementById('rv_tiktok');
+    if(tikEl&&!saved.rv_tiktok&&cData.tiktok) tikEl.value=cData.tiktok;
+    var igEl=document.getElementById('rv_ig');
+    if(igEl&&!saved.rv_ig&&cData.ig) igEl.value=cData.ig;
+    updateReviewTotal();
+    // Show auto note
+    const note=document.getElementById('reviewAutoNote');
+    if(note&&(mR||mT||mN)){
+        note.style.display='block';
+        note.innerHTML='✦ 已自動帶入本月業績：零售 $'+mR.toLocaleString()+' · 團隊 $'+mT.toLocaleString()+' · 培育 $'+mN.toLocaleString();
+    }
+    renderPastReviews();
+}
+
+function updateReviewTotal(){
+    var r=parseInt(document.getElementById('rv_retail')?.value)||0;
+    var t=parseInt(document.getElementById('rv_team')?.value)||0;
+    var n=parseInt(document.getElementById('rv_nurture')?.value)||0;
+    var el=document.getElementById('rv_total_display');
+    if(el) el.innerText='$'+(r+t+n).toLocaleString();
+}
+
+// Update total when profit fields change
+['rv_retail','rv_team','rv_nurture'].forEach(function(id){
+    document.addEventListener('input',function(e){if(e.target&&e.target.id===id) updateReviewTotal();});
+});
+
+function saveReview(){
+    const key=getReviewKey();
+    const fields=['rv_target','rv_retail','rv_team','rv_nurture','rv_score','rv_score_reason',
+        'rv_compare','rv_breakthrough','rv_improve','rv_next_profit','rv_next_recruit','rv_next_reels',
+        'rv_next_todo','rv_next_avoid','rv_next_challenge','rv_self_note','rv_question',
+        'rv_new_member','rv_direct','rv_indirect','rv_reels','rv_story','rv_fans_growth',
+        'rv_pro_order','rv_pro_sell','rv_pro_left','rv_jelly_order','rv_jelly_sell','rv_jelly_left','rv_tiktok','rv_ig'];
+    const data={};
+    fields.forEach(function(f){var el=document.getElementById(f);if(el) data[f]=el.value;});
+    const all=getReviews();
+    all[key]=data;
+    saveReviews(all);
+    showToast('✓ 復盤已儲存！');
+    renderPastReviews();
+}
+
+function copyReview(){
+    const key=getReviewKey();
+    const [y,m]=key.split('-');
+    const mn=parseInt(m)+1;
+    var get=function(id){var el=document.getElementById(id);return el?el.value.trim():'';};
+    var lines=[
+        '@All 想成長者完成月復盤',
+        '上家會跟你說目前你的狀況可以怎麼調整',
+        '',
+        '🪐益生菌',
+        '叫貨 '+get('rv_pro_order')+'組',
+        '銷售 '+get('rv_pro_sell')+'組',
+        '剩餘 '+get('rv_pro_left')+'組',
+        '',
+        '🪐果凍',
+        '叫貨 '+get('rv_jelly_order')+'組',
+        '銷售 '+get('rv_jelly_sell')+'組',
+        '剩餘 '+get('rv_jelly_left')+'組',
+        '',
+        '🔹本月淨利：$'+(
+            (parseInt(get('rv_retail'))||0)+(parseInt(get('rv_team'))||0)+(parseInt(get('rv_nurture'))||0)
+        ).toLocaleString(),
+        '　零售淨利：$'+(get('rv_retail')||0),
+        '　團隊淨利：$'+(get('rv_team')||0),
+        '　培育獎金：$'+(get('rv_nurture')||0),
+        '',
+        '🔹目標淨利：$'+get('rv_target'),
+        '🔹本月給自己打幾分：'+get('rv_score')+'分',
+        get('rv_score_reason')?'　原因：'+get('rv_score_reason'):'',
+        '',
+        '🔹目前直屬人數：'+get('rv_direct')+'人　間系：'+get('rv_indirect')+'人',
+        get('rv_new_member')?'🔹此次新增加盟：'+get('rv_new_member'):'',
+        '',
+        '📱粉絲數',
+        '　TikTok：'+get('rv_tiktok'),
+        '　IG：'+get('rv_ig'),
+        '　本月粉絲成長：+'+get('rv_fans_growth'),
+        '　本月 Reels：'+get('rv_reels')+'則',
+        '',
+        get('rv_compare')?'🔹對比上月發現：'+get('rv_compare'):'',
+        '',
+        '🔥本月反思',
+        get('rv_breakthrough')?'✦ 最大突破：'+get('rv_breakthrough'):'',
+        get('rv_improve')?'✦ 可以更好：'+get('rv_improve'):'',
+        '',
+        '🔥下月目標',
+        '✦ 淨利目標：$'+get('rv_next_profit'),
+        get('rv_next_recruit')?'✦ 目標招商：'+get('rv_next_recruit')+'人':'',
+        get('rv_next_reels')?'✦ 目標 Reels：'+get('rv_next_reels')+'則':'',
+        get('rv_next_todo')?'✦ 要做到的事：'+get('rv_next_todo'):'',
+        get('rv_next_avoid')?'✦ 要避免的事：'+get('rv_next_avoid'):'',
+        get('rv_next_challenge')?'✦ 挑戰目標：'+get('rv_next_challenge'):'',
+        '',
+        get('rv_self_note')?'🌸給自己的話：'+get('rv_self_note'):'',
+        get('rv_question')?'❓我的問題：'+get('rv_question'):'',
+        '',
+        '🌸請更新魔術曲線圖、淨利圖、月報表',
+        '🌸以上內容截圖傳給上家'
+    ].filter(function(l){return l!==undefined;}).join('\n');
+    if(navigator.clipboard){
+        navigator.clipboard.writeText(lines).then(function(){showToast('✓ 已複製！貼上傳給上家吧 💕');});
+    } else {
+        var ta=document.createElement('textarea');
+        ta.value=lines;ta.style.position='fixed';ta.style.opacity='0';
+        document.body.appendChild(ta);ta.select();document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('✓ 已複製！貼上傳給上家吧 💕');
+    }
+}
+
+function renderPastReviews(){
+    const all=getReviews();
+    const keys=Object.keys(all).sort(function(a,b){return b.localeCompare(a);});
+    const el=document.getElementById('rv_past_container');
+    if(!el)return;
+    if(!keys.length){el.innerHTML='';return;}
+    var html='<div class="card"><div class="card-header">過去的復盤</div>';
+    keys.forEach(function(k){
+        const [y,m]=k.split('-');
+        const d=all[k];
+        const tot=(parseInt(d.rv_retail)||0)+(parseInt(d.rv_team)||0)+(parseInt(d.rv_nurture)||0);
+        html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--panel-dark);">'
+            +'<span style="font-size:.85rem;font-weight:600;">'+y+'年'+(parseInt(m)+1)+'月</span>'
+            +'<div style="display:flex;gap:8px;align-items:center;">'
+            +(tot?'<span style="font-size:.82rem;color:var(--gold-deep);font-weight:700;">$'+tot.toLocaleString()+'</span>':'')
+            +'<button data-k="'+k+'" onclick="jumpToReview(this.dataset.k)" style="background:var(--gold-pale);color:var(--gold-deep);border:1px solid var(--gold-light);border-radius:6px;padding:4px 10px;font-size:.72rem;cursor:pointer;font-family:inherit;">查看</button>'
+            +'</div></div>';
+    });
+    html+='</div>';
+    el.innerHTML=html;
+}
+
+function jumpToReview(key){
+    const [y,m]=key.split('-');
+    const ySel=document.getElementById('reviewYear');
+    const mSel=document.getElementById('reviewMonth');
+    if(ySel) ySel.value=y;
+    if(mSel) mSel.value=m;
+    loadReviewData();
+    goTop();
+}
 
 </script>
 
