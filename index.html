@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>DCT Promax</title>
     <link rel="icon" href="https://annie55229900608.github.io/dct-calculator/IMG_2571.png" type="image/jpeg">
     <link rel="apple-touch-icon" href="https://annie55229900608.github.io/dct-calculator/IMG_2571.png">
@@ -28,7 +28,7 @@
         /* ── Nav: scrollable for 8 tabs ── */
         .nav-tabs{display:flex;background:var(--dark);border-bottom:2px solid var(--gold-deep);position:sticky;top:0;z-index:99;overflow-x:auto;-webkit-overflow-scrolling:touch;}
         .nav-tabs::-webkit-scrollbar{display:none;}
-        .nav-tab{flex:0 0 auto;text-align:center;padding:13px 14px;font-size:.76rem;font-weight:600;color:var(--text-muted);cursor:pointer;letter-spacing:.8px;transition:all .2s;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;}
+        .nav-tab{flex:0 0 auto;text-align:center;padding:11px 10px;font-size:.68rem;font-weight:600;color:var(--text-muted);cursor:pointer;letter-spacing:0;transition:all .2s;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;}
         .nav-tab.active{color:var(--gold-shine);border-bottom-color:var(--gold);}
         .container{padding:16px;display:none;} .container.active{display:block;}
         .card{background:var(--white);border-radius:16px;padding:18px;margin-bottom:12px;border:1px solid var(--border-soft);box-shadow:var(--shadow-sm);}
@@ -564,6 +564,11 @@
     <div style="text-align:center;padding:24px 0 8px;font-size:.8rem;color:var(--text-muted);line-height:2;">有任何問題隨時詢問上家 💕<br><span style="color:var(--gold-deep);font-weight:700;font-size:.88rem;">妳可以的！加油 ✨</span></div>
 </div>
 <script>
+window.onerror=function(msg,src,line,col,err){
+    console.log('[DCT Error]',msg,'line:'+line,'col:'+col,err?err.stack:'');
+    return true;
+};
+
 
 
 
@@ -1138,14 +1143,15 @@ function closeWelcome(){
     setTimeout(function(){ws.style.display='none';goTop();},520);
 }
 // Trigger welcome animations + auto-enter after 2s
-(function(){
+(function(){try{
     setTimeout(function(){
         var ids=['wc-crown','wc-welcome','wc-divider','wc-icons','wc-dots','wc-loading','wc-btn'];
         ids.forEach(function(id){var el=document.getElementById(id);if(el)el.style.opacity='1';});
         var t=document.getElementById('wc-title');if(t){t.style.opacity='1';t.style.transform='translateY(0)';}
         var g=document.getElementById('wc-tag');if(g)g.style.opacity='1';
     },80);
-    setTimeout(function(){closeWelcome();},2000);
+    setTimeout(function(){try{closeWelcome();}catch(e){console.log('closeWelcome err:',e);}},2000);
+}catch(e){console.log('IIFE err:',e);}
 })();
 
 // ══ Review ══
@@ -1354,6 +1360,7 @@ function jumpToReview(key){
     loadReviewData();
     goTop();
 }
+
 
 
 
