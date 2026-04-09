@@ -26,7 +26,7 @@
         .header-sub{font-size:.68rem;color:var(--gold-light);opacity:.6;letter-spacing:2px;margin-top:3px;}
         .quote-bar{background:var(--dark2);padding:10px 20px;font-size:.78rem;color:var(--gold-light);text-align:center;letter-spacing:.8px;border-bottom:1px solid var(--dark3);font-style:italic;min-height:38px;display:flex;align-items:center;justify-content:center;opacity:.9;}
         /* ── Nav: scrollable for 8 tabs ── */
-        .nav-tabs{display:flex;background:var(--dark);border-bottom:2px solid var(--gold-deep);position:sticky;top:0;z-index:99;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+        .nav-tabs{display:flex;background:var(--dark);border-bottom:2px solid var(--gold-deep);overflow-x:auto;-webkit-overflow-scrolling:touch;}
         .nav-tabs::-webkit-scrollbar{display:none;}
         .nav-tab{flex:0 0 auto;text-align:center;padding:11px 10px;font-size:.68rem;font-weight:600;color:var(--text-muted);cursor:pointer;letter-spacing:0;transition:all .2s;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;}
         .nav-tab.active{color:var(--gold-shine);border-bottom-color:var(--gold);}
@@ -144,6 +144,11 @@
 /* ── Stars ── */
 .header-stars{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:0;}
 
+
+        /* Prevent iOS scroll jump on input focus */
+        #tab-review input, #tab-review textarea, #tab-review select {
+            scroll-margin-top: 80px;
+        }
 </style>
 </head>
 <body>
@@ -203,9 +208,7 @@
     <div class="nav-tab" onclick="switchTab('tab-history',this)">歷史</div>
     <div class="nav-tab" onclick="switchTab('tab-chart',this)">淨利圖</div>
     <div class="nav-tab" onclick="switchTab('tab-curve',this)">曲線圖</div>
-    <div class="nav-tab" onclick="switchTab('tab-settings',this)">設定</div>
     <div class="nav-tab" onclick="switchTab('tab-review',this)">復盤</div>
-    <div class="nav-tab" onclick="switchTab('tab-guide',this)">指南</div>
 </div>
 
 <!-- ════════ 開單 ════════ -->
@@ -447,8 +450,8 @@
     <div class="card" style="margin-bottom:12px;">
         <div class="card-header">選擇復盤月份</div>
         <div style="display:flex;gap:8px;align-items:center;">
-            <div style="position:relative;flex:1;"><select id="reviewYear" class="month-select" onchange="loadReviewData()" style="display:none;font-size:.8rem;padding:9px 28px 9px 10px;"></select><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;font-size:.8rem;">▾</span></div>
-            <div style="position:relative;flex:1;"><select id="reviewMonth" class="month-select" onchange="loadReviewData()" style="font-size:.8rem;padding:9px 28px 9px 10px;">
+            <div style="position:relative;flex:1;"><select id="reviewYear" class="month-select" style="display:none;font-size:.8rem;padding:9px 28px 9px 10px;"></select><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;font-size:.8rem;">▾</span></div>
+            <div style="position:relative;flex:1;"><select id="reviewMonth" class="month-select" style="font-size:.8rem;padding:9px 28px 9px 10px;">
                 <option value="0">1月</option><option value="1">2月</option><option value="2">3月</option><option value="3">4月</option><option value="4">5月</option><option value="5">6月</option><option value="6">7月</option><option value="7">8月</option><option value="8">9月</option><option value="9">10月</option><option value="10">11月</option><option value="11">12月</option>
             </select><span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;">▾</span></div>
         </div>
@@ -564,10 +567,10 @@
     <div style="text-align:center;padding:24px 0 8px;font-size:.8rem;color:var(--text-muted);line-height:2;">有任何問題隨時詢問上家 💕<br><span style="color:var(--gold-deep);font-weight:700;font-size:.88rem;">妳可以的！加油 ✨</span></div>
 </div>
 <script>
-window.onerror=function(msg,src,line,col,err){
-    console.log('[DCT Error]',msg,'line:'+line,'col:'+col,err?err.stack:'');
-    return true;
-};
+
+
+
+
 
 
 
@@ -1159,6 +1162,7 @@ const REVIEW_KEY = 'dctpro_review_v1';
 function getReviews(){return JSON.parse(localStorage.getItem(REVIEW_KEY)||'{}');}
 function saveReviews(d){localStorage.setItem(REVIEW_KEY,JSON.stringify(d));}
 
+var _reviewInited=false;
 function initReview(){
     const sel=document.getElementById('reviewYear');
     if(sel&&!sel.options.length){
@@ -1168,7 +1172,10 @@ function initReview(){
     }
     const cm=document.getElementById('reviewMonth');
     if(cm) cm.value=new Date().getMonth();
-    loadReviewData();
+    if(!_reviewInited){
+        _reviewInited=true;
+        loadReviewData();
+    }
 }
 
 function getReviewKey(){
@@ -1358,8 +1365,11 @@ function jumpToReview(key){
     if(ySel) ySel.value=y;
     if(mSel) mSel.value=m;
     loadReviewData();
-    goTop();
 }
+
+
+
+
 
 
 
