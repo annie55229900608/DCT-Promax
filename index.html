@@ -291,6 +291,26 @@
         </div>
         <div class="chart-wrap" id="chartWrap"></div>
     </div>
+
+    <div class="card">
+        <div class="card-header">📝 手動補登歷史業績</div>
+        <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:12px;line-height:1.6;">補登加入 App 前的業績，輸入後圖表自動更新。已有訂單的月份也可用這裡補充。</div>
+        <div class="input-group"><span class="input-label">年份 / 月份</span>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <div style="position:relative;"><select id="manualYear" class="month-select" style="font-size:.85rem;padding:10px 30px 10px 12px;"></select><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;font-size:.8rem;">▾</span></div>
+                <div style="position:relative;"><select id="manualMonth" class="month-select" style="font-size:.85rem;padding:10px 30px 10px 12px;">
+                    <option value="0">1月</option><option value="1">2月</option><option value="2">3月</option><option value="3">4月</option><option value="4">5月</option><option value="5">6月</option><option value="6">7月</option><option value="7">8月</option><option value="8">9月</option><option value="9">10月</option><option value="10">11月</option><option value="11">12月</option>
+                </select><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;font-size:.8rem;">▾</span></div>
+            </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+            <div class="input-group" style="margin-bottom:0;"><span class="input-label" style="color:#C9A84C;">零售淨利</span><input type="number" id="manualRetail" class="custom-input" placeholder="0" style="border-left:3px solid #C9A84C;"></div>
+            <div class="input-group" style="margin-bottom:0;"><span class="input-label" style="color:#5A7EC7;">團隊淨利</span><input type="number" id="manualTeam" class="custom-input" placeholder="0" style="border-left:3px solid #5A7EC7;"></div>
+            <div class="input-group" style="margin-bottom:0;"><span class="input-label" style="color:#4BAE73;">培育獎金</span><input type="number" id="manualNurture" class="custom-input" placeholder="0" style="border-left:3px solid #4BAE73;"></div>
+        </div>
+        <button class="save-btn" style="margin-top:0;" onclick="saveManualEntry()">儲存這個月份</button>
+    </div>
+
     <div class="card">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
             <span style="font-size:.75rem;font-weight:700;color:var(--gold-deep);">月份明細</span>
@@ -412,7 +432,7 @@ function getSellingPrice(n,seller,buyer){const p=products[n];if(seller==='royal'
 window.onload=()=>{
     document.getElementById('dailyQuote').innerText=quotes[Math.floor(Math.random()*quotes.length)];
     document.getElementById('orderDate').value=toLocalISO(new Date());
-    initUI();loadDashboards();loadProfileUI();initCurveBasic();updateAllBadges();
+    initUI();loadDashboards();loadProfileUI();initCurveBasic();updateAllBadges();initManualYearSelect();
 };
 
 function initUI(){
@@ -473,7 +493,7 @@ function switchTab(id,el){
     window.scrollTo({top:0,behavior:'smooth'});
     if(id==='tab-daily'||id==='tab-monthly')loadDashboards();
     if(id==='tab-history')loadHistory();
-    if(id==='tab-chart')renderChart();
+    if(id==='tab-chart'){renderChart();initManualYearSelect();}
     if(id==='tab-curve')initCurve();
 }
 function switchCat(cat,el){currentCat=cat;document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderProducts();}
@@ -538,7 +558,7 @@ function loadDashboards(){
 // ══ History ══
 function loadHistory(){const rs=getOrders();const set=new Set();rs.forEach(r=>{const d=new Date(r.orderDate||r.id);set.add(`${d.getFullYear()}-${d.getMonth()}`);});const keys=Array.from(set).sort((a,b)=>b.localeCompare(a));const sel=document.getElementById('monthSelect');const prev=sel.value||selectedHistoryKey;sel.innerHTML='<option value="">— 請選擇月份 —</option>';keys.forEach(k=>{const[y,mo]=k.split('-');const o=document.createElement('option');o.value=k;o.textContent=`${y}年${parseInt(mo)+1}月`;sel.appendChild(o);});if(keys.length){if(prev&&keys.includes(prev))sel.value=prev;else{sel.value=keys[0];selectedHistoryKey=keys[0];}}renderHistoryMonth();}
 function onMonthChange(){selectedHistoryKey=document.getElementById('monthSelect').value||null;renderHistoryMonth();}
-function renderHistoryMonth(){const c=document.getElementById('historyContent');if(!selectedHistoryKey){c.innerHTML='';return;}const[y,mo]=selectedHistoryKey.split('-');const rs=getOrders().filter(r=>{const d=new Date(r.orderDate||r.id);return d.getFullYear()==y&&d.getMonth()==mo;});if(!rs.length){c.innerHTML='<div class="card"><div style="font-size:.82rem;color:var(--text-muted);text-align:center;padding:8px">本月暫無訂單</div></div>';return;}let tR=0,tP=0,tC=0,tN=0,rP=0,tP2=0;rs.forEach(r=>{tR+=r.rev;tP+=r.profit;tC+=r.cost;tN+=(r.nurture||0);if(r.type==='retail')rP+=r.profit;else tP2+=r.profit;});let html=`<div class="card"><div class="card-header">${y}年${parseInt(mo)+1}月 · 共${rs.length}筆</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;"><div class="stat-box"><span class="stat-label">營業額</span><div class="stat-value">$${tR.toLocaleString()}</div></div><div class="stat-box"><span class="stat-label">成本</span><div class="stat-value muted">$${tC.toLocaleString()}</div></div><div class="stat-box gold-box"><span class="stat-label">淨利</span><div class="stat-value">$${tP.toLocaleString()}</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div style="background:#FFF8EC;border:1px solid #E8D5A0;border-radius:10px;padding:11px;text-align:center;"><div style="font-size:.67rem;color:#9A7830;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">零售淨利</div><div style="font-size:1rem;font-weight:700;color:#9A7830;">$${rP.toLocaleString()}</div></div><div style="background:#EEF3FD;border:1px solid #B5CFF4;border-radius:10px;padding:11px;text-align:center;"><div style="font-size:.67rem;color:#2A5BAD;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">團隊淨利</div><div style="font-size:1rem;font-weight:700;color:#2A5BAD;">$${tP2.toLocaleString()}</div></div></div>${tN>0?`<div style="background:#F0F9F0;border:1px solid #9DCFAC;border-radius:10px;padding:11px;text-align:center;margin-top:8px;"><div style="font-size:.67rem;color:#2E7D4A;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">培育獎金</div><div style="font-size:1rem;font-weight:700;color:#2E7D4A;">$${tN.toLocaleString()}</div></div>`:''}</div>`;rs.sort((a,b)=>new Date(b.orderDate||b.id)-new Date(a.orderDate||a.id)).forEach(r=>{const d=new Date(r.orderDate||r.id);const ds=`${d.getMonth()+1}/${d.getDate()} ${d.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})}`;const nTag=(r.nurture||0)>0?` <span style="color:#4BAE73;font-size:.72rem;">+培育$${r.nurture.toLocaleString()}</span>`:'';html+=`<div class="order-card"><div class="order-card-header"><div><div class="order-note">${r.note}</div><div style="font-size:.72rem;color:var(--text-muted);margin-top:2px">${ds}</div></div><div class="order-profit">+$${r.profit.toLocaleString()}${nTag}</div></div><div class="order-items">${r.items.map(i=>`${i.name} × ${i.qty}${i.unit}`).join(' · ')}</div><div class="order-actions"><button class="action-btn" onclick="deleteOrder(${r.id});loadHistory();">刪除</button></div></div>`;});c.innerHTML=html;}
+function renderHistoryMonth(){const c=document.getElementById('historyContent');if(!selectedHistoryKey){c.innerHTML='';return;}const[y,mo]=selectedHistoryKey.split('-');const rs=getOrders().filter(r=>{const d=new Date(r.orderDate||r.id);return d.getFullYear()==y&&d.getMonth()==mo;});if(!rs.length){c.innerHTML='<div class="card"><div style="font-size:.82rem;color:var(--text-muted);text-align:center;padding:8px">本月暫無訂單</div></div>';return;}let tR=0,tP=0,tC=0,tN=0,rP=0,tP2=0;rs.forEach(r=>{tR+=r.rev;tP+=r.profit;tC+=r.cost;tN+=(r.nurture||0);if(r.type==='retail')rP+=r.profit;else tP2+=r.profit;});let html=`<div class="card"><div class="card-header">${y}年${parseInt(mo)+1}月 · 共${rs.length}筆</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;"><div class="stat-box"><span class="stat-label">營業額</span><div class="stat-value">$${tR.toLocaleString()}</div></div><div class="stat-box"><span class="stat-label">成本</span><div class="stat-value muted">$${tC.toLocaleString()}</div></div><div class="stat-box gold-box"><span class="stat-label">淨利</span><div class="stat-value">$${tP.toLocaleString()}</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div style="background:#FFF8EC;border:1px solid #E8D5A0;border-radius:10px;padding:11px;text-align:center;"><div style="font-size:.67rem;color:#9A7830;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">零售淨利</div><div style="font-size:1rem;font-weight:700;color:#9A7830;">$${rP.toLocaleString()}</div></div><div style="background:#EEF3FD;border:1px solid #B5CFF4;border-radius:10px;padding:11px;text-align:center;"><div style="font-size:.67rem;color:#2A5BAD;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">團隊淨利</div><div style="font-size:1rem;font-weight:700;color:#2A5BAD;">$${tP2.toLocaleString()}</div></div></div>${tN>0?`<div style="background:#F0F9F0;border:1px solid #9DCFAC;border-radius:10px;padding:11px;text-align:center;margin-top:8px;"><div style="font-size:.67rem;color:#2E7D4A;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">培育獎金</div><div style="font-size:1rem;font-weight:700;color:#2E7D4A;">$${tN.toLocaleString()}</div></div>`:''}</div>`;rs.sort((a,b)=>new Date(b.orderDate||b.id)-new Date(a.orderDate||a.id)).forEach(r=>{const d=new Date(r.orderDate||r.id);const ds=`${d.getMonth()+1}/${d.getDate()} ${d.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})}`;const nTag=(r.nurture||0)>0?` <span style="color:#4BAE73;font-size:.72rem;">+培育$${r.nurture.toLocaleString()}</span>`:'';html+=`<div class="order-card"><div class="order-card-header"><div><div class="order-note">${r.note}</div><div style="font-size:.72rem;color:var(--text-muted);margin-top:2px">${ds}</div></div><div class="order-profit">+$${r.profit.toLocaleString()}${nTag}</div></div><div class="order-items">${r.items.map(i=>`${i.name} × ${i.qty}${i.unit}`).join(' · ')}</div><div class="order-actions"><button class="action-btn" style="color:var(--gold-deep);border-color:var(--gold-light);" onclick="openEditModal(${r.id})">✏ 編輯</button><button class="action-btn" onclick="deleteOrder(${r.id});loadHistory();">刪除</button></div></div>`;});c.innerHTML=html;}
 function onSearchInput(){const q=document.getElementById('historySearch').value.trim();const sr=document.getElementById('searchResults');const mc=document.getElementById('monthPickerCard');const hc=document.getElementById('historyContent');if(!q){sr.style.display='none';mc.style.display='';hc.style.display='';return;}mc.style.display='none';hc.style.display='none';sr.style.display='block';const all=getOrders().filter(r=>(r.note||'').toLowerCase().includes(q.toLowerCase()));if(!all.length){sr.innerHTML='<div style="text-align:center;font-size:.82rem;color:var(--text-muted);padding:12px">找不到符合的備註</div>';return;}all.sort((a,b)=>new Date(b.orderDate||b.id)-new Date(a.orderDate||a.id));let html=`<div style="font-size:.75rem;color:var(--text-muted);margin-bottom:10px">共找到 ${all.length} 筆含「${q}」的訂單</div>`;all.forEach(r=>{const d=new Date(r.orderDate||r.id);const ds=`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`;const nTag=(r.nurture||0)>0?` <span style="color:#4BAE73;">+培育$${r.nurture.toLocaleString()}</span>`:'';const regex=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');const hiNote=(r.note||'').replace(regex,'<mark style="background:#FFE566;border-radius:2px;padding:0 2px">$1</mark>');html+=`<div class="order-card"><div class="order-card-header"><div><div class="order-note">${hiNote}</div><div style="font-size:.72rem;color:var(--text-muted);margin-top:2px">${ds}</div></div><div class="order-profit">+$${r.profit.toLocaleString()}${nTag}</div></div><div class="order-items">${r.items.map(i=>`${i.name} × ${i.qty}${i.unit}`).join(' · ')}</div><div class="order-actions"><button class="action-btn" onclick="deleteOrder(${r.id});onSearchInput();">刪除</button></div></div>`;});sr.innerHTML=html;}
 
 // ══ Chart ══
@@ -626,6 +646,72 @@ function updateAllBadges(){const p=getProfile();const parts=[p.name,p.level,p.up
 // ══ Backup ══
 function exportAllData(){const payload={exportDate:new Date().toISOString().slice(0,10),orders:JSON.parse(localStorage.getItem('dctpro_v1')||'[]'),curveData:JSON.parse(localStorage.getItem(CURVE_KEY)||'{}'),profile:JSON.parse(localStorage.getItem('dctpro_profile')||'{}'),goal:localStorage.getItem('dctpro_goal')||'0'};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='DCT_Promax_備份_'+payload.exportDate+'.json';a.click();showToast('✓ 備份已匯出！請存至安全的地方');}
 function importAllData(e){const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{try{const data=JSON.parse(ev.target.result);if(Array.isArray(data.orders)){const ex=getOrders();const merged=[...ex];data.orders.forEach(o=>{if(!merged.find(e=>e.id===o.id))merged.push(o);});saveOrders(merged);}if(data.curveData){const ex=JSON.parse(localStorage.getItem(CURVE_KEY)||'{}');localStorage.setItem(CURVE_KEY,JSON.stringify({...data.curveData,...ex}));curveDB=JSON.parse(localStorage.getItem(CURVE_KEY));}if(data.profile&&!getProfile().name){saveProfileLS(data.profile);loadProfileUI();}if(data.goal)localStorage.setItem('dctpro_goal',data.goal);loadDashboards();renderChart();renderCurveCharts();showToast('✓ 還原成功！資料已合併匯入');}catch(err){showToast('⚠ 檔案格式錯誤，請確認是正確的備份檔');}};reader.readAsText(file);e.target.value='';}
+
+// ══ Manual entry ══
+function initManualYearSelect(){
+    const sel=document.getElementById('manualYear');if(!sel)return;
+    const cy=new Date().getFullYear();sel.innerHTML='';
+    for(let y=cy;y>=cy-5;y--){const o=document.createElement('option');o.value=y;o.textContent=y+'年';sel.appendChild(o);}
+    const mm=document.getElementById('manualMonth');if(mm)mm.value=new Date().getMonth();
+}
+function saveManualEntry(){
+    const y=document.getElementById('manualYear')?.value;
+    const mo=document.getElementById('manualMonth')?.value;
+    const retail=parseInt(document.getElementById('manualRetail')?.value)||0;
+    const team=parseInt(document.getElementById('manualTeam')?.value)||0;
+    const nurture=parseInt(document.getElementById('manualNurture')?.value)||0;
+    if(!y){showToast('⚠ 請選擇年份');return;}
+    const key=y+'-'+mo;
+    const d=getManualData();
+    if(retail===0&&team===0&&nurture===0) delete d[key]; else d[key]={retail,team,nurture};
+    saveManualData(d);
+    ['manualRetail','manualTeam','manualNurture'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    renderChart();loadHistory();
+    showToast('✓ 業績已儲存，圖表與歷史已更新');
+}
+
+// ══ Edit Modal ══
+let editingId=null;
+function openEditModal(id){
+    const order=getOrders().find(r=>r.id===id);if(!order)return;
+    editingId=id;
+    const d=new Date(order.orderDate||order.id);
+    document.getElementById('editModalTitle').innerText=`編輯訂單 · ${d.getMonth()+1}/${d.getDate()}`;
+    const buyers=buyersByLevel[order.type==='retail'?'L1':'L1'];
+    document.getElementById('editModalContent').innerHTML=`
+        <div class="input-group"><span class="input-label">訂單日期</span><input type="datetime-local" id="editDate" class="custom-input" value="${toLocalISO(d)}" style="color:var(--gold-deep);"></div>
+        <div class="input-group"><span class="input-label">客戶備註</span><input type="text" id="editNote" class="custom-input" value="${order.note||''}"></div>
+        <div class="input-group"><span class="input-label">額外成本</span><input type="number" id="editExtra" class="custom-input cost-input" value="${order.cost - (order.itemsCost||order.cost)||0}"></div>
+        <div class="input-group"><span class="input-label" style="color:#4BAE73;">培育獎金</span><input type="number" id="editNurture" class="custom-input" value="${order.nurture||0}" style="border-left:3px solid #4BAE73;"></div>
+        <div style="background:var(--gold-pale);border-radius:12px;padding:12px;margin-bottom:14px;">
+            <div style="font-size:.72rem;font-weight:700;color:var(--gold-deep);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">購買品項（不可修改）</div>
+            <div style="font-size:.8rem;color:var(--text-sub);">${order.items.map(i=>`${i.name} × ${i.qty}${i.unit}`).join('<br>')}</div>
+        </div>
+        <div style="background:var(--panel);border-radius:12px;padding:14px;text-align:center;margin-bottom:14px;">
+            <div style="font-size:.7rem;color:var(--text-muted);margin-bottom:4px;">銷售淨利</div>
+            <div style="font-size:1.5rem;font-weight:700;color:var(--gold-deep);">$${order.profit.toLocaleString()}</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:8px;">
+            <button onclick="closeEditModal()" style="flex:0 0 auto;padding:14px 18px;background:var(--panel);color:var(--text-sub);border:1px solid var(--border-soft);border-radius:12px;font-size:.9rem;cursor:pointer;font-family:inherit;">取消</button>
+            <button onclick="deleteOrder(${order.id});closeEditModal();loadHistory();" style="flex:0 0 auto;padding:14px 16px;background:transparent;color:#c55;border:1px solid #fcc;border-radius:12px;font-size:.9rem;cursor:pointer;font-family:inherit;">刪除</button>
+            <button onclick="saveEditOrder()" style="flex:1;padding:14px;background:var(--gold);color:var(--dark);border:none;border-radius:12px;font-weight:700;font-size:.9rem;cursor:pointer;font-family:inherit;">儲存</button>
+        </div>`;
+    const modal=document.getElementById('editModal');modal.style.display='flex';
+}
+function closeEditModal(){const modal=document.getElementById('editModal');if(modal)modal.style.display='none';editingId=null;}
+function saveEditOrder(){
+    if(!editingId)return;
+    const rs=getOrders();const idx=rs.findIndex(r=>r.id===editingId);if(idx<0)return;
+    const order=rs[idx];
+    const dateVal=document.getElementById('editDate')?.value;
+    const newTs=dateVal?new Date(dateVal).getTime():order.orderDate||order.id;
+    const nd=new Date(newTs);
+    const nurture=parseInt(document.getElementById('editNurture')?.value)||0;
+    rs[idx]={...order,orderDate:newTs,year:nd.getFullYear(),month:nd.getMonth(),note:document.getElementById('editNote')?.value||'無備註',nurture};
+    saveOrders(rs);closeEditModal();loadHistory();loadDashboards();renderChart();
+    showToast('✓ 訂單已更新');
+}
+document.addEventListener('click',e=>{const m=document.getElementById('editModal');if(m&&e.target===m)closeEditModal();});
 
 </script>
 <div id="tab-guide" class="container">
@@ -740,6 +826,16 @@ function importAllData(e){const file=e.target.files[0];if(!file)return;const rea
         <span style="color:var(--gold-deep);font-weight:700;font-size:.88rem;">妳可以的！加油 ✨</span>
     </div>
 </div>
+
+<!-- Edit Modal -->
+<div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:flex-end;">
+    <div style="background:var(--white);border-radius:22px 22px 0 0;width:100%;max-height:90vh;overflow-y:auto;padding:20px 16px 40px;animation:slideUp .28s ease;">
+        <div style="width:40px;height:4px;background:var(--panel-dark);border-radius:2px;margin:0 auto 18px;"></div>
+        <div id="editModalTitle" style="font-size:1rem;font-weight:700;margin-bottom:16px;color:var(--text-main);"></div>
+        <div id="editModalContent"></div>
+    </div>
+</div>
+<style>@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}</style>
 
 </body>
 </html>
