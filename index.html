@@ -442,7 +442,7 @@
     <div style="background:var(--dark);border-radius:16px;padding:20px;margin-bottom:14px;text-align:center;position:relative;overflow:hidden;border:1px solid var(--gold-deep);">
         <div style="position:absolute;top:-30px;right:-20px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.12),transparent 70%);pointer-events:none;"></div>
         <div style="font-size:.7rem;letter-spacing:3px;color:var(--gold-light);opacity:.7;margin-bottom:6px;">MONTHLY REVIEW</div>
-        <div id="reviewMonthTitle" style="font-size:1.4rem;font-weight:700;background:linear-gradient(135deg,#C9A84C,#F0D882,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">— 月復盤</div>
+        <div id="reviewMonthTitle" style="display:none;"></div>
         <div style="font-size:.78rem;color:var(--gold-light);opacity:.6;margin-top:8px;line-height:1.7;">每個月的覆盤＆檢核都會讓我們更清楚自己的成長進步<br>儘快填完傳給上家唷！</div>
         <div style="font-size:.72rem;color:var(--gold);opacity:.8;margin-top:8px;font-style:italic;">「每個月完成覆盤者，通常是成長最快的」</div>
     </div>
@@ -564,10 +564,12 @@
     <div class="card"><div class="card-header">歷史 ── 找回任何一筆訂單</div><div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;margin-bottom:8px;">按月份查看，或輸入客戶名稱/IG 快速搜尋。每筆可編輯或刪除。</div><div style="background:var(--panel);border-radius:12px;padding:12px;font-size:.79rem;color:var(--text-sub);line-height:1.9;"><div>🔍 <strong>搜尋備註</strong> — 輸入關鍵字，自動高亮符合訂單</div><div>🗓️ <strong>月份選單</strong> — 顯示當月所有訂單及三口袋統計</div><div>✏️ <strong>編輯訂單</strong> — 修改日期、備註、額外成本、銷售對象、品項</div></div></div>
     <div class="card"><div class="card-header">淨利圖 ── 讓上家一眼看到你的成長</div><div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;margin-bottom:8px;">月度條狀圖（金=零售/藍=團隊/綠=培育），每段顯示金額，左右滑查看歷史。</div><div style="background:var(--panel);border-radius:12px;padding:12px;font-size:.79rem;color:var(--text-sub);line-height:1.9;"><div>📊 上方三格顯示今年度各口袋累計</div><div>✏️ 月份明細可手動補登 App 前的歷史業績</div><div>📝 手動補登區塊：選年月輸入零售/團隊/培育金額</div></div><div style="background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.76rem;color:var(--gold-deep);">💡 每個月覆盤都拿這張圖給上家看！</div></div>
     <div class="card"><div class="card-header">魔術曲線圖 ── 粉絲成長是收入的前驅</div><div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;margin-bottom:8px;">記錄每月 TikTok 和 IG 粉絲數，生成堆疊長條圖，看社群成長軌跡。</div><div style="background:var(--panel);border-radius:12px;padding:12px;font-size:.79rem;color:var(--text-sub);line-height:1.9;"><div>① 每月月底記錄當月<strong>最新總粉絲數</strong>（累計總數，不是增加量）</div><div>② 選年份 → 月份 → 填 TikTok → 填 IG → 按「新增」</div><div>③ 圖表自動計算每月增減，上方三格即時顯示年度成長</div><div>④ 月份資料可點「✏ 編輯」修改或刪除</div></div><div style="background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.76rem;color:var(--gold-deep);">💡 粉絲持續增長，客源才會源源不絕！🚀</div></div>
-    <div class="card"><div class="card-header">設定 ── 個人化 ＆ 備份</div><div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;margin-bottom:8px;">填寫個人資料讓圖表顯示你的名字，定期備份保護數據。</div><div style="background:var(--panel);border-radius:12px;padding:12px;font-size:.79rem;color:var(--text-sub);line-height:1.9;"><div>👤 <strong>姓名/等級/上家</strong> — 填完後自動顯示在兩張圖表上方</div><div>⚡ <strong>等級自動同步</strong> — 設定等級後，開單頁自動切換進貨等級</div><div>📥 <strong>每月匯出備份</strong> — 下載 JSON 存至 iCloud / Google Drive</div><div>📤 <strong>換裝置時匯入</strong> — 匯入備份檔完整還原所有數據</div></div><div style="background:#FFF8EE;border:1px solid #FAE5B8;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.76rem;color:#B08840;">⚠️ <strong>重要：</strong>清除瀏覽器快取會刪除全部資料！請每月備份一次！</div></div>
+    <div class="card"><div class="card-header">復盤 ── 月底必做的儀式</div><div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;margin-bottom:8px;">每個月填一次復盤，清楚看到自己的成長，讓上家了解你的狀況並給出建議。</div><div style="background:var(--panel);border-radius:12px;padding:12px;font-size:.79rem;color:var(--text-sub);line-height:1.9;"><div>🪐 <strong>活動庫存</strong> — 益生菌/果凍的叫貨、銷售、剩餘數量</div><div>🔹 <strong>業績數字</strong> — 自動帶入本月三口袋，可手動調整</div><div>📱 <strong>社群粉絲</strong> — TikTok / IG 月底數字，自動帶入曲線圖數據</div><div>👥 <strong>團隊狀況</strong> — 直屬人數、新加盟情況</div><div>🔥 <strong>反思 ＆ 下月目標</strong> — 誠實覆盤、設定下月目標</div><div>📋 <strong>一鍵複製</strong> — 整理成格式傳給上家</div></div><div style="background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.76rem;color:var(--gold-deep);">💡 每月完成覆盤者，通常是成長最快的！每月都要填喔 🌸</div></div>
+    <div class="card"><div class="card-header">⚙️ 設定（左上角）＆ 💡 指南（右上角）</div><div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;margin-bottom:8px;">Header 左上角 ⚙️ 進入設定，右上角 💡 開啟這份指南，不佔分頁空間。</div><div style="background:var(--panel);border-radius:12px;padding:12px;font-size:.79rem;color:var(--text-sub);line-height:1.9;"><div>👤 <strong>姓名/等級/上家</strong> — 填完後自動顯示在兩張圖表上方</div><div>⚡ <strong>等級雙向同步</strong> — 設定改等級 ↔ 開單改等級，兩邊互相更新</div><div>📥 <strong>每月匯出備份</strong> — 下載 JSON 存至 iCloud / Google Drive</div><div>📤 <strong>換裝置時匯入</strong> — 匯入備份檔完整還原所有數據</div></div><div style="background:#FFF8EE;border:1px solid #FAE5B8;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.76rem;color:#B08840;">⚠️ <strong>重要：</strong>清除瀏覽器快取會刪除全部資料！請每月備份一次！</div></div>
     <div style="text-align:center;padding:24px 0 8px;font-size:.8rem;color:var(--text-muted);line-height:2;">有任何問題隨時詢問上家 💕<br><span style="color:var(--gold-deep);font-weight:700;font-size:.88rem;">妳可以的！加油 ✨</span></div>
 </div>
 <script>
+
 
 
 window.onerror=function(){return true;};
@@ -698,7 +700,17 @@ function initUI(){
     renderProducts();
     document.getElementById('mGoalInput').value=localStorage.getItem('dctpro_goal')||0;
 }
-function selectSeller(id){currentSeller=id;currentBuyer=buyersByLevel[id][0].id;initUI();updateCalc();}
+function selectSeller(id){
+    currentSeller=id;currentBuyer=buyersByLevel[id][0].id;initUI();updateCalc();
+    // Sync to settings
+    var rmap={'L1':'一級輔導','royal':'皇家輔導'};
+    var ln=rmap[id];
+    if(ln){
+        var sl=document.getElementById('settingLevel');if(sl)sl.value=ln;
+        var p=getProfile();if(p.level!==ln){p.level=ln;saveProfileLS(p);updateProfileDisplay(p);updateAllBadges();}
+        showToast('等級已同步：'+ln);
+    }
+}
 function getCostKey(){return currentSeller;}
 function renderProducts(){
     const div=document.getElementById('productList');div.innerHTML='';
@@ -1165,7 +1177,7 @@ function closeWelcome(){
         var t=document.getElementById('wc-title');if(t){t.style.opacity='1';t.style.transform='translateY(0)';}
         var g=document.getElementById('wc-tag');if(g)g.style.opacity='1';
     },80);
-    setTimeout(function(){try{closeWelcome();}catch(e){console.log('closeWelcome err:',e);}},2000);
+    setTimeout(function(){try{closeWelcome();}catch(e){console.log('closeWelcome err:',e);}},3000);
 }catch(e){console.log('IIFE err:',e);}
 })();
 
@@ -1197,7 +1209,7 @@ function loadReviewData(){
     const [y,m]=key.split('-');
     // Update title
     const title=document.getElementById('reviewMonthTitle');
-    if(title) title.innerText=y+'年'+( parseInt(m)+1)+'月 復盤';
+    // title hidden
     // Auto-fill from orders
     const rs=getOrders();
     let mR=0,mT=0,mN=0;
@@ -1374,6 +1386,7 @@ function jumpToReview(key){
     if(mSel) mSel.value=m;
     loadReviewData();
 }
+
 
 
 
