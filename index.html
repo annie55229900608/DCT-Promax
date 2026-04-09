@@ -19,7 +19,7 @@
             --white:#FEFCF7; --shadow:0 4px 24px rgba(140,100,20,.12); --shadow-sm:0 2px 10px rgba(140,100,20,.08);
         }
         *{box-sizing:border-box;margin:0;padding:0;}
-        body{font-family:'Noto Sans TC',"PingFang TC",sans-serif;background:var(--panel);color:var(--text-main);padding-bottom:100px;letter-spacing:.3px;}
+        body{font-family:'Noto Sans TC',"PingFang TC",sans-serif;background:#0D0B08;color:var(--text-main);padding-bottom:100px;letter-spacing:.3px;}
         header{background:var(--dark);padding:20px 20px 16px;text-align:center;border-bottom:1px solid var(--gold-deep);}
         .header-crown{font-size:1rem;letter-spacing:6px;color:var(--gold-light);margin-bottom:4px;opacity:.7;}
         .header-title{font-size:2rem;font-weight:700;letter-spacing:4px;background:linear-gradient(135deg,#C9A84C 0%,#F0D882 45%,#C9A84C 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
@@ -162,7 +162,7 @@
     <div id="wc-crown" style="font-size:.75rem;letter-spacing:8px;color:#E8D5A0;opacity:0;margin-bottom:10px;transition:opacity .8s ease .1s;text-align:center;">◆ &nbsp; ◆ &nbsp; ◆</div>
     <div id="wc-welcome" style="font-size:.7rem;letter-spacing:6px;color:#E8D5A0;opacity:0;margin-bottom:14px;transition:opacity .8s ease .3s;text-align:center;">W E L C O M E</div>
     <div id="wc-title" style="opacity:0;transition:opacity .9s ease .5s,transform .9s ease .5s;transform:translateY(16px);text-align:center;margin-bottom:6px;">
-        <div style="font-family:'Noto Sans TC',serif;font-size:3.2rem;font-weight:300;letter-spacing:6px;background:linear-gradient(135deg,#C9A84C 0%,#F0D882 40%,#E8C85A 65%,#C9A84C 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;">DCT Promax</div>
+        <div style="font-family:'Noto Sans TC',serif;font-size:2.2rem;font-weight:300;letter-spacing:6px;background:linear-gradient(135deg,#C9A84C 0%,#F0D882 40%,#E8C85A 65%,#C9A84C 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;">DCT Promax</div>
     </div>
     <div id="wc-divider" style="width:60px;height:1px;background:linear-gradient(90deg,transparent,#C9A84C,transparent);margin:14px auto 18px;opacity:0;transition:opacity .8s ease .8s;"></div>
     <div id="wc-icons" style="font-size:1.4rem;letter-spacing:10px;opacity:0;margin-bottom:18px;transition:opacity .8s ease 1s;text-align:center;">✦ &nbsp;💎&nbsp; ✦</div>
@@ -170,12 +170,12 @@
         <div style="font-size:.88rem;font-weight:600;color:#E8D5A0;letter-spacing:1px;margin-bottom:8px;">PREMIUM BUSINESS TRACKER</div>
         <div style="font-size:.8rem;color:#E8D5A0;opacity:.6;line-height:1.8;letter-spacing:.5px;">每一筆記錄，都是妳認真的證明<br>每一條曲線，都是妳成長的足跡</div>
     </div>
-    <div id="wc-dots" style="display:flex;gap:8px;margin-bottom:16px;opacity:0;transition:opacity .6s ease 1.4s;">
-        <div style="width:7px;height:7px;border-radius:50%;background:#C9A84C;opacity:.4;animation:wcdot 1.2s ease-in-out 3;"></div>
-        <div style="width:7px;height:7px;border-radius:50%;background:#C9A84C;opacity:.4;animation:wcdot 1.2s ease-in-out .2s infinite;"></div>
-        <div style="width:7px;height:7px;border-radius:50%;background:#C9A84C;opacity:.4;animation:wcdot 1.2s ease-in-out .4s infinite;"></div>
+    <div id="wc-progress-wrap" style="width:220px;margin-bottom:10px;opacity:0;transition:opacity .6s ease 1.4s;">
+        <div style="height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;box-shadow:0 0 10px rgba(201,168,76,.2);">
+            <div id="wc-prog-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#C9A84C,#F0D882,#C9A84C);border-radius:2px;transition:width .3s ease;box-shadow:0 0 14px rgba(240,216,130,.8),0 0 4px rgba(255,220,80,.9);"></div>
+        </div>
     </div>
-    <div id="wc-loading" style="font-size:.72rem;color:#E8D5A0;opacity:0;letter-spacing:1.5px;margin-bottom:40px;transition:opacity .6s ease 1.5s;">正在準備你的空間…</div>
+    <div id="wc-loading" style="font-size:.7rem;color:#E8D5A0;opacity:0;letter-spacing:2px;margin-bottom:36px;transition:opacity .6s ease 1.5s;text-align:center;">正在準備你的空間…</div>
     <button id="wc-btn" onclick="closeWelcome()" style="opacity:0;transition:opacity .8s ease 1.8s;padding:16px 48px;background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(240,216,130,.08));color:#F0D882;border:1px solid #C9A84C;border-radius:50px;font-size:.95rem;font-weight:700;letter-spacing:3px;cursor:pointer;font-family:inherit;box-shadow:0 0 30px rgba(201,168,76,.2);">
         ✦ &nbsp;開始今天&nbsp; ✦
     </button>
@@ -185,6 +185,41 @@
 @keyframes wcdot{0%,80%,100%{opacity:.15;transform:scale(.8);}40%{opacity:1;transform:scale(1.1);}}
 #wc-btn:active{opacity:.7!important;transform:scale(.97);}
 </style>
+
+<!-- ════ Onboarding ════ -->
+<div id="onboardingScreen" style="display:none;position:fixed;inset:0;z-index:9998;background:linear-gradient(160deg,#0D0B08,#1A1510,#2C1F0A);overflow-y:auto;padding:50px 24px 60px;">
+    <div style="max-width:400px;margin:0 auto;">
+        <div style="text-align:center;margin-bottom:32px;">
+            <div style="font-size:.7rem;letter-spacing:5px;color:#E8D5A0;opacity:.6;margin-bottom:10px;">WELCOME TO</div>
+            <div style="font-size:2rem;font-weight:300;letter-spacing:6px;background:linear-gradient(135deg,#C9A84C,#F0D882,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">DCT Promax</div>
+            <div style="height:1px;background:linear-gradient(90deg,transparent,#C9A84C,transparent);margin:14px auto;width:80px;"></div>
+            <div style="font-size:.82rem;color:#E8D5A0;opacity:.7;line-height:1.7;">歡迎加入！先讓我認識你 🌸<br><span style="font-size:.72rem;opacity:.5;">這些資訊之後可以在設定裡修改</span></div>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.25);border-radius:18px;padding:22px;">
+            <div class="input-group">
+                <span class="input-label" style="color:#E8D5A0;">姓名 / 暱稱</span>
+                <input type="text" id="ob_name" class="custom-input" placeholder="輸入你的名字" style="background:rgba(255,255,255,.06);border-color:rgba(201,168,76,.3);color:#F0D882;">
+            </div>
+            <div class="input-group">
+                <span class="input-label" style="color:#E8D5A0;">等級</span>
+                <div style="position:relative;">
+                    <select id="ob_level" class="month-select" style="background:rgba(255,255,255,.06);border-color:rgba(201,168,76,.3);color:#F0D882;">
+                        <option value="" style="background:#1A1510;">請選擇等級</option>
+                        <option value="一級輔導" style="background:#1A1510;">一級輔導</option>
+                        <option value="皇家輔導" style="background:#1A1510;">皇家輔導</option>
+                    </select>
+                    <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#C9A84C;pointer-events:none;">▾</span>
+                </div>
+            </div>
+            <div class="input-group" style="margin-bottom:0;">
+                <span class="input-label" style="color:#E8D5A0;">上家 / 推薦人</span>
+                <input type="text" id="ob_upline" class="custom-input" placeholder="輸入上家姓名" style="background:rgba(255,255,255,.06);border-color:rgba(201,168,76,.3);color:#F0D882;">
+            </div>
+        </div>
+        <button onclick="saveOnboarding()" style="width:100%;margin-top:20px;padding:17px;background:linear-gradient(135deg,#9A7830,#C9A84C,#9A7830);color:#1A1510;border:none;border-radius:14px;font-weight:700;font-size:.95rem;letter-spacing:2px;cursor:pointer;font-family:inherit;box-shadow:0 4px 20px rgba(180,140,40,.35);">✦ 開始使用</button>
+        <button onclick="skipOnboarding()" style="width:100%;margin-top:10px;padding:12px;background:transparent;color:rgba(232,213,160,.45);border:none;font-size:.78rem;cursor:pointer;font-family:inherit;">略過，稍後再填</button>
+    </div>
+</div>
 
 <header style="position:relative;">
     <svg class="header-stars" viewBox="0 0 400 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.7;">
@@ -572,6 +607,38 @@
 
 
 
+
+
+function startWelcomeProgress(){
+    var bar=document.getElementById('wc-prog-bar');
+    var wrap=document.getElementById('wc-progress-wrap');
+    var loading=document.getElementById('wc-loading');
+    if(!bar) return;
+    if(wrap) wrap.style.opacity='1';
+    if(loading) loading.style.opacity='1';
+    // 4000ms total - 280ms start delay = 3720ms, spread 6 steps evenly ~580ms each
+    var steps=[
+        {p:15,t:'載入產品資料…',  d:580},
+        {p:32,t:'讀取訂單記錄…',  d:580},
+        {p:52,t:'計算業績數字…',  d:580},
+        {p:72,t:'準備圖表資料…',  d:580},
+        {p:90,t:'即將完成…',      d:560},
+        {p:100,t:'✨ 準備好了！',  d:0}
+    ];
+    var i=0;
+    function next(){
+        if(i>=steps.length) return;
+        var s=steps[i++];
+        bar.style.width=s.p+'%';
+        if(loading) loading.innerText=s.t;
+        if(i<steps.length) setTimeout(next,s.d);
+    }
+    setTimeout(next,200);
+}
+
+
+
+
 window.onerror=function(){return true;};
 
 
@@ -683,7 +750,7 @@ window.onload=function(){
     document.getElementById('dailyQuote').innerText=quotes[Math.floor(Math.random()*quotes.length)];
     document.getElementById('orderDate').value=toLocalISO(new Date());
     initUI();loadDashboards();loadProfileUI();initCurveBasic();updateAllBadges();initManualYearSelect();
-    if(!getProfile().name){setTimeout(function(){document.getElementById('onboardingScreen').style.display='block';},2100);}
+    if(!getProfile().name){setTimeout(function(){var ob=document.getElementById('onboardingScreen');if(ob)ob.style.display='block';},3200);}
     // Always start on 開單 tab at top - multiple attempts
     Array.prototype.forEach.call(document.querySelectorAll('.container'),function(x){x.classList.remove('active');});
     Array.prototype.forEach.call(document.querySelectorAll('.nav-tab'),function(x){x.classList.remove('active');});
@@ -1003,14 +1070,16 @@ function renderCurveCharts(){const keys=getCurveSortedKeys();if(!keys.length){
         const s2z=document.getElementById('curve-stats2');
         if(s2z)s2z.innerHTML='<div style="background:var(--white);border:1px solid var(--border-soft);border-radius:12px;padding:12px;text-align:center;"><div style="font-size:.67rem;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;">年度粉絲總增加</div><div style="font-size:1.1rem;font-weight:700;color:var(--text-muted);">0</div></div><div style="background:var(--white);border:1px solid var(--border-soft);border-radius:12px;padding:12px;text-align:center;"><div style="font-size:.67rem;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;">TikTok 增加</div><div style="font-size:1.1rem;font-weight:700;color:var(--text-muted);">0</div></div><div style="background:var(--white);border:1px solid var(--border-soft);border-radius:12px;padding:12px;text-align:center;"><div style="font-size:.67rem;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;">IG 增加</div><div style="font-size:1.1rem;font-weight:700;color:var(--text-muted);">0</div></div>';
 
-    }const tiktok=keys.map(k=>curveDB[k].tiktok||0),ig=keys.map(k=>curveDB[k].ig||0);const totF=tiktok.map((t,i)=>t+ig[i]),dF=totF.map((v,i)=>i===0?null:v-totF[i-1]);buildCurveSVG(keys,tiktok,ig,dF);updateCurveYearFilter();renderCurveTableFiltered();const s2=document.getElementById('curve-stats2');if(s2){const latestYear=keys.length?keys[keys.length-1].split('-')[0]:null,prevYear=latestYear?String(parseInt(latestYear)-1):null;const lastPrevKey=prevYear?keys.filter(k=>k.startsWith(prevYear))[this_wont_work]:null;// Year-over-year: compare latest entry vs last entry of previous year
-// If no previous year data, compare vs first entry of current year
-const firstCurYearKey=keys.filter(k=>k.startsWith(latestYear||''))[0];
-const firstCurTik=firstCurYearKey&&firstCurYearKey!==keys[keys.length-1]?curveDB[firstCurYearKey].tiktok||0:null;
-const firstCurIg=firstCurYearKey&&firstCurYearKey!==keys[keys.length-1]?curveDB[firstCurYearKey].ig||0:null;
-const tikBase=lastPrevKey?(curveDB[lastPrevKey].tiktok||0):(firstCurTik!==null?firstCurTik:0);
-const igBase=lastPrevKey?(curveDB[lastPrevKey].ig||0):(firstCurIg!==null?firstCurIg:0);
-const tikInc=(tiktok[tiktok.length-1]||0)-tikBase;const igInc=(ig[ig.length-1]||0)-igBase;const totInc=tikInc+igInc;const fmtN=n=>Number(n).toLocaleString('zh-TW');s2.innerHTML=[{l:'年度粉絲總增加',v:totInc},{l:'TikTok 增加',v:tikInc,c:'#5BC8C0'},{l:'IG 增加',v:igInc,c:'#D4607A'}].map(x=>{const sign=x.v>0?'+':'';const col=x.c||(x.v>0?'#4BAE73':x.v<0?'#e05050':'var(--gold-deep)');return `<div style="background:var(--white);border:1px solid var(--border-soft);border-radius:12px;padding:12px;text-align:center;"><div style="font-size:.67rem;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;">${x.l}</div><div style="font-size:1.1rem;font-weight:700;color:${col}">${sign}${fmtN(x.v)}</div></div>`;}).join('');}updateAllBadges();}
+    }const tiktok=keys.map(k=>curveDB[k].tiktok||0),ig=keys.map(k=>curveDB[k].ig||0);const totF=tiktok.map((t,i)=>t+ig[i]),dF=totF.map((v,i)=>i===0?null:v-totF[i-1]);buildCurveSVG(keys,tiktok,ig,dF);updateCurveYearFilter();renderCurveTableFiltered();const s2=document.getElementById('curve-stats2');if(s2){// Use current year's first entry as baseline (Jan 1 equivalent)
+var curYear=new Date().getFullYear().toString();
+var curYearKeys=keys.filter(function(k){return k.split('-')[0]===curYear;});
+var firstCurKey=curYearKeys.length?curYearKeys[0]:null;
+var lastCurKey=curYearKeys.length?curYearKeys[curYearKeys.length-1]:null;
+var tikBase=firstCurKey?curveDB[firstCurKey].tiktok||0:0;
+var igBase=firstCurKey?curveDB[firstCurKey].ig||0:0;
+var tikCur=lastCurKey?curveDB[lastCurKey].tiktok||0:0;
+var igCur=lastCurKey?curveDB[lastCurKey].ig||0:0;
+var tikInc=tikCur-tikBase;var igInc=igCur-igBase;var totInc=tikInc+igInc;const fmtN=n=>Number(n).toLocaleString('zh-TW');s2.innerHTML=[{l:'年度粉絲總增加',v:totInc},{l:'TikTok 增加',v:tikInc,c:'#5BC8C0'},{l:'IG 增加',v:igInc,c:'#D4607A'}].map(x=>{const sign=x.v>0?'+':'';const col=x.c||(x.v>0?'#4BAE73':x.v<0?'#e05050':'var(--gold-deep)');return `<div style="background:var(--white);border:1px solid var(--border-soft);border-radius:12px;padding:12px;text-align:center;"><div style="font-size:.67rem;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;">${x.l}</div><div style="font-size:1.1rem;font-weight:700;color:${col}">${sign}${fmtN(x.v)}</div></div>`;}).join('');}updateAllBadges();}
 
 // ══ Settings ══
 function loadProfileUI(){const p=getProfile();document.getElementById('settingName').value=p.name||'';document.getElementById('settingLevel').value=p.level||'';document.getElementById('settingUpline').value=p.upline||'';updateProfileDisplay(p);updateAllBadges();}
@@ -1166,18 +1235,19 @@ function closeWelcome(){
     setTimeout(function(){
         var el=document.getElementById('welcomeScreen');
         if(el&&el.parentNode) el.parentNode.removeChild(el);
+        document.body.style.background='';
         goTop();
     },520);
 }
 // Trigger welcome animations + auto-enter after 2s
 (function(){try{
     setTimeout(function(){
-        var ids=['wc-crown','wc-welcome','wc-divider','wc-icons','wc-dots','wc-loading','wc-btn'];
-        ids.forEach(function(id){var el=document.getElementById(id);if(el)el.style.opacity='1';});
+        var ids=['wc-crown','wc-welcome','wc-divider','wc-icons','wc-loading','wc-btn'];
+        ids.forEach(function(id){var el=document.getElementById(id);if(el)el.style.opacity='1';});startWelcomeProgress();
         var t=document.getElementById('wc-title');if(t){t.style.opacity='1';t.style.transform='translateY(0)';}
         var g=document.getElementById('wc-tag');if(g)g.style.opacity='1';
     },80);
-    setTimeout(function(){try{closeWelcome();}catch(e){console.log('closeWelcome err:',e);}},3000);
+    setTimeout(function(){try{closeWelcome();}catch(e){console.log('err',e);}},4000);
 }catch(e){console.log('IIFE err:',e);}
 })();
 
@@ -1371,20 +1441,29 @@ function renderPastReviews(){
             +'<span style="font-size:.85rem;font-weight:600;">'+y+'年'+(parseInt(m)+1)+'月</span>'
             +'<div style="display:flex;gap:8px;align-items:center;">'
             +(tot?'<span style="font-size:.82rem;color:var(--gold-deep);font-weight:700;">$'+tot.toLocaleString()+'</span>':'')
-            +'<button data-k="'+k+'" onclick="jumpToReview(this.dataset.k)" style="background:var(--gold-pale);color:var(--gold-deep);border:1px solid var(--gold-light);border-radius:6px;padding:4px 10px;font-size:.72rem;cursor:pointer;font-family:inherit;">查看</button>'
+            +'<button onclick="jumpToReview(\''+k+'\')" style="background:var(--gold-pale);color:var(--gold-deep);border:1px solid var(--gold-light);border-radius:6px;padding:4px 10px;font-size:.72rem;cursor:pointer;font-family:inherit;">查看/改</button>'
++'<button onclick="deleteReview(\''+k+'\')" style="background:transparent;color:#c55;border:1px solid #fcc;border-radius:6px;padding:4px 9px;font-size:.72rem;cursor:pointer;font-family:inherit;">刪</button>'
             +'</div></div>';
     });
     html+='</div>';
     el.innerHTML=html;
 }
 
+function deleteReview(key){
+    var all=getReviews();
+    delete all[key];
+    saveReviews(all);
+    renderPastReviews();
+    showToast('已刪除');
+}
 function jumpToReview(key){
-    const [y,m]=key.split('-');
-    const ySel=document.getElementById('reviewYear');
-    const mSel=document.getElementById('reviewMonth');
-    if(ySel) ySel.value=y;
-    if(mSel) mSel.value=m;
+    var parts=key.split('-');
+    var ySel=document.getElementById('reviewYear');
+    var mSel=document.getElementById('reviewMonth');
+    if(ySel){ySel.style.display='';ySel.value=parts[0];}
+    if(mSel) mSel.value=parts[1];
     loadReviewData();
+    window.scrollTo(0,0);
 }
 
 
@@ -1411,7 +1490,12 @@ function jumpToReview(key){
 
 
 
-</script>
+
+
+
+
+
+</script></script></script></script></script>
 
 <div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:flex-end;"><div style="background:var(--white);border-radius:22px 22px 0 0;width:100%;max-height:90vh;overflow-y:auto;padding:20px 16px 40px;animation:slideUp .28s ease;"><div style="width:40px;height:4px;background:var(--panel-dark);border-radius:2px;margin:0 auto 18px;"></div><div id="editModalTitle" style="font-size:1rem;font-weight:700;margin-bottom:16px;color:var(--text-main);"></div><div id="editModalContent"></div></div></div>
 <style>@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}</style>
