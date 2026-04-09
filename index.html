@@ -151,6 +151,7 @@
         }
 </style>
 </head>
+
 <body>
 
 <!-- ════════ Welcome Screen ════════ -->
@@ -170,7 +171,7 @@
         <div style="font-size:.8rem;color:#E8D5A0;opacity:.6;line-height:1.8;letter-spacing:.5px;">每一筆記錄，都是妳認真的證明<br>每一條曲線，都是妳成長的足跡</div>
     </div>
     <div id="wc-dots" style="display:flex;gap:8px;margin-bottom:16px;opacity:0;transition:opacity .6s ease 1.4s;">
-        <div style="width:7px;height:7px;border-radius:50%;background:#C9A84C;opacity:.4;animation:wcdot 1.2s ease-in-out infinite;"></div>
+        <div style="width:7px;height:7px;border-radius:50%;background:#C9A84C;opacity:.4;animation:wcdot 1.2s ease-in-out 3;"></div>
         <div style="width:7px;height:7px;border-radius:50%;background:#C9A84C;opacity:.4;animation:wcdot 1.2s ease-in-out .2s infinite;"></div>
         <div style="width:7px;height:7px;border-radius:50%;background:#C9A84C;opacity:.4;animation:wcdot 1.2s ease-in-out .4s infinite;"></div>
     </div>
@@ -569,6 +570,12 @@
 <script>
 
 
+window.onerror=function(){return true;};
+
+
+
+
+
 
 
 
@@ -746,6 +753,8 @@ function switchTab(id,el){
     if(id==='tab-history')loadHistory();
     if(id==='tab-chart'){renderChart();initManualYearSelect();}
     if(id==='tab-curve')initCurve();
+    if(id==='tab-review')initReview();
+    if(id==='tab-settings')loadProfileUI();
 }
 function switchCat(cat,el){currentCat=cat;Array.prototype.forEach.call(document.querySelectorAll('.cat-tab'),function(t){t.classList.remove('active');});el.classList.add('active');renderProducts();}
 function updateGoal(v){localStorage.setItem('dctpro_goal',v);loadDashboards();}
@@ -1142,8 +1151,11 @@ function closeWelcome(){
     if(!ws)return;
     ws.style.transition='opacity .5s ease';
     ws.style.opacity='0';
-    setTimeout(function(){closeWelcome();},2500);
-    setTimeout(function(){ws.style.display='none';goTop();},520);
+    setTimeout(function(){
+        var el=document.getElementById('welcomeScreen');
+        if(el&&el.parentNode) el.parentNode.removeChild(el);
+        goTop();
+    },520);
 }
 // Trigger welcome animations + auto-enter after 2s
 (function(){try{
@@ -1162,7 +1174,6 @@ const REVIEW_KEY = 'dctpro_review_v1';
 function getReviews(){return JSON.parse(localStorage.getItem(REVIEW_KEY)||'{}');}
 function saveReviews(d){localStorage.setItem(REVIEW_KEY,JSON.stringify(d));}
 
-var _reviewInited=false;
 function initReview(){
     const sel=document.getElementById('reviewYear');
     if(sel&&!sel.options.length){
@@ -1172,10 +1183,7 @@ function initReview(){
     }
     const cm=document.getElementById('reviewMonth');
     if(cm) cm.value=new Date().getMonth();
-    if(!_reviewInited){
-        _reviewInited=true;
-        loadReviewData();
-    }
+    loadReviewData();
 }
 
 function getReviewKey(){
@@ -1366,6 +1374,11 @@ function jumpToReview(key){
     if(mSel) mSel.value=m;
     loadReviewData();
 }
+
+
+
+
+
 
 
 
