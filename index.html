@@ -238,7 +238,8 @@
 </header>
 <div class="quote-bar" id="dailyQuote">載入中…</div>
 <div class="nav-tabs">
-    <div class="nav-tab active" onclick="switchTab('tab-new',this)">開單</div>
+    <div class="nav-tab active" onclick="switchTab('tab-calc-px',this)">💰 算錢</div>
+    <div class="nav-tab" onclick="switchTab('tab-new',this)">開單</div>
     <div class="nav-tab" onclick="switchTab('tab-daily',this)">今日</div>
     <div class="nav-tab" onclick="switchTab('tab-monthly',this)">月報表</div>
     <div class="nav-tab" onclick="switchTab('tab-history',this)">歷史</div>
@@ -248,7 +249,7 @@
 </div>
 
 <!-- ════════ 開單 ════════ -->
-<div id="tab-new" class="container active">
+<div id="tab-new" class="container">
     <div class="card"><div class="card-header">我的等級</div>
         <div style="position:relative;">
             <select id="sellerSelect" class="month-select" style="border-color:var(--gold-light);" onchange="selectSeller(this.value)">
@@ -471,6 +472,57 @@
     </div>
 </div>
 
+<!-- ════════ 算錢 ════════ -->
+<div id="tab-calc-px" class="container active">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+        <button id="px-calc-btn-consumer" onclick="pxCalcSetMode('consumer')" style="padding:14px;background:linear-gradient(135deg,#9A7830,#C9A84C);color:#1A1510;border:none;border-radius:14px;font-weight:700;font-size:.88rem;cursor:pointer;font-family:inherit;">🛍️ 消費者</button>
+        <button id="px-calc-btn-partner" onclick="pxCalcSetMode('partner')" style="padding:14px;background:rgba(255,255,255,.06);color:#C9A84C;border:1px solid rgba(201,168,76,.3);border-radius:14px;font-weight:600;font-size:.88rem;cursor:pointer;font-family:inherit;">🤝 夥伴叫貨</button>
+    </div>
+    <div id="px-calc-consumer-opts">
+        <div class="card" style="margin-bottom:12px;">
+            <div class="card-header">購買方式</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;" id="px-calc-buyer-pills">
+                <div class="buyer-btn active" onclick="pxCalcSetBuyer('to_consumer',this)">消費者零售</div>
+                <div class="buyer-btn" onclick="pxCalcSetBuyer('to_consumer_2',this)">兩盒優惠</div>
+                <div class="buyer-btn" onclick="pxCalcSetBuyer('to_consumer_vip',this)">VIP 價</div>
+            </div>
+        </div>
+    </div>
+    <div id="px-calc-partner-opts" style="display:none;">
+        <div class="card" style="margin-bottom:12px;">
+            <div class="card-header">夥伴等級</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;" id="px-calc-partner-pills">
+                <div class="buyer-btn active" onclick="pxCalcSetPartner('to_intern',this)">實習</div>
+                <div class="buyer-btn" onclick="pxCalcSetPartner('to_L3ret',this)">三級零售</div>
+                <div class="buyer-btn" onclick="pxCalcSetPartner('to_L3sup',this)">三級輔導</div>
+                <div class="buyer-btn" onclick="pxCalcSetPartner('to_L2',this)">二級輔導</div>
+                <div class="buyer-btn" onclick="pxCalcSetPartner('L1',this)">一級輔導</div>
+                <div class="buyer-btn" onclick="pxCalcSetPartner('royal',this)">皇家輔導</div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">選擇商品</div>
+        <div class="category-tabs" id="px-calc-cat-tabs">
+            <div class="cat-tab active" onclick="pxCalcSwitchCat('本月活動',this)">本月活動</div>
+            <div class="cat-tab" onclick="pxCalcSwitchCat('活動',this)">上月活動</div>
+            <div class="cat-tab" onclick="pxCalcSwitchCat('纖體',this)">纖體</div>
+            <div class="cat-tab" onclick="pxCalcSwitchCat('美肌',this)">美肌</div>
+            <div class="cat-tab" onclick="pxCalcSwitchCat('保健',this)">保健</div>
+        </div>
+        <div id="px-calc-product-list"></div>
+    </div>
+    <div id="px-calc-result" style="display:none;">
+        <div style="background:linear-gradient(135deg,#2C1F0A,#3D2B10);border:1px solid rgba(201,168,76,.3);border-radius:18px;padding:20px;text-align:center;margin-bottom:12px;">
+            <div id="px-calc-mode-label" style="font-size:.72rem;color:rgba(232,213,160,.7);letter-spacing:1px;margin-bottom:4px;">消費者付款金額</div>
+            <div id="px-calc-total" style="font-size:2.6rem;font-weight:600;color:#F0D882;letter-spacing:-1px;">$0</div>
+        </div>
+        <div id="px-calc-detail-box" class="card"></div>
+        <div id="px-calc-saving-box" style="display:none;background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:14px;padding:16px;margin-top:4px;"></div>
+    </div>
+    <button onclick="pxClearCalc()" style="width:100%;margin-top:8px;padding:13px;background:transparent;color:rgba(232,213,160,.4);border:1px solid rgba(201,168,76,.2);border-radius:12px;font-size:.82rem;cursor:pointer;font-family:inherit;">🗑 清除重算</button>
+</div>
+
 <!-- ════════ 復盤 ════════ -->
 <div id="tab-review" class="container">
 
@@ -593,6 +645,15 @@
 <!-- ════════ 指南 ════════ -->
 <div id="tab-guide" class="container">
     <div style="text-align:center;padding:8px 0 18px;"><div style="font-size:1.6rem;font-weight:700;color:var(--gold-deep);letter-spacing:2px;">使用指南 📖</div><div style="font-size:.8rem;color:var(--text-muted);margin-top:4px;">了解每個功能，讓業績數字說話 ✨</div></div>
+    <div class="card" style="border:1px solid rgba(201,168,76,.3);">
+        <div class="card-header">💰 算錢 ── 快速報價給客人或夥伴</div>
+        <div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;margin-bottom:10px;">不用心算！選商品加數量，馬上顯示金額，適合跟客人說明或夥伴叫貨。</div>
+        <div style="background:rgba(255,255,255,.04);border-radius:12px;padding:12px;font-size:.79rem;color:var(--text-sub);line-height:1.9;">
+            <div>🛍️ <strong>消費者</strong> — 消費者零售 / VIP / 兩盒優惠，有 msrp 原價就顯示省多少</div>
+            <div>🤝 <strong>夥伴叫貨</strong> — 一級 / 皇家 / 二級 / 三級 / 實習，顯示各級叫貨金額</div>
+            <div>📂 <strong>跨分類選商品</strong> — 切換分類不清除，可跨類型加總</div>
+        </div>
+    </div>
     <div class="card"><div class="card-header">開單 ── 每筆成交都要記錄</div><div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;margin-bottom:10px;">每次成交後立即開單，系統自動計算<strong style="color:var(--gold-deep);">零售淨利、團隊淨利、培育獎金</strong>三口袋收入。</div><div style="background:var(--panel);border-radius:12px;padding:12px;font-size:.79rem;color:var(--text-sub);line-height:2;"><div>① <strong>選我的等級</strong> — 一級輔導 或 皇家輔導（設定頁設好後自動帶入）</div><div>② <strong>選銷售對象</strong> — 消費者零售/VIP/兩盒 → 零售；各輔導/三級/實習 → 團隊</div><div>③ <strong>選產品</strong> — 點 ＋ 號加入，可多品混搭</div><div>④ <strong>填訂單日期</strong> — 補登過去訂單只需更改日期，自動歸入正確月份</div><div>⑤ <strong>填額外成本</strong> — 運費、手續費等</div><div>⑥ <strong>填培育獎金</strong> — 獨立計算，不影響商品成本</div><div>⑦ <strong>填客戶備註</strong> — 客戶 IG 或姓名，方便日後搜尋</div><div>⑧ <strong>按「儲存」</strong> 🎉</div></div><div style="background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.76rem;color:var(--gold-deep);">💡 <strong>培育獎金可以不選產品</strong>，單獨輸入金額後直接儲存！</div></div>
     <div class="card"><div class="card-header">今日 ── 今天賺了多少一目瞭然</div><div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;">顯示今天三口袋收入：零售收入、團隊收入、培育獎金，以及總營業額、成本、銷售淨利。每筆訂單顯示銷售對象標籤，可點✏️編輯。</div></div>
     <div class="card"><div class="card-header">月報表 ── 掌握整個月的節奏</div><div style="font-size:.82rem;color:var(--text-sub);line-height:1.8;margin-bottom:8px;">月底覆盤最好用！設定目標 → 看達成率，三口袋分項統計，上月數據對照。</div><div style="background:var(--panel);border-radius:12px;padding:12px;font-size:.79rem;color:var(--text-sub);line-height:1.9;"><div>🎯 <strong>設定月目標</strong> — 輸入目標總收入，進度條即時顯示達成百分比</div><div>📊 <strong>收入結構比例</strong> — 零售/團隊/培育佔比，看哪個口袋最強</div><div>📦 <strong>系列佔比</strong> — 活動/纖體/美肌/保健哪類最暢銷</div><div>🔥 <strong>本月熱銷排行</strong> — 按數量排列，知道最受歡迎的產品</div></div></div>
@@ -604,6 +665,13 @@
     <div style="text-align:center;padding:24px 0 8px;font-size:.8rem;color:var(--text-muted);line-height:2;">有任何問題隨時詢問上家 💕<br><span style="color:var(--gold-deep);font-weight:700;font-size:.88rem;">妳可以的！加油 ✨</span></div>
 </div>
 <script>
+
+
+
+
+
+
+
 
 
 
@@ -671,6 +739,8 @@ window.onerror=function(){return true;};
 
 
 const products = {
+    "本月活動A 纖體組":{cat:"本月活動",unit:"組",L1:2370,royal:2100,to_L2:2640,to_L3sup:2865,to_L3ret:2970,to_intern:3480,to_consumer:3840,to_consumer_vip:3840,to_consumer_2:3840,msrp:12120},
+    "本月活動B 美肌組":{cat:"本月活動",unit:"組",L1:2060,royal:1840,to_L2:2290,to_L3sup:2565,to_L3ret:2660,to_intern:3070,to_consumer:3560,to_consumer_vip:3560,to_consumer_2:3560,msrp:5250},
     "活動A 益生菌超值組":{cat:"活動",unit:"組",L1:2070,royal:1860,to_L2:2310,to_L3sup:2490,to_L3ret:2580,to_intern:2970,to_consumer:3300,to_consumer_vip:3300,to_consumer_2:3300},
     "活動B 晶亮凍超值組":{cat:"活動",unit:"組",L1:1095,royal:960,to_L2:1230,to_L3sup:1320,to_L3ret:1365,to_intern:1590,to_consumer:1800,to_consumer_vip:1800,to_consumer_2:1800},
     "纖纖飲X":{cat:"纖體",unit:"盒",L1:790,royal:700,to_L2:880,to_L3sup:955,to_L3ret:990,to_intern:1160,to_consumer:1480,to_consumer_vip:1280,to_consumer_2:1380},
@@ -751,12 +821,14 @@ window.onload=function(){
     document.getElementById('orderDate').value=toLocalISO(new Date());
     initUI();loadDashboards();loadProfileUI();initCurveBasic();updateAllBadges();initManualYearSelect();
     if(!getProfile().name){setTimeout(function(){var ob=document.getElementById('onboardingScreen');if(ob)ob.style.display='block';},3200);}
-    // Always start on 開單 tab at top - multiple attempts
+    // Start on 算錢 tab
     Array.prototype.forEach.call(document.querySelectorAll('.container'),function(x){x.classList.remove('active');});
     Array.prototype.forEach.call(document.querySelectorAll('.nav-tab'),function(x){x.classList.remove('active');});
-    document.getElementById('tab-new').classList.add('active');
-    var firstTab=document.querySelector('.nav-tab');if(firstTab)firstTab.classList.add('active');
+    document.getElementById('tab-calc-px').classList.add('active');
+    var calcNavTab=document.querySelector('.nav-tab[onclick*="tab-calc-px"]');if(calcNavTab)calcNavTab.classList.add('active');
     }catch(e){console.log('onload err:',e.message,e.stack)}
+    setTimeout(initPxCalc,100);
+    
 };
 
 function initUI(){
@@ -1495,7 +1567,179 @@ function jumpToReview(key){
 
 
 
-</script></script></script></script></script>
+
+
+// ══ 算錢（Promax）══
+var pxCalcMode = 'consumer';
+var pxCalcBuyer = 'to_consumer';
+var pxCalcPartner = 'to_intern';
+var pxCalcCat = '本月活動';
+var pxCalcItems = [];
+
+function pxCalcGetPrice(name) {
+    var p = products[name];
+    if (!p) return 0;
+    if (pxCalcMode === 'consumer') return p[pxCalcBuyer] || 0;
+    return p[pxCalcPartner] || 0;
+}
+function pxCalcGetQty(name) {
+    for (var i = 0; i < pxCalcItems.length; i++) { if (pxCalcItems[i].name === name) return pxCalcItems[i].qty; }
+    return 0;
+}
+function pxCalcSetQty(name, qty) {
+    for (var i = 0; i < pxCalcItems.length; i++) {
+        if (pxCalcItems[i].name === name) { if (qty <= 0) pxCalcItems.splice(i, 1); else pxCalcItems[i].qty = qty; return; }
+    }
+    if (qty > 0) pxCalcItems.push({name: name, qty: qty});
+}
+
+function pxCalcSetMode(mode) {
+    pxCalcMode = mode;
+    var isC = mode === 'consumer';
+    document.getElementById('px-calc-consumer-opts').style.display = isC ? '' : 'none';
+    document.getElementById('px-calc-partner-opts').style.display = isC ? 'none' : '';
+    var cb = document.getElementById('px-calc-btn-consumer');
+    var pb = document.getElementById('px-calc-btn-partner');
+    if (cb) { cb.style.background = isC ? 'linear-gradient(135deg,#9A7830,#C9A84C)' : 'rgba(255,255,255,.06)'; cb.style.color = isC ? '#1A1510' : '#C9A84C'; cb.style.border = isC ? 'none' : '1px solid rgba(201,168,76,.3)'; }
+    if (pb) { pb.style.background = isC ? 'rgba(255,255,255,.06)' : 'linear-gradient(135deg,#9A7830,#C9A84C)'; pb.style.color = isC ? '#C9A84C' : '#1A1510'; pb.style.border = isC ? '1px solid rgba(201,168,76,.3)' : 'none'; }
+    var ml = document.getElementById('px-calc-mode-label');
+    if (ml) ml.innerText = isC ? '消費者付款金額' : '夥伴叫貨金額';
+    pxCalcRender();
+}
+
+function pxCalcSetBuyer(type, el) {
+    pxCalcBuyer = type;
+    Array.prototype.forEach.call(document.querySelectorAll('#px-calc-buyer-pills .buyer-btn'), function(b) { b.classList.remove('active'); });
+    if (el) el.classList.add('active');
+    pxCalcRender();
+}
+
+function pxCalcSetPartner(level, el) {
+    pxCalcPartner = level;
+    Array.prototype.forEach.call(document.querySelectorAll('#px-calc-partner-pills .buyer-btn'), function(b) { b.classList.remove('active'); });
+    if (el) el.classList.add('active');
+    pxCalcRender();
+}
+
+function pxCalcSwitchCat(cat, el) {
+    pxCalcCat = cat;
+    Array.prototype.forEach.call(document.querySelectorAll('#px-calc-cat-tabs .cat-tab'), function(t) { t.classList.remove('active'); });
+    if (el) el.classList.add('active');
+    pxCalcRender();
+}
+
+function pxCalcRender() {
+    var list = document.getElementById('px-calc-product-list');
+    if (!list) return;
+    list.innerHTML = '';
+    var prodNames = [];
+    for (var n in products) { if (products[n].cat === pxCalcCat) prodNames.push(n); }
+    prodNames.forEach(function(name) {
+        var price = pxCalcGetPrice(name);
+        var qty = pxCalcGetQty(name);
+        var p = products[name];
+        var row = document.createElement('div');
+        row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid rgba(201,168,76,.15);';
+        var msrpHtml = (p.msrp && pxCalcMode === 'consumer') ? '<div style="font-size:.68rem;color:#5A3E1B;text-decoration:line-through;margin-top:1px;font-weight:500;">原價 $' + p.msrp.toLocaleString() + '</div>' : '';
+        var infoDiv = document.createElement('div');
+        infoDiv.style.cssText = 'flex:1;min-width:0;';
+        infoDiv.innerHTML = '<div style="font-size:.86rem;font-weight:500;color:var(--text-main);">' + name + '</div>'
+            + '<div style="font-size:.76rem;color:var(--gold-deep);font-weight:600;margin-top:2px;">$' + price.toLocaleString() + ' / ' + p.unit + '</div>'
+            + msrpHtml;
+        var minusBtn = document.createElement('button');
+        minusBtn.className = 'btn-qty';
+        minusBtn.innerText = '−';
+        var qtyDiv = document.createElement('div');
+        qtyDiv.className = 'qty-input';
+        qtyDiv.innerText = qty;
+        var plusBtn = document.createElement('button');
+        plusBtn.className = 'btn-qty';
+        plusBtn.innerText = '+';
+        var qtyCtrl = document.createElement('div');
+        qtyCtrl.className = 'qty-control';
+        qtyCtrl.appendChild(minusBtn); qtyCtrl.appendChild(qtyDiv); qtyCtrl.appendChild(plusBtn);
+        row.appendChild(infoDiv); row.appendChild(qtyCtrl);
+        list.appendChild(row);
+        (function(pName, qDiv) {
+            minusBtn.addEventListener('click', function() {
+                var cur = parseInt(qDiv.innerText) || 0;
+                var nq = Math.max(0, cur - 1);
+                qDiv.innerText = nq; pxCalcSetQty(pName, nq); pxCalcShowResult();
+            });
+            plusBtn.addEventListener('click', function() {
+                var cur = parseInt(qDiv.innerText) || 0;
+                var nq = cur + 1;
+                qDiv.innerText = nq; pxCalcSetQty(pName, nq); pxCalcShowResult();
+            });
+        })(name, qtyDiv);
+    });
+    pxCalcShowResult();
+}
+
+function pxCalcShowResult() {
+    var resultDiv = document.getElementById('px-calc-result');
+    if (!resultDiv) return;
+    var selected = pxCalcItems.filter(function(item) { return item.qty > 0 && products[item.name]; });
+    if (!selected.length) { resultDiv.style.display = 'none'; return; }
+    resultDiv.style.display = 'block';
+    var total = 0, totalMsrp = 0;
+    var detail = '<div class="card-header" style="margin-bottom:12px;">明細</div>';
+    selected.forEach(function(item) {
+        var price = pxCalcGetPrice(item.name);
+        var subtotal = price * item.qty;
+        total += subtotal;
+        var rp = (products[item.name].msrp || products[item.name].to_consumer || 0);
+        totalMsrp += rp * item.qty;
+        detail += '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-soft);">'
+            + '<div><div style="font-size:.85rem;font-weight:500;color:var(--text-main);">' + item.name + '</div>'
+            + '<div style="font-size:.74rem;color:var(--text-sub);margin-top:2px;">$' + price.toLocaleString() + ' × ' + item.qty + '</div></div>'
+            + '<div style="font-weight:600;color:var(--gold-deep);">$' + subtotal.toLocaleString() + '</div></div>';
+    });
+    var totalEl = document.getElementById('px-calc-total');
+    if (totalEl) totalEl.innerText = '$' + total.toLocaleString();
+    var detailBox = document.getElementById('px-calc-detail-box');
+    if (detailBox) detailBox.innerHTML = detail;
+    var savingBox = document.getElementById('px-calc-saving-box');
+    if (savingBox) {
+        if (pxCalcMode === 'consumer' && totalMsrp > total) {
+            var saving = totalMsrp - total;
+            savingBox.style.display = 'block';
+            savingBox.innerHTML = '<div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.78rem;color:#6B5A38;"><span>原價合計</span><span style="text-decoration:line-through;font-weight:500;">$' + totalMsrp.toLocaleString() + '</span></div>'
+                + '<div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:.78rem;color:var(--text-sub);"><span>✨ 共省下</span><span style="font-weight:700;color:#C04040;">$' + saving.toLocaleString() + '</span></div>'
+                + '<div style="text-align:center;padding-top:12px;border-top:1px solid var(--border-soft);">'
+                + '<div style="font-size:.7rem;color:var(--text-sub);letter-spacing:1px;margin-bottom:6px;">優惠價</div>'
+                + '<div style="font-size:2.2rem;font-weight:700;color:var(--gold-deep);">$' + total.toLocaleString() + '</div></div>';
+        } else { savingBox.style.display = 'none'; }
+    }
+}
+
+function pxClearCalc() { pxCalcItems = []; pxCalcRender(); }
+
+var _pxCalcInited = false;
+function initPxCalc() {
+    if (!_pxCalcInited) { _pxCalcInited = true; }
+    pxCalcItems = []; pxCalcMode = 'consumer'; pxCalcBuyer = 'to_consumer';
+    pxCalcPartner = 'to_intern'; pxCalcCat = '本月活動';
+    Array.prototype.forEach.call(document.querySelectorAll('#px-calc-cat-tabs .cat-tab'), function(t) {
+        t.classList.remove('active');
+        if (t.textContent.trim() === '本月活動') t.classList.add('active');
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('#px-calc-buyer-pills .buyer-btn'), function(b) {
+        b.classList.remove('active');
+        if (b.textContent.trim() === '消費者零售') b.classList.add('active');
+    });
+    document.getElementById('px-calc-consumer-opts').style.display = '';
+    document.getElementById('px-calc-partner-opts').style.display = 'none';
+    pxCalcSetMode('consumer');
+}
+
+
+
+
+
+
+
+</script></script></script></script></script></script></script></script></script></script></script></script>
 
 <div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:flex-end;"><div style="background:var(--white);border-radius:22px 22px 0 0;width:100%;max-height:90vh;overflow-y:auto;padding:20px 16px 40px;animation:slideUp .28s ease;"><div style="width:40px;height:4px;background:var(--panel-dark);border-radius:2px;margin:0 auto 18px;"></div><div id="editModalTitle" style="font-size:1rem;font-weight:700;margin-bottom:16px;color:var(--text-main);"></div><div id="editModalContent"></div></div></div>
 <style>@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}</style>
