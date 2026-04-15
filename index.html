@@ -55,7 +55,7 @@
         .qty-control{display:flex;align-items:center;gap:10px;}
         .btn-qty{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:var(--panel);color:var(--gold-deep);font-weight:700;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
         .btn-qty:active{background:var(--gold);color:var(--dark);transform:scale(.9);}
-        .qty-input{width:28px;text-align:center;font-weight:700;font-size:.95rem;color:var(--text-main);border:none;background:transparent;outline:none;}
+        .qty-input{width:40px;text-align:center;font-weight:700;font-size:.95rem;color:var(--text-main);border:none;background:transparent;outline:none;-moz-appearance:textfield;appearance:textfield;} .qty-input::-webkit-inner-spin-button,.qty-input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;display:none;}
         .nurture-input-wrap{display:flex;align-items:center;background:var(--dark2);border-radius:12px;padding:14px 16px;gap:12px;border:1px solid var(--gold-deep);}
         .nurture-label-text{font-size:.82rem;font-weight:600;color:var(--gold-light);flex:1;letter-spacing:.5px;}
         .result-card{background:var(--dark);color:var(--gold-light);padding:22px 20px 20px;border-radius:18px;border:1px solid var(--gold-deep);margin-top:12px;position:relative;overflow:hidden;}
@@ -269,12 +269,13 @@
             <div class="cat-tab" onclick="switchCat('保健',this)">保健</div>
         </div>
         <div id="productList"></div>
+    <div style="text-align:center;font-size:.68rem;color:var(--text-muted);margin-top:4px;letter-spacing:.3px;">✏️ 數量可直接點擊輸入</div>
     </div>
     <div class="card">
         <div class="card-header">費用與備註</div>
         <div class="input-group"><span class="input-label">訂單日期（可補登過去日期）</span><input type="datetime-local" id="orderDate" class="custom-input" style="color:var(--gold-deep);"></div>
         <div class="input-group"><span class="input-label">額外成本（運費 / 手續費）</span><input type="number" id="extraCost" class="custom-input cost-input" placeholder="請輸入金額" oninput="updateCalc()"></div>
-        <div class="input-group" style="margin-bottom:0"><span class="input-label">客戶備註</span><input type="text" id="orderNote" class="custom-input" placeholder="客戶 IG 帳號或姓名"></div>
+        <div class="input-group" style="margin-bottom:0"><span class="input-label">客戶備註</span><textarea id="orderNote" class="custom-input" placeholder="客戶 IG 帳號或姓名" rows="2" style="resize:none;"></textarea></div>
     </div>
     <div class="card">
         <div class="card-header">培育皇家獎金</div>
@@ -398,10 +399,11 @@
                 </select><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;font-size:.8rem;">▾</span></div>
             </div>
         </div>
+        <div style="font-size:.75rem;color:var(--text-sub);margin-bottom:10px;padding:8px 10px;background:rgba(201,168,76,.08);border-radius:8px;border-left:3px solid #C9A84C;">⚠️ 輸入<strong>淨利金額</strong>，不是營業額</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
-            <div class="input-group" style="margin-bottom:0;"><span class="input-label" style="color:#C9A84C;">零售淨利</span><input type="number" id="manualRetail" class="custom-input" placeholder="0" style="border-left:3px solid #C9A84C;"></div>
-            <div class="input-group" style="margin-bottom:0;"><span class="input-label" style="color:#5A7EC7;">團隊淨利</span><input type="number" id="manualTeam" class="custom-input" placeholder="0" style="border-left:3px solid #5A7EC7;"></div>
-            <div class="input-group" style="margin-bottom:0;"><span class="input-label" style="color:#4BAE73;">培育獎金</span><input type="number" id="manualNurture" class="custom-input" placeholder="0" style="border-left:3px solid #4BAE73;"></div>
+            <div class="input-group" style="margin-bottom:0;"><span class="input-label" style="color:#C9A84C;">✏️ 輸入零售淨利</span><input type="number" id="manualRetail" class="custom-input" placeholder="0" style="border-left:3px solid #C9A84C;"></div>
+            <div class="input-group" style="margin-bottom:0;"><span class="input-label" style="color:#5A7EC7;">✏️ 輸入團隊淨利</span><input type="number" id="manualTeam" class="custom-input" placeholder="0" style="border-left:3px solid #5A7EC7;"></div>
+            <div class="input-group" style="margin-bottom:0;"><span class="input-label" style="color:#4BAE73;">✏️ 輸入培育獎金</span><input type="number" id="manualNurture" class="custom-input" placeholder="0" style="border-left:3px solid #4BAE73;"></div>
         </div>
         <button class="save-btn" style="margin-top:0;" onclick="saveManualEntry()">儲存這個月份</button>
     </div>
@@ -538,8 +540,8 @@
     <div class="card" style="margin-bottom:12px;">
         <div class="card-header">選擇復盤月份</div>
         <div style="display:flex;gap:8px;align-items:center;">
-            <div style="position:relative;flex:1;"><select id="reviewYear" class="month-select" style="display:none;font-size:.8rem;padding:9px 28px 9px 10px;"></select><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;font-size:.8rem;">▾</span></div>
-            <div style="position:relative;flex:1;"><select id="reviewMonth" class="month-select" style="font-size:.8rem;padding:9px 28px 9px 10px;">
+            <div style="position:relative;flex:1;"><select id="reviewYear" class="month-select" onchange="loadReviewData()" style="display:none;font-size:.8rem;padding:9px 28px 9px 10px;"></select><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;font-size:.8rem;">▾</span></div>
+            <div style="position:relative;flex:1;"><select id="reviewMonth" class="month-select" style="font-size:.8rem;padding:9px 28px 9px 10px;" onchange="loadReviewData();">
                 <option value="0">1月</option><option value="1">2月</option><option value="2">3月</option><option value="3">4月</option><option value="4">5月</option><option value="5">6月</option><option value="6">7月</option><option value="7">8月</option><option value="8">9月</option><option value="9">10月</option><option value="10">11月</option><option value="11">12月</option>
             </select><span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;">▾</span></div>
         </div>
@@ -665,6 +667,9 @@
     <div style="text-align:center;padding:24px 0 8px;font-size:.8rem;color:var(--text-muted);line-height:2;">有任何問題隨時詢問上家 💕<br><span style="color:var(--gold-deep);font-weight:700;font-size:.88rem;">妳可以的！加油 ✨</span></div>
 </div>
 <script>
+
+
+
 
 
 
@@ -856,7 +861,7 @@ function renderProducts(){
     for(let n in products){
         if(products[n].cat!==currentCat)continue;
         const p=products[n],cp=p[getCostKey()],sp=getSellingPrice(n,currentSeller,currentBuyer),qty=cart[n]||0;
-        div.innerHTML+='<div class="product-item"><div><div class="product-name">'+n+'</div><div class="product-price">成本 $'+cp.toLocaleString()+' → 售 $'+sp.toLocaleString()+' / '+p.unit+'</div></div><div class="qty-control"><button class="btn-qty" onclick="changeQty(\''+n+'\',- 1)">−</button><div class="qty-input">'+qty+'</div><button class="btn-qty" onclick="changeQty(\''+n+'\',1)">+</button></div></div>';
+        div.innerHTML+='<div class="product-item"><div><div class="product-name">'+n+'</div><div class="product-price">成本 $'+cp.toLocaleString()+' → 售 $'+sp.toLocaleString()+' / '+p.unit+'</div></div><div class="qty-control"><button class="btn-qty" onclick="changeQty(\''+n+'\',- 1)">−</button><input type="number" class="qty-input" min="0" value="'+qty+'" onchange="cart[\''+n+'\']=Math.max(0,parseInt(this.value)||0);this.value=cart[\''+n+'\'];renderProducts();updateCalc();" oninput="this.value=this.value.replace(/[^0-9]/g,\'\')" /><button class="btn-qty" onclick="changeQty(\''+n+'\',1)">+</button></div></div>';
     }
 }
 function changeQty(n,d){cart[n]=Math.max(0,(cart[n]||0)+d);renderProducts();updateCalc();}
@@ -1329,13 +1334,13 @@ function getReviews(){return JSON.parse(localStorage.getItem(REVIEW_KEY)||'{}');
 function saveReviews(d){localStorage.setItem(REVIEW_KEY,JSON.stringify(d));}
 
 function initReview(){
-    const sel=document.getElementById('reviewYear');
+    var sel=document.getElementById('reviewYear');
     if(sel&&!sel.options.length){
         sel.style.display='';
         const cy=new Date().getFullYear();
         for(let y=cy;y>=cy-3;y--){const o=document.createElement('option');o.value=y;o.textContent=y+'年';sel.appendChild(o);}
     }
-    const cm=document.getElementById('reviewMonth');
+    var cm=document.getElementById('reviewMonth');
     if(cm) cm.value=new Date().getMonth();
     loadReviewData();
 }
@@ -1347,8 +1352,8 @@ function getReviewKey(){
 }
 
 function loadReviewData(){
-    const key=getReviewKey();
-    const [y,m]=key.split('-');
+    var key=getReviewKey();
+    var _sp2=key.split('-'); var y=_sp2[0],m=_sp2[1];
     // Update title
     const title=document.getElementById('reviewMonthTitle');
     // title hidden
@@ -1363,13 +1368,19 @@ function loadReviewData(){
             mN+=(r.nurture||0);
         }
     });
+    // Auto-fill from manual monthly data
+    var manKey=y+'-'+m;
+    var manD=getManualData()[manKey]||{};
+    mR += manD.retail||0;
+    mT += manD.team||0;
+    mN += manD.nurture||0;
     // Auto-fill from curve
     var cKey=y+'-'+String(parseInt(m)+1).padStart(2,'0');
     var cData=curveDB[cKey]||{};
     // Load saved review
-    const saved=getReviews()[key]||{};
+    var saved=getReviews()[key]||{};
     // Fields
-    const fields=['rv_target','rv_score','rv_score_reason','rv_compare','rv_breakthrough','rv_improve',
+    var fields=['rv_target','rv_score','rv_score_reason','rv_compare','rv_breakthrough','rv_improve',
         'rv_next_profit','rv_next_recruit','rv_next_reels','rv_next_todo','rv_next_avoid','rv_next_challenge',
         'rv_self_note','rv_question','rv_new_member','rv_direct','rv_indirect','rv_reels','rv_story','rv_fans_growth',
         'rv_pro_order','rv_pro_sell','rv_pro_left','rv_jelly_order','rv_jelly_sell','rv_jelly_left','rv_tiktok','rv_ig'];
@@ -1391,10 +1402,10 @@ function loadReviewData(){
     if(igEl&&!saved.rv_ig&&cData.ig) igEl.value=cData.ig;
     updateReviewTotal();
     // Show auto note
-    const note=document.getElementById('reviewAutoNote');
-    if(note&&(mR||mT||mN)){
+    var note=document.getElementById('reviewAutoNote');
+    if(note&&(mR||mT||mN||manD.retail||manD.team)){
         note.style.display='block';
-        note.innerHTML='✦ 已自動帶入本月業績：零售 $'+mR.toLocaleString()+' · 團隊 $'+mT.toLocaleString()+' · 培育 $'+mN.toLocaleString();
+        note.innerHTML='✦ 已自動帶入本月業績（含手動）：零售淨利 $'+mR.toLocaleString()+' · 團隊淨利 $'+mT.toLocaleString()+(mN?' · 培育 $'+mN.toLocaleString():'');
     }
     renderPastReviews();
 }
@@ -1649,9 +1660,11 @@ function pxCalcRender() {
         var minusBtn = document.createElement('button');
         minusBtn.className = 'btn-qty';
         minusBtn.innerText = '−';
-        var qtyDiv = document.createElement('div');
+        var qtyDiv = document.createElement('input');
+        qtyDiv.type = 'number';
+        qtyDiv.min = '0';
         qtyDiv.className = 'qty-input';
-        qtyDiv.innerText = qty;
+        qtyDiv.value = qty;
         var plusBtn = document.createElement('button');
         plusBtn.className = 'btn-qty';
         plusBtn.innerText = '+';
@@ -1662,14 +1675,18 @@ function pxCalcRender() {
         list.appendChild(row);
         (function(pName, qDiv) {
             minusBtn.addEventListener('click', function() {
-                var cur = parseInt(qDiv.innerText) || 0;
+                var cur = parseInt(qDiv.value) || 0;
                 var nq = Math.max(0, cur - 1);
-                qDiv.innerText = nq; pxCalcSetQty(pName, nq); pxCalcShowResult();
+                qDiv.value = nq; pxCalcSetQty(pName, nq); pxCalcShowResult();
             });
             plusBtn.addEventListener('click', function() {
-                var cur = parseInt(qDiv.innerText) || 0;
+                var cur = parseInt(qDiv.value) || 0;
                 var nq = cur + 1;
-                qDiv.innerText = nq; pxCalcSetQty(pName, nq); pxCalcShowResult();
+                qDiv.value = nq; pxCalcSetQty(pName, nq); pxCalcShowResult();
+            });
+            qDiv.addEventListener('change', function() {
+                var nq = Math.max(0, parseInt(qDiv.value) || 0);
+                qDiv.value = nq; pxCalcSetQty(pName, nq); pxCalcShowResult();
             });
         })(name, qtyDiv);
     });
@@ -1739,7 +1756,10 @@ function initPxCalc() {
 
 
 
-</script></script></script></script></script></script></script></script></script></script></script></script>
+
+
+
+</script></script></script></script></script></script></script></script></script></script></script></script></script></script>
 
 <div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:flex-end;"><div style="background:var(--white);border-radius:22px 22px 0 0;width:100%;max-height:90vh;overflow-y:auto;padding:20px 16px 40px;animation:slideUp .28s ease;"><div style="width:40px;height:4px;background:var(--panel-dark);border-radius:2px;margin:0 auto 18px;"></div><div id="editModalTitle" style="font-size:1rem;font-weight:700;margin-bottom:16px;color:var(--text-main);"></div><div id="editModalContent"></div></div></div>
 <style>@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}</style>
