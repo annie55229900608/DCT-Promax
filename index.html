@@ -263,7 +263,8 @@
     <div class="card">
         <div class="card-header">選擇產品</div>
         <div class="category-tabs">
-            <div class="cat-tab active" onclick="switchCat('活動',this)">活動專區</div>
+            <div class="cat-tab active" onclick="switchCat('本月活動',this)">本月活動</div>
+            <div class="cat-tab" onclick="switchCat('上月活動',this)">上月活動</div>
             <div class="cat-tab" onclick="switchCat('纖體',this)">纖體</div>
             <div class="cat-tab" onclick="switchCat('美肌',this)">美肌</div>
             <div class="cat-tab" onclick="switchCat('保健',this)">保健</div>
@@ -507,7 +508,7 @@
         <div class="card-header">選擇商品</div>
         <div class="category-tabs" id="px-calc-cat-tabs">
             <div class="cat-tab active" onclick="pxCalcSwitchCat('本月活動',this)">本月活動</div>
-            <div class="cat-tab" onclick="pxCalcSwitchCat('活動',this)">上月活動</div>
+            <div class="cat-tab" onclick="pxCalcSwitchCat('上月活動',this)">上月活動</div>
             <div class="cat-tab" onclick="pxCalcSwitchCat('纖體',this)">纖體</div>
             <div class="cat-tab" onclick="pxCalcSwitchCat('美肌',this)">美肌</div>
             <div class="cat-tab" onclick="pxCalcSwitchCat('保健',this)">保健</div>
@@ -682,6 +683,13 @@
 
 
 
+
+
+
+
+
+
+
 function startWelcomeProgress(){
     var bar=document.getElementById('wc-prog-bar');
     var wrap=document.getElementById('wc-progress-wrap');
@@ -746,8 +754,8 @@ window.onerror=function(){return true;};
 const products = {
     "本月活動A 纖體組":{cat:"本月活動",unit:"組",L1:2370,royal:2100,to_L2:2640,to_L3sup:2865,to_L3ret:2970,to_intern:3480,to_consumer:3840,to_consumer_vip:3840,to_consumer_2:3840,msrp:12120},
     "本月活動B 美肌組":{cat:"本月活動",unit:"組",L1:2060,royal:1840,to_L2:2290,to_L3sup:2565,to_L3ret:2660,to_intern:3070,to_consumer:3560,to_consumer_vip:3560,to_consumer_2:3560,msrp:5250},
-    "活動A 益生菌超值組":{cat:"活動",unit:"組",L1:2070,royal:1860,to_L2:2310,to_L3sup:2490,to_L3ret:2580,to_intern:2970,to_consumer:3300,to_consumer_vip:3300,to_consumer_2:3300},
-    "活動B 晶亮凍超值組":{cat:"活動",unit:"組",L1:1095,royal:960,to_L2:1230,to_L3sup:1320,to_L3ret:1365,to_intern:1590,to_consumer:1800,to_consumer_vip:1800,to_consumer_2:1800},
+    "活動A 益生菌超值組":{cat:"上月活動",unit:"組",L1:2070,royal:1860,to_L2:2310,to_L3sup:2490,to_L3ret:2580,to_intern:2970,to_consumer:3300,to_consumer_vip:3300,to_consumer_2:3300},
+    "活動B 晶亮凍超值組":{cat:"上月活動",unit:"組",L1:1095,royal:960,to_L2:1230,to_L3sup:1320,to_L3ret:1365,to_intern:1590,to_consumer:1800,to_consumer_vip:1800,to_consumer_2:1800},
     "纖纖飲X":{cat:"纖體",unit:"盒",L1:790,royal:700,to_L2:880,to_L3sup:955,to_L3ret:990,to_intern:1160,to_consumer:1480,to_consumer_vip:1280,to_consumer_2:1380},
     "纖飄錠":{cat:"纖體",unit:"盒",L1:790,royal:700,to_L2:880,to_L3sup:955,to_L3ret:990,to_intern:1160,to_consumer:1480,to_consumer_vip:1280,to_consumer_2:1380},
     "雪花紫纖飲":{cat:"纖體",unit:"盒",L1:510,royal:440,to_L2:580,to_L3sup:635,to_L3ret:660,to_intern:780,to_consumer:990,to_consumer_vip:830,to_consumer_2:900},
@@ -782,7 +790,7 @@ const buyersByLevel={
     royal:[{id:"L1",name:"一級輔導",t:"team"},{id:"to_L2",name:"二級輔導",t:"team"},{id:"to_L3sup",name:"三級輔導",t:"team"},{id:"to_L3ret",name:"三級零售",t:"team"},{id:"to_intern",name:"實習",t:"team"},{id:"to_consumer",name:"消費者零售",t:"retail"},{id:"to_consumer_vip",name:"消費者VIP",t:"retail"},{id:"to_consumer_2",name:"消費者兩盒",t:"retail"}],
 };
 const quotes=["每一次成交都是因為妳傳遞了價值。","溫柔且堅定，讓妳的專業帶領客戶。","最好的招商力，就是活出妳想要的樣子。","目標不是用來達成的，是用來超越的。","真正的領袖，是把身邊的人都帶向更好的地方。","今天的每一步，都是明天格局的地基。","妳的自律，就是妳最強的名片。","不是等到準備好了才開始，是開始了才會準備好。","成功從來不是偶然，是每一天選擇累積的結果。","妳的能量，決定妳吸引到的人。","讓自己發光，就是最好的行銷。","堅持，是把普通人和成功者分開的那條線。","信念有多強，舞台就有多大。","妳的堅持，終將被看見。","成功不是終點，是一種持續的狀態。","妳有多愛這份事業，客人就有多感受得到。","妳的影響力，從妳願意開口分享開始。","今天的妳，已經比昨天更好了。","每一分努力，時間都會給妳答案。","不怕慢，只怕停。"];
-let currentSeller="L1",currentBuyer="to_consumer",currentCat="活動",cart={};
+let currentSeller="L1",currentBuyer="to_consumer",currentCat="本月活動",cart={};
 let selectedHistoryKey=null;
 
 function getOrders(){return JSON.parse(localStorage.getItem('dctpro_v1'))||[];}
@@ -1400,6 +1408,20 @@ function loadReviewData(){
     if(tikEl&&!saved.rv_tiktok&&cData.tiktok) tikEl.value=cData.tiktok;
     var igEl=document.getElementById('rv_ig');
     if(igEl&&!saved.rv_ig&&cData.ig) igEl.value=cData.ig;
+    // Auto-calculate fans growth from curveDB
+    (function calcFansGrowth(){
+        var fgEl=document.getElementById('rv_fans_growth');
+        if(!fgEl) return;
+        var allKeys=Object.keys(curveDB).sort();
+        var cKeyIdx=allKeys.indexOf(cKey);
+        if(cKeyIdx>0&&curveDB[cKey]){
+            var prevKey=allKeys[cKeyIdx-1];
+            var tikGrowth=(curveDB[cKey].tiktok||0)-(curveDB[prevKey].tiktok||0);
+            var igGrowth=(curveDB[cKey].ig||0)-(curveDB[prevKey].ig||0);
+            var total=tikGrowth+igGrowth;
+            fgEl.value=total>0?total:0;
+        }
+    })();
     updateReviewTotal();
     // Show auto note
     var note=document.getElementById('reviewAutoNote');
@@ -1749,6 +1771,13 @@ function initPxCalc() {
     document.getElementById('px-calc-partner-opts').style.display = 'none';
     pxCalcSetMode('consumer');
 }
+
+
+
+
+
+
+
 
 
 
