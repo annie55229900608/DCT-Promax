@@ -690,6 +690,9 @@
 
 
 
+
+
+
 function startWelcomeProgress(){
     var bar=document.getElementById('wc-prog-bar');
     var wrap=document.getElementById('wc-progress-wrap');
@@ -941,12 +944,12 @@ function loadDashboards(){
     let dP=0,dR=0,dC=0,dN=0,dRetail=0,dTeam=0,dI={},todayOrders=[];
     let mR=0,mP=0,mC=0,mN=0,mRetail=0,mTeam=0,mI={};
     let lR=0,lP=0,lC=0,lN=0;
-    let ser={"活動":0,"纖體":0,"美肌":0,"保健":0};
+    var ser={"本月活動":0,"上月活動":0,"纖體":0,"美肌":0,"保健":0};
     records.forEach(r=>{
         const rd=new Date(r.orderDate||r.id);
         if(rd.toDateString()===today){dP+=r.profit;dR+=r.rev;dC+=r.cost;dN+=(r.nurture||0);if(r.type==='retail')dRetail+=r.profit;else if(r.type==='team')dTeam+=r.profit;r.items.forEach(i=>dI[i.name]={q:((dI[i.name]&&dI[i.name].q!==undefined?dI[i.name].q:undefined)||0)+i.qty,u:i.unit});todayOrders.push({r,rd});}
         const ry=new Date(r.orderDate||r.id);
-        if(ry.getMonth()===curM&&ry.getFullYear()===curY){mR+=r.rev;mP+=r.profit;mC+=r.cost;mN+=(r.nurture||0);if(r.type==='retail')mRetail+=r.profit;else if(r.type==='team')mTeam+=r.profit;r.items.forEach(i=>{mI[i.name]={q:((mI[i.name]&&mI[i.name].q!==undefined?mI[i.name].q:undefined)||0)+i.qty,u:i.unit};if(ser[i.cat]!==undefined)ser[i.cat]+=r.rev;});}
+        if(ry.getMonth()===curM&&ry.getFullYear()===curY){mR+=r.rev;mP+=r.profit;mC+=r.cost;mN+=(r.nurture||0);if(r.type==='retail')mRetail+=r.profit;else if(r.type==='team')mTeam+=r.profit;r.items.forEach(i=>{mI[i.name]={q:((mI[i.name]&&mI[i.name].q!==undefined?mI[i.name].q:undefined)||0)+i.qty,u:i.unit};if(ser[i.cat]!==undefined)var sCat=i.cat==="活動"?"本月活動":i.cat;if(ser[sCat]!==undefined)ser[sCat]+=r.rev;});}
         if(ry.getMonth()===lastM&&ry.getFullYear()===lastY){lR+=r.rev;lP+=r.profit;lC+=r.cost;lN+=(r.nurture||0);}
     });
     let dL='';
@@ -983,9 +986,9 @@ dL+='<div class="order-card"><div class="order-card-header"><div><div class="ord
     document.getElementById('lastMProfit').innerText='$'+lP.toLocaleString();document.getElementById('lastMNurture').innerText='$'+lN.toLocaleString();
     let mIH='';Object.entries(mI).sort((a,b)=>b[1].q-a[1].q).forEach(e=>mIH+=`<div class="item-row"><span>${e[0]}</span><b>${e[1].q} ${e[1].u}</b></div>`);
     document.getElementById('mItemStats').innerHTML=mIH||'<span style="font-size:.82rem;color:var(--text-muted)">無數據</span>';
-    const sC={"活動":"#C9A84C","纖體":"#5A9EC7","美肌":"#B07ACA","保健":"#5AAE80"};
-    const ts=Object.values(ser).reduce((a,b)=>a+b,0);let sH='';
-    for(let s in ser){const p=ts>0?Math.round(ser[s]/ts*100):0;sH+=`<div class="series-container"><div class="series-label"><span>${s}</span><span>${p}%</span></div><div class="series-bar"><div class="series-fill" style="width:${p}%;background:${sC[s]}"></div></div></div>`;}
+    const sC={"本月活動":"#C9A84C","上月活動":"#D4A843","纖體":"#5A9EC7","美肌":"#B07ACA","保健":"#5AAE80"};
+    var ts=Object.values(ser).reduce(function(a,b){ return a+b; },0);var sH='';
+    for(var s in ser){ var p=ts>0?Math.round(ser[s]/ts*100):0;sH+=`<div class="series-container"><div class="series-label"><span>${s}</span><span>${p}%</span></div><div class="series-bar"><div class="series-fill" style="width:${p}%;background:${sC[s]}"></div></div></div>`;}
     document.getElementById('seriesChart').innerHTML=sH;
 }
 
@@ -1771,6 +1774,9 @@ function initPxCalc() {
     document.getElementById('px-calc-partner-opts').style.display = 'none';
     pxCalcSetMode('consumer');
 }
+
+
+
 
 
 
