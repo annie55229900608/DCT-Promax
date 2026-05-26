@@ -673,6 +673,8 @@
 <script>
 
 
+
+
 function showCoinRain(){
     var btn=document.querySelector('.save-btn');
     var rect=btn?btn.getBoundingClientRect():{left:window.innerWidth/2-30,top:window.innerHeight-100,width:60};
@@ -776,10 +778,11 @@ window.onerror=function(){return true;};
 
 
 const products = {
-    "本月活動A 纖體組":{cat:"本月活動",unit:"組",L1:2370,royal:2100,to_L2:2640,to_L3sup:2865,to_L3ret:2970,to_intern:3480,to_consumer:3840,to_consumer_vip:3840,to_consumer_2:3840,msrp:12120},
-    "本月活動B 美肌組":{cat:"本月活動",unit:"組",L1:2060,royal:1840,to_L2:2290,to_L3sup:2565,to_L3ret:2660,to_intern:3070,to_consumer:3560,to_consumer_vip:3560,to_consumer_2:3560,msrp:5250},
-    "活動A 益生菌超值組":{cat:"上月活動",unit:"組",L1:2070,royal:1860,to_L2:2310,to_L3sup:2490,to_L3ret:2580,to_intern:2970,to_consumer:3300,to_consumer_vip:3300,to_consumer_2:3300},
-    "活動B 晶亮凍超值組":{cat:"上月活動",unit:"組",L1:1095,royal:960,to_L2:1230,to_L3sup:1320,to_L3ret:1365,to_intern:1590,to_consumer:1800,to_consumer_vip:1800,to_consumer_2:1800},
+        "肽纖飲組合":{cat:"本月活動",unit:"組",L1:1530,royal:1320,to_L2:1740,to_L3sup:1905,to_L3ret:1980,to_intern:2340,to_consumer:2490,to_consumer_vip:2490,to_consumer_2:2490,msrp:2490},
+    "纖體組（活動）":{cat:"上月活動",unit:"組",L1:2370,royal:2100,to_L2:2640,to_L3sup:2865,to_L3ret:2970,to_intern:3480,to_consumer:3840,to_consumer_vip:3840,to_consumer_2:3840,msrp:12120},
+    "美肌組（活動）":{cat:"上月活動",unit:"組",L1:2060,royal:1840,to_L2:2290,to_L3sup:2565,to_L3ret:2660,to_intern:3070,to_consumer:3560,to_consumer_vip:3560,to_consumer_2:3560,msrp:5250},
+    "益生菌超值組":{cat:"上月活動",unit:"組",L1:2070,royal:1860,to_L2:2310,to_L3sup:2490,to_L3ret:2580,to_intern:2970,to_consumer:3300,to_consumer_vip:3300,to_consumer_2:3300},
+    "晶亮凍超值組":{cat:"上月活動",unit:"組",L1:1095,royal:960,to_L2:1230,to_L3sup:1320,to_L3ret:1365,to_intern:1590,to_consumer:1800,to_consumer_vip:1800,to_consumer_2:1800},
     "纖纖飲X":{cat:"纖體",unit:"盒",L1:790,royal:700,to_L2:880,to_L3sup:955,to_L3ret:990,to_intern:1160,to_consumer:1480,to_consumer_vip:1280,to_consumer_2:1380},
     "纖飄錠":{cat:"纖體",unit:"盒",L1:790,royal:700,to_L2:880,to_L3sup:955,to_L3ret:990,to_intern:1160,to_consumer:1480,to_consumer_vip:1280,to_consumer_2:1380},
     "雪花紫纖飲":{cat:"纖體",unit:"盒",L1:510,royal:440,to_L2:580,to_L3sup:635,to_L3ret:660,to_intern:780,to_consumer:990,to_consumer_vip:830,to_consumer_2:900},
@@ -1817,6 +1820,26 @@ function initPxCalc() {
 
 
 
+
+
+function deleteManualEntry(key){
+    var d=getManualData();
+    if(!d[key]) return;
+    var sp=key.split('-');
+    if(!confirm(sp[0]+'年'+(parseInt(sp[1])+1)+'月 確定刪除手動業績？')) return;
+    delete d[key];
+    saveManualDataStore(d);
+    renderChart();
+    loadHistory();
+    showToast('已刪除');
+}
+function deleteCurveRow(key){
+    delete curveDB[key];
+    saveCurveDB();
+    renderCurveTableFiltered();
+    renderCurveCharts();
+    showToast('已刪除');
+}
 
 </script></script></script></script></script></script></script></script></script></script></script></script></script></script>
 
