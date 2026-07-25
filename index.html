@@ -555,18 +555,10 @@
     <!-- 活動庫存 -->
     <div class="card">
         <div class="card-header">🪐 活動庫存</div>
-        <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:10px;">纖體組 / 美肌組各填叫貨、銷售、剩餘</div>
-        <div style="font-size:.8rem;font-weight:600;color:var(--gold-deep);margin-bottom:8px;">🌿 纖體組</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
             <div class="input-group" style="margin-bottom:0"><span class="input-label">叫貨</span><input type="number" id="rv_pro_order" class="custom-input" placeholder="0組"></div>
             <div class="input-group" style="margin-bottom:0"><span class="input-label">銷售</span><input type="number" id="rv_pro_sell" class="custom-input" placeholder="0組"></div>
             <div class="input-group" style="margin-bottom:0"><span class="input-label">剩餘</span><input type="number" id="rv_pro_left" class="custom-input" placeholder="0組"></div>
-        </div>
-        <div style="font-size:.8rem;font-weight:600;color:var(--gold-deep);margin-bottom:8px;">✨ 美肌組</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-            <div class="input-group" style="margin-bottom:0"><span class="input-label">叫貨</span><input type="number" id="rv_jelly_order" class="custom-input" placeholder="0組"></div>
-            <div class="input-group" style="margin-bottom:0"><span class="input-label">銷售</span><input type="number" id="rv_jelly_sell" class="custom-input" placeholder="0組"></div>
-            <div class="input-group" style="margin-bottom:0"><span class="input-label">剩餘</span><input type="number" id="rv_jelly_left" class="custom-input" placeholder="0組"></div>
         </div>
     </div>
 
@@ -676,6 +668,11 @@
 
 
 
+
+
+
+
+
 function showCoinRain(){
     var btn=document.querySelector('.save-btn');
     var rect=btn?btn.getBoundingClientRect():{left:window.innerWidth/2-30,top:window.innerHeight-100,width:60};
@@ -779,11 +776,13 @@ window.onerror=function(){return true;};
 
 
 const products = {
-        "肽纖飲組合":{cat:"本月活動",unit:"組",L1:1530,royal:1320,to_L2:1740,to_L3sup:1905,to_L3ret:1980,to_intern:2340,to_consumer:2490,to_consumer_vip:2490,to_consumer_2:2490,msrp:2490},
-    "纖體組（活動）":{cat:"上月活動",unit:"組",L1:2370,royal:2100,to_L2:2640,to_L3sup:2865,to_L3ret:2970,to_intern:3480,to_consumer:3840,to_consumer_vip:3840,to_consumer_2:3840,msrp:12120},
-    "美肌組（活動）":{cat:"上月活動",unit:"組",L1:2060,royal:1840,to_L2:2290,to_L3sup:2565,to_L3ret:2660,to_intern:3070,to_consumer:3560,to_consumer_vip:3560,to_consumer_2:3560,msrp:5250},
-    "益生菌超值組":{cat:"上月活動",unit:"組",L1:2070,royal:1860,to_L2:2310,to_L3sup:2490,to_L3ret:2580,to_intern:2970,to_consumer:3300,to_consumer_vip:3300,to_consumer_2:3300},
-    "晶亮凍超值組":{cat:"上月活動",unit:"組",L1:1095,royal:960,to_L2:1230,to_L3sup:1320,to_L3ret:1365,to_intern:1590,to_consumer:1800,to_consumer_vip:1800,to_consumer_2:1800},
+            "葉黃素活動":{cat:"本月活動",unit:"盒",L1:1710,royal:1500,to_L2:1920,to_L3sup:2085,to_L3ret:2160,to_intern:2520,to_consumer:2700,to_consumer_vip:2700,to_consumer_2:2700,msrp:2700},
+    "法樂蓬活動":{cat:"本月活動",unit:"組",L1:1830,royal:1620,to_L2:2050,to_L3sup:2220,to_L3ret:2300,to_intern:2670,to_consumer:2900,to_consumer_vip:2900,to_consumer_2:2900,msrp:2900},
+    "肽纖飲組合":{cat:"上月活動",unit:"組",L1:1530,royal:1320,to_L2:1740,to_L3sup:1905,to_L3ret:1980,to_intern:2340,to_consumer:2490,to_consumer_vip:2490,to_consumer_2:2490,msrp:2490},
+    "纖體組（活動）":{cat:"_hidden",unit:"組",L1:2370,royal:2100,to_L2:2640,to_L3sup:2865,to_L3ret:2970,to_intern:3480,to_consumer:3840,to_consumer_vip:3840,to_consumer_2:3840,msrp:12120},
+    "美肌組（活動）":{cat:"_hidden",unit:"組",L1:2060,royal:1840,to_L2:2290,to_L3sup:2565,to_L3ret:2660,to_intern:3070,to_consumer:3560,to_consumer_vip:3560,to_consumer_2:3560,msrp:5250},
+    "益生菌超值組":{cat:"_hidden",unit:"組",L1:2070,royal:1860,to_L2:2310,to_L3sup:2490,to_L3ret:2580,to_intern:2970,to_consumer:3300,to_consumer_vip:3300,to_consumer_2:3300},
+    "晶亮凍超值組":{cat:"_hidden",unit:"組",L1:1095,royal:960,to_L2:1230,to_L3sup:1320,to_L3ret:1365,to_intern:1590,to_consumer:1800,to_consumer_vip:1800,to_consumer_2:1800},
     "纖纖飲X":{cat:"纖體",unit:"盒",L1:790,royal:700,to_L2:880,to_L3sup:955,to_L3ret:990,to_intern:1160,to_consumer:1480,to_consumer_vip:1280,to_consumer_2:1380},
     "纖飄錠":{cat:"纖體",unit:"盒",L1:790,royal:700,to_L2:880,to_L3sup:955,to_L3ret:990,to_intern:1160,to_consumer:1480,to_consumer_vip:1280,to_consumer_2:1380},
     "雪花紫纖飲":{cat:"纖體",unit:"盒",L1:510,royal:440,to_L2:580,to_L3sup:635,to_L3ret:660,to_intern:780,to_consumer:990,to_consumer_vip:830,to_consumer_2:900},
@@ -1059,7 +1058,7 @@ const regex=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');con
 
 // ══ Chart ══
 function renderChart(){const rs=getOrders();const data={};rs.forEach(r=>{const d=new Date(r.orderDate||r.id);const k=`${d.getFullYear()}-${d.getMonth()}`;if(!data[k])data[k]={retail:0,team:0,nurture:0};if(r.type==='retail')data[k].retail+=r.profit;else if(r.type==='team')data[k].team+=r.profit;data[k].nurture+=(r.nurture||0);});const manD2=getManualData();Object.keys(manD2).forEach(k=>{if(!data[k])data[k]={retail:0,team:0,nurture:0};data[k].retail+=manD2[k].retail||0;data[k].team+=manD2[k].team||0;data[k].nurture+=manD2[k].nurture||0;});
-const keys=Object.keys(data).sort();if(!keys.length){document.getElementById('chartWrap').innerHTML='<div style="text-align:center;padding:20px;font-size:.82rem;color:var(--text-muted)">尚無數據</div>';document.getElementById('chartTable').innerHTML='';return;}const VISIBLE=18;const _wrap=document.getElementById('chartWrap');const _cW=(_wrap&&_wrap.offsetWidth>100)?_wrap.offsetWidth:360;const BW=Math.max(22,Math.floor((_cW-54-20-10*VISIBLE)/VISIBLE));const G=10,PL=54,PR=20,PT=50,PB=50,CH=260;const aMax=Math.max(...keys.map(k=>data[k].retail+data[k].team+data[k].nurture),1);const nM=Math.ceil(aMax/10000)*10000||10000;const TW=PL+keys.length*(BW+G)+PR;const ys=v=>PT+(CH*(1-v/nM));let tks='';for(let i=0;i<=5;i++){const v=nM*i/5,y=ys(v);tks+=`<line x1="${PL-6}" y1="${y}" x2="${TW-PR}" y2="${y}" stroke="#EAE0C4" stroke-width="1"/><text x="${PL-9}" y="${y+4}" text-anchor="end" font-size="9" fill="#A89060">${v>=10000?Math.round(v/1000)+'k':v}</text>`;}let bars='';keys.forEach((k,i)=>{const d=data[k],[yr,mo]=k.split('-');const x=PL+i*(BW+G),tot=d.retail+d.team+d.nurture;const yt_pos=ys(d.retail+d.team),yn_pos=ys(d.retail),ytot=ys(tot);const hn=Math.max(1,CH*d.nurture/nM),ht=Math.max(1,CH*d.team/nM),hr=Math.max(1,CH*d.retail/nM);
+const keys=Object.keys(data).sort(function(a,b){ var sa=a.split('-'),sb=b.split('-'); return parseInt(sa[0])-parseInt(sb[0])||parseInt(sa[1])-parseInt(sb[1]); });if(!keys.length){document.getElementById('chartWrap').innerHTML='<div style="text-align:center;padding:20px;font-size:.82rem;color:var(--text-muted)">尚無數據</div>';document.getElementById('chartTable').innerHTML='';return;}const VISIBLE=18;const _wrap=document.getElementById('chartWrap');const _cW=(_wrap&&_wrap.offsetWidth>100)?_wrap.offsetWidth:360;const BW=Math.max(22,Math.floor((_cW-54-20-10*VISIBLE)/VISIBLE));const G=10,PL=54,PR=20,PT=50,PB=50,CH=260;const aMax=Math.max(...keys.map(k=>data[k].retail+data[k].team+data[k].nurture),1);const nM=Math.ceil(aMax/10000)*10000||10000;const TW=PL+keys.length*(BW+G)+PR;const ys=v=>PT+(CH*(1-v/nM));let tks='';for(let i=0;i<=5;i++){const v=nM*i/5,y=ys(v);tks+=`<line x1="${PL-6}" y1="${y}" x2="${TW-PR}" y2="${y}" stroke="#EAE0C4" stroke-width="1"/><text x="${PL-9}" y="${y+4}" text-anchor="end" font-size="9" fill="#A89060">${v>=10000?Math.round(v/1000)+'k':v}</text>`;}let bars='';keys.forEach((k,i)=>{const d=data[k],[yr,mo]=k.split('-');const x=PL+i*(BW+G),tot=d.retail+d.team+d.nurture;const yt_pos=ys(d.retail+d.team),yn_pos=ys(d.retail),ytot=ys(tot);const hn=Math.max(1,CH*d.nurture/nM),ht=Math.max(1,CH*d.team/nM),hr=Math.max(1,CH*d.retail/nM);
         if(d.nurture>0){bars+=`<rect x="${x}" y="${ytot}" width="${BW}" height="${hn}" fill="#4BAE73" rx="2"/>`;if(hn>14){const nl=d.nurture>=10000?(d.nurture/1000).toFixed(0)+'k':d.nurture>=1000?(d.nurture/1000).toFixed(1)+'k':d.nurture;bars+=`<text x="${x+BW/2}" y="${ytot+hn/2+4}" text-anchor="middle" font-size="8" font-weight="700" fill="rgba(255,255,255,.85)">${nl}</text>`;}}
         if(d.team>0){bars+=`<rect x="${x}" y="${yt_pos}" width="${BW}" height="${ht}" fill="#5A7EC7" rx="2"/>`;if(ht>14){const tl=d.team>=10000?(d.team/1000).toFixed(0)+'k':d.team>=1000?(d.team/1000).toFixed(1)+'k':d.team;bars+=`<text x="${x+BW/2}" y="${yt_pos+ht/2+4}" text-anchor="middle" font-size="8" font-weight="700" fill="rgba(255,255,255,.85)">${tl}</text>`;}}
         if(d.retail>0){bars+=`<rect x="${x}" y="${yn_pos}" width="${BW}" height="${hr}" fill="#C9A84C" rx="2"/>`;if(hr>14){const rl=d.retail>=10000?(d.retail/1000).toFixed(0)+'k':d.retail>=1000?(d.retail/1000).toFixed(1)+'k':d.retail;bars+=`<text x="${x+BW/2}" y="${yn_pos+hr/2+4}" text-anchor="middle" font-size="8" font-weight="700" fill="rgba(255,255,255,.85)">${rl}</text>`;}}if(tot>0)bars+=`<text x="${x+BW/2}" y="${ytot-6}" text-anchor="middle" font-size="9.5" font-weight="600" fill="#1A1510">${tot>=1000?(tot/1000).toFixed(1).replace(/.0$/,'')+'k':tot}</text>`;bars+=`<text x="${x+BW/2}" y="${PT+CH+16}" text-anchor="middle" font-size="9.5" fill="#6B5A38">${parseInt(mo)+1}月</text>`;bars+=`<text x="${x+BW/2}" y="${PT+CH+28}" text-anchor="middle" font-size="8" fill="#A89060">${yr}</text>`;});updateAllBadges();document.getElementById('chartWrap').innerHTML=`<svg width="${TW}" height="${PT+CH+PB}" xmlns="http://www.w3.org/2000/svg" style="display:block;">${tks}<line x1="${PL}" y1="${PT}" x2="${PL}" y2="${PT+CH}" stroke="#EAE0C4" stroke-width="1.5"/>${bars}</svg>`;const curY=new Date().getFullYear().toString();let yR=0,yT=0,yN=0;Object.keys(data).filter(k=>k.startsWith(curY)).forEach(k=>{yR+=data[k].retail;yT+=data[k].team;yN+=data[k].nurture;});const srEl=document.getElementById('chartStatRetail');const stEl=document.getElementById('chartStatTeam');const snEl=document.getElementById('chartStatNurture');if(srEl)srEl.innerText='$'+yR.toLocaleString();if(stEl)stEl.innerText='$'+yT.toLocaleString();if(snEl)snEl.innerText='$'+yN.toLocaleString();const sel=document.getElementById('chartYearFilter');const years=Array.from(new Set(keys.map(function(k){return k.split('-')[0];}))).sort(function(a,b){return b-a;});const cur=sel.value;sel.innerHTML='<option value="">全部年份</option>'+years.map(y=>`<option value="${y}"${y===cur?'selected':''}>${y}年</option>`).join('');renderChartTable();}
@@ -1073,7 +1072,7 @@ function saveChartEdit(k){const eid='cedit_'+k.replace('-','_');const retail=par
     var rs=getOrders(),manD=getManualData(),data={};
     rs.forEach(function(r){var d=new Date(r.orderDate||r.id);var k=d.getFullYear()+'-'+d.getMonth();if(!data[k])data[k]={retail:0,team:0,nurture:0};if(r.type==='retail')data[k].retail+=r.profit;else if(r.type==='team')data[k].team+=r.profit;data[k].nurture+=(r.nurture||0);});
     Object.keys(manD).forEach(function(k){if(!data[k])data[k]={retail:0,team:0,nurture:0};data[k].retail+=manD[k].retail||0;data[k].team+=manD[k].team||0;data[k].nurture+=manD[k].nurture||0;});
-    var allKeys=Object.keys(data).filter(function(k){return !yr||k.startsWith(yr);}).sort(function(a,b){return b.localeCompare(a);});
+    var allKeys=Object.keys(data).filter(function(k){return !yr||k.startsWith(yr);}).sort(function(a,b){ var sa=a.split('-'),sb=b.split('-'); return parseInt(sb[0])-parseInt(sa[0])||parseInt(sb[1])-parseInt(sa[1]); });
     if(!allKeys.length){document.getElementById('chartTable').innerHTML='<div style="text-align:center;padding:20px;font-size:.82rem;color:var(--text-muted)">尚無數據，開單後自動出現；也可補登歷史</div>';return;}
     var th='';
     allKeys.forEach(function(k){
@@ -1498,12 +1497,12 @@ function copyReview(){
         '@All 想成長者完成月復盤',
         '上家會跟你說目前你的狀況可以怎麼調整',
         '',
-        '🌿纖體組',
+        '💊肽纖飲活動',
         '叫貨 '+get('rv_pro_order')+'組',
         '銷售 '+get('rv_pro_sell')+'組',
         '剩餘 '+get('rv_pro_left')+'組',
         '',
-        '✨美肌組',
+        '',
         '叫貨 '+get('rv_jelly_order')+'組',
         '銷售 '+get('rv_jelly_sell')+'組',
         '剩餘 '+get('rv_jelly_left')+'組',
@@ -1561,7 +1560,7 @@ function copyReview(){
 
 function renderPastReviews(){
     const all=getReviews();
-    const keys=Object.keys(all).sort(function(a,b){return b.localeCompare(a);});
+    const keys=Object.keys(all).sort(function(a,b){ var sa=a.split('-'),sb=b.split('-'); return parseInt(sb[0])-parseInt(sa[0])||parseInt(sb[1])-parseInt(sa[1]); });
     const el=document.getElementById('rv_past_container');
     if(!el)return;
     if(!keys.length){el.innerHTML='';return;}
@@ -1841,6 +1840,11 @@ function deleteCurveRow(key){
     renderCurveCharts();
     showToast('已刪除');
 }
+
+
+
+
+
 
 
 </script></script></script></script></script></script></script></script></script></script></script></script></script></script>
