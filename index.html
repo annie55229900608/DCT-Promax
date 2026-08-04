@@ -555,10 +555,17 @@
     <!-- 活動庫存 -->
     <div class="card">
         <div class="card-header">🪐 活動庫存</div>
+        <div style="font-size:.78rem;font-weight:600;color:var(--rose-deep);margin-bottom:8px;">🌿 法樂蓬活動</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+            <div class="input-group" style="margin-bottom:0"><span class="input-label">叫貨</span><input type="number" id="rv_falap_order" class="custom-input" placeholder="0組"></div>
+            <div class="input-group" style="margin-bottom:0"><span class="input-label">銷售</span><input type="number" id="rv_falap_sell" class="custom-input" placeholder="0組"></div>
+            <div class="input-group" style="margin-bottom:0"><span class="input-label">剩餘</span><input type="number" id="rv_falap_left" class="custom-input" placeholder="0組"></div>
+        </div>
+        <div style="font-size:.78rem;font-weight:600;color:var(--rose-deep);margin-bottom:8px;">✨ 葉黃素活動</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-            <div class="input-group" style="margin-bottom:0"><span class="input-label">叫貨</span><input type="number" id="rv_pro_order" class="custom-input" placeholder="0組"></div>
-            <div class="input-group" style="margin-bottom:0"><span class="input-label">銷售</span><input type="number" id="rv_pro_sell" class="custom-input" placeholder="0組"></div>
-            <div class="input-group" style="margin-bottom:0"><span class="input-label">剩餘</span><input type="number" id="rv_pro_left" class="custom-input" placeholder="0組"></div>
+            <div class="input-group" style="margin-bottom:0"><span class="input-label">叫貨</span><input type="number" id="rv_yls_order" class="custom-input" placeholder="0組"></div>
+            <div class="input-group" style="margin-bottom:0"><span class="input-label">銷售</span><input type="number" id="rv_yls_sell" class="custom-input" placeholder="0組"></div>
+            <div class="input-group" style="margin-bottom:0"><span class="input-label">剩餘</span><input type="number" id="rv_yls_left" class="custom-input" placeholder="0組"></div>
         </div>
     </div>
 
@@ -673,6 +680,8 @@
 
 
 
+
+
 function showCoinRain(){
     var btn=document.querySelector('.save-btn');
     var rect=btn?btn.getBoundingClientRect():{left:window.innerWidth/2-30,top:window.innerHeight-100,width:60};
@@ -776,8 +785,10 @@ window.onerror=function(){return true;};
 
 
 const products = {
-            "葉黃素活動":{cat:"本月活動",unit:"盒",L1:1710,royal:1500,to_L2:1920,to_L3sup:2085,to_L3ret:2160,to_intern:2520,to_consumer:2700,to_consumer_vip:2700,to_consumer_2:2700,msrp:2700},
-    "法樂蓬活動":{cat:"本月活動",unit:"組",L1:1830,royal:1620,to_L2:2050,to_L3sup:2220,to_L3ret:2300,to_intern:2670,to_consumer:2900,to_consumer_vip:2900,to_consumer_2:2900,msrp:2900},
+            "葉黃素活動":{cat:"上月活動",unit:"盒",L1:1710,royal:1500,to_L2:1920,to_L3sup:2085,to_L3ret:2160,to_intern:2520,to_consumer:2700,to_consumer_vip:2700,to_consumer_2:2700,msrp:2700},
+    "法樂蓬活動":{cat:"上月活動",unit:"組",L1:1830,royal:1620,to_L2:2050,to_L3sup:2220,to_L3ret:2300,to_intern:2670,to_consumer:2900,to_consumer_vip:2900,to_consumer_2:2900,msrp:2900},
+        "婕肌零組合":{cat:"本月活動",unit:"組",L1:1020,royal:880,to_L2:1160,to_L3sup:1270,to_L3ret:1320,to_intern:1560,to_consumer:1660,to_consumer_vip:1660,to_consumer_2:1660,msrp:2330},
+    "雪聚露組合":{cat:"本月活動",unit:"組",L1:1380,royal:1240,to_L2:1540,to_L3sup:1660,to_L3ret:1720,to_intern:1980,to_consumer:2200,to_consumer_vip:2200,to_consumer_2:2200,msrp:3550},
     "肽纖飲組合":{cat:"上月活動",unit:"組",L1:1530,royal:1320,to_L2:1740,to_L3sup:1905,to_L3ret:1980,to_intern:2340,to_consumer:2490,to_consumer_vip:2490,to_consumer_2:2490,msrp:2490},
     "纖體組（活動）":{cat:"_hidden",unit:"組",L1:2370,royal:2100,to_L2:2640,to_L3sup:2865,to_L3ret:2970,to_intern:3480,to_consumer:3840,to_consumer_vip:3840,to_consumer_2:3840,msrp:12120},
     "美肌組（活動）":{cat:"_hidden",unit:"組",L1:2060,royal:1840,to_L2:2290,to_L3sup:2565,to_L3ret:2660,to_intern:3070,to_consumer:3560,to_consumer_vip:3560,to_consumer_2:3560,msrp:5250},
@@ -1418,7 +1429,7 @@ function loadReviewData(){
     var fields=['rv_target','rv_score','rv_score_reason','rv_compare','rv_breakthrough','rv_improve',
         'rv_next_profit','rv_next_recruit','rv_next_reels','rv_next_todo','rv_next_avoid','rv_next_challenge',
         'rv_self_note','rv_question','rv_new_member','rv_direct','rv_indirect','rv_reels','rv_story','rv_fans_growth',
-        'rv_pro_order','rv_pro_sell','rv_pro_left','rv_jelly_order','rv_jelly_sell','rv_jelly_left','rv_tiktok','rv_ig'];
+        'rv_falap_order','rv_falap_sell','rv_falap_left','rv_yls_order','rv_yls_sell','rv_yls_left','rv_jelly_order','rv_jelly_sell','rv_jelly_left','rv_tiktok','rv_ig'];
     fields.forEach(function(f){
         var el=document.getElementById(f);
         if(el) el.value=saved[f]!==undefined?saved[f]:'';
@@ -1478,7 +1489,7 @@ function saveReview(){
         'rv_compare','rv_breakthrough','rv_improve','rv_next_profit','rv_next_recruit','rv_next_reels',
         'rv_next_todo','rv_next_avoid','rv_next_challenge','rv_self_note','rv_question',
         'rv_new_member','rv_direct','rv_indirect','rv_reels','rv_story','rv_fans_growth',
-        'rv_pro_order','rv_pro_sell','rv_pro_left','rv_jelly_order','rv_jelly_sell','rv_jelly_left','rv_tiktok','rv_ig'];
+        'rv_falap_order','rv_falap_sell','rv_falap_left','rv_yls_order','rv_yls_sell','rv_yls_left','rv_jelly_order','rv_jelly_sell','rv_jelly_left','rv_tiktok','rv_ig'];
     const data={};
     fields.forEach(function(f){var el=document.getElementById(f);if(el) data[f]=el.value;});
     const all=getReviews();
@@ -1497,10 +1508,16 @@ function copyReview(){
         '@All 想成長者完成月復盤',
         '上家會跟你說目前你的狀況可以怎麼調整',
         '',
-        '💊肽纖飲活動',
-        '叫貨 '+get('rv_pro_order')+'組',
-        '銷售 '+get('rv_pro_sell')+'組',
-        '剩餘 '+get('rv_pro_left')+'組',
+        '🌿法樂蓬活動',
+        '叫貨 '+get('rv_falap_order')+'組',
+        '銷售 '+get('rv_falap_sell')+'組',
+        '剩餘 '+get('rv_falap_left')+'組',
+        '',
+        '✨葉黃素活動',
+        '叫貨 '+get('rv_yls_order')+'組',
+        '銷售 '+get('rv_yls_sell')+'組',
+        '剩餘 '+get('rv_yls_left')+'組',
+        
         '',
         '',
         '叫貨 '+get('rv_jelly_order')+'組',
@@ -1840,6 +1857,8 @@ function deleteCurveRow(key){
     renderCurveCharts();
     showToast('已刪除');
 }
+
+
 
 
 
