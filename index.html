@@ -687,6 +687,7 @@
 
 
 
+
 function showCoinRain(){
     var btn=document.querySelector('.save-btn');
     var rect=btn?btn.getBoundingClientRect():{left:window.innerWidth/2-30,top:window.innerHeight-100,width:60};
@@ -1261,11 +1262,10 @@ function importAllData(e){
                 var merged=ex.slice();
                 pO.forEach(function(o){ if(!merged.find(function(m2){ return m2.id===o.id; })) merged.push(o); });
                 localStorage.setItem('dctpro_v1',JSON.stringify(merged));
-                allOrders=merged;
             }
             if(pM && Object.keys(pM).length){ var exM=JSON.parse(localStorage.getItem('dctpro_manual')||'{}'); localStorage.setItem('dctpro_manual',JSON.stringify(Object.assign({},pM,exM))); }
-            if(pC && Object.keys(pC).length){ var exC=JSON.parse(localStorage.getItem('dctpro_curve_v1')||'{}'); localStorage.setItem('dctpro_curve_v1',JSON.stringify(Object.assign({},pC,exC))); curveData=JSON.parse(localStorage.getItem('dctpro_curve_v1')); }
-            if(pP && pP.name && !getProfile().name) saveProfile(pP);
+            if(pC && Object.keys(pC).length){ var exC=JSON.parse(localStorage.getItem('dctpro_curve_v1')||'{}'); localStorage.setItem('dctpro_curve_v1',JSON.stringify(Object.assign({},pC,exC)));  }
+            if(pP && pP.name && !getProfile().name) saveProfileLS(pP);
             if(pG) localStorage.setItem('dctpro_goal',pG);
             if(pRv && Object.keys(pRv).length){ var exR=JSON.parse(localStorage.getItem('dctpro_review_v1')||'{}'); localStorage.setItem('dctpro_review_v1',JSON.stringify(Object.assign({},pRv,exR))); }
             if(isUnified){
@@ -1281,7 +1281,8 @@ function importAllData(e){
             loadDashboard(); renderChart(); if(typeof renderCurveCharts==='function') renderCurveCharts();
             showToast('✓ 還原成功！兩個 App 的資料都已合併匯入');
         } catch(err) {
-            showToast('⚠ 檔案格式錯誤，請確認是正確的備份檔');
+            console.error('Import error:', err);
+            showToast('⚠ 匯入失敗：' + (err.message||'格式錯誤'), '#C8748A');
         }
     };
     reader.readAsText(file);
@@ -1905,6 +1906,7 @@ function deleteCurveRow(key){
     renderCurveCharts();
     showToast('已刪除');
 }
+
 
 
 
