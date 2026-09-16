@@ -693,6 +693,8 @@
 
 
 
+
+
 function showCoinRain(){
     var btn=document.querySelector('.save-btn');
     var rect=btn?btn.getBoundingClientRect():{left:window.innerWidth/2-30,top:window.innerHeight-100,width:60};
@@ -1294,7 +1296,16 @@ function importAllData(e){
                 if(mGl&&mGl!=='0'){ var exMG=localStorage.getItem('dct_goal'); if(!exMG||exMG==='0') localStorage.setItem('dct_goal',mGl); }
                 if(Object.keys(mRv).length){ var exMR=JSON.parse(localStorage.getItem('dct_money_review_v1')||'{}')||{}; localStorage.setItem('dct_money_review_v1',JSON.stringify(Object.assign({},mRv,exMR))); }
             }
-            loadDashboards(); renderChart(); if(typeof renderCurveCharts==='function') renderCurveCharts(); if(typeof renderCurveTableFiltered==='function') renderCurveTableFiltered();
+            // Reload all in-memory data after import
+            curveDB = JSON.parse(localStorage.getItem('dctpro_curve_v1') || '{}');
+            // Re-render all tabs
+            loadDashboards();
+            loadHistory();
+            renderChart();
+            initManualYearSelect();
+            renderChartTableFiltered();
+            if(typeof renderCurveCharts==='function') renderCurveCharts();
+            if(typeof renderCurveTableFiltered==='function') renderCurveTableFiltered();
             showToast('✓ 還原成功！資料已合併匯入');
         } catch(err) {
             console.error('Import error:', err);
@@ -1922,6 +1933,8 @@ function deleteCurveRow(key){
     renderCurveCharts();
     showToast('已刪除');
 }
+
+
 
 
 
