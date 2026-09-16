@@ -689,6 +689,9 @@
 
 
 
+
+
+
 function showCoinRain(){
     var btn=document.querySelector('.save-btn');
     var rect=btn?btn.getBoundingClientRect():{left:window.innerWidth/2-30,top:window.innerHeight-100,width:60};
@@ -791,7 +794,7 @@ window.onerror=function(){return true;};
 // Prevent iOS pinch zoom
 
 
-const products = {
+var products = {
             "葉黃素活動":{cat:"_hidden",unit:"盒",L1:1710,royal:1500,to_L2:1920,to_L3sup:2085,to_L3ret:2160,to_intern:2520,to_consumer:2700,to_consumer_vip:2700,to_consumer_2:2700,msrp:2700},
     "法樂蓬活動":{cat:"_hidden",unit:"組",L1:1830,royal:1620,to_L2:2050,to_L3sup:2220,to_L3ret:2300,to_intern:2670,to_consumer:2900,to_consumer_vip:2900,to_consumer_2:2900,msrp:2900},
             "纖體組":{cat:"本月活動",unit:"組",L1:2370,royal:2100,to_L2:2640,to_L3sup:2865,to_L3ret:2970,to_intern:3480,to_consumer:3840,to_consumer_vip:3840,to_consumer_2:3840,msrp:12120},
@@ -831,14 +834,14 @@ const products = {
     "9國英雄TURBO極速錠":{cat:"保健",unit:"盒",L1:365,royal:320,to_L2:410,to_L3sup:440,to_L3ret:455,to_intern:530,to_consumer:680,to_consumer_vip:600,to_consumer_2:630},
     "療肺草正冠茶":{cat:"保健",unit:"盒",L1:510,royal:440,to_L2:580,to_L3sup:635,to_L3ret:660,to_intern:780,to_consumer:990,to_consumer_vip:830,to_consumer_2:900},
 };
-const sellers=[{id:"L1",name:"一級輔導",royal:false},{id:"royal",name:"皇家輔導",royal:true}];
-const buyersByLevel={
+var sellers=[{id:"L1",name:"一級輔導",royal:false},{id:"royal",name:"皇家輔導",royal:true}];
+var buyersByLevel={
     L1:[{id:"to_L2",name:"二級輔導",t:"team"},{id:"to_L3sup",name:"三級輔導",t:"team"},{id:"to_L3ret",name:"三級零售",t:"team"},{id:"to_intern",name:"實習",t:"team"},{id:"to_consumer",name:"消費者零售",t:"retail"},{id:"to_consumer_vip",name:"消費者VIP",t:"retail"},{id:"to_consumer_2",name:"消費者兩盒",t:"retail"}],
     royal:[{id:"L1",name:"一級輔導",t:"team"},{id:"to_L2",name:"二級輔導",t:"team"},{id:"to_L3sup",name:"三級輔導",t:"team"},{id:"to_L3ret",name:"三級零售",t:"team"},{id:"to_intern",name:"實習",t:"team"},{id:"to_consumer",name:"消費者零售",t:"retail"},{id:"to_consumer_vip",name:"消費者VIP",t:"retail"},{id:"to_consumer_2",name:"消費者兩盒",t:"retail"}],
 };
-const quotes=["每一次成交都是因為妳傳遞了價值。","溫柔且堅定，讓妳的專業帶領客戶。","最好的招商力，就是活出妳想要的樣子。","目標不是用來達成的，是用來超越的。","真正的領袖，是把身邊的人都帶向更好的地方。","今天的每一步，都是明天格局的地基。","妳的自律，就是妳最強的名片。","不是等到準備好了才開始，是開始了才會準備好。","成功從來不是偶然，是每一天選擇累積的結果。","妳的能量，決定妳吸引到的人。","讓自己發光，就是最好的行銷。","堅持，是把普通人和成功者分開的那條線。","信念有多強，舞台就有多大。","妳的堅持，終將被看見。","成功不是終點，是一種持續的狀態。","妳有多愛這份事業，客人就有多感受得到。","妳的影響力，從妳願意開口分享開始。","今天的妳，已經比昨天更好了。","每一分努力，時間都會給妳答案。","不怕慢，只怕停。"];
-let currentSeller="L1",currentBuyer="to_consumer",currentCat="本月活動",cart={};
-let selectedHistoryKey=null;
+var quotes=["每一次成交都是因為妳傳遞了價值。","溫柔且堅定，讓妳的專業帶領客戶。","最好的招商力，就是活出妳想要的樣子。","目標不是用來達成的，是用來超越的。","真正的領袖，是把身邊的人都帶向更好的地方。","今天的每一步，都是明天格局的地基。","妳的自律，就是妳最強的名片。","不是等到準備好了才開始，是開始了才會準備好。","成功從來不是偶然，是每一天選擇累積的結果。","妳的能量，決定妳吸引到的人。","讓自己發光，就是最好的行銷。","堅持，是把普通人和成功者分開的那條線。","信念有多強，舞台就有多大。","妳的堅持，終將被看見。","成功不是終點，是一種持續的狀態。","妳有多愛這份事業，客人就有多感受得到。","妳的影響力，從妳願意開口分享開始。","今天的妳，已經比昨天更好了。","每一分努力，時間都會給妳答案。","不怕慢，只怕停。"];
+var currentSeller="L1",currentBuyer="to_consumer",currentCat="本月活動",cart={};
+var selectedHistoryKey=null;
 
 function getOrders(){return JSON.parse(localStorage.getItem('dctpro_v1'))||[];}
 function saveOrders(rs){localStorage.setItem('dctpro_v1',JSON.stringify(rs));}
@@ -1126,8 +1129,8 @@ function saveChartEdit(k){const eid='cedit_'+k.replace('-','_');const retail=par
     document.getElementById('chartTable').innerHTML=th;
 }
 
-const CURVE_KEY='dctpro_curve_v1';
-let curveDB=JSON.parse(localStorage.getItem('dctpro_curve_v1')||'{}');
+var CURVE_KEY='dctpro_curve_v1';
+var curveDB=JSON.parse(localStorage.getItem('dctpro_curve_v1')||'{}');
 
 function saveCurveDB(){localStorage.setItem(CURVE_KEY,JSON.stringify(curveDB));}
 function getCurveSortedKeys(){return Object.keys(curveDB).sort();}
@@ -1272,7 +1275,7 @@ function importAllData(e){
                 saveOrders(merged);
             }
             if(Object.keys(pM).length){ var exM=JSON.parse(localStorage.getItem('dctpro_manual')||'{}')||{}; localStorage.setItem('dctpro_manual',JSON.stringify(Object.assign({},pM,exM))); }
-            if(Object.keys(pC).length){ var exC=JSON.parse(localStorage.getItem('dctpro_curve_v1')||'{}')||{}; localStorage.setItem('dctpro_curve_v1',JSON.stringify(Object.assign({},pC,exC))); curveDB=JSON.parse(localStorage.getItem('dctpro_curve_v1'))||{}; }
+            if(Object.keys(pC).length){ var exC=JSON.parse(localStorage.getItem('dctpro_curve_v1')||'{}')||{}; localStorage.setItem('dctpro_curve_v1',JSON.stringify(Object.assign({},pC,exC))); }
             if(pP&&pP.name&&!getProfile().name) saveProfileLS(pP);
             if(pG&&pG!=='0') localStorage.setItem('dctpro_goal',pG);
             if(Object.keys(pRv).length){ var exR=JSON.parse(localStorage.getItem('dctpro_review_v1')||'{}')||{}; localStorage.setItem('dctpro_review_v1',JSON.stringify(Object.assign({},pRv,exR))); }
@@ -1325,7 +1328,7 @@ function saveManualEntry(){
 }
 
 // ══ Edit Modal ══
-let editingId=null, editCart={}, editSeller='L1', editBuyer='to_consumer';
+var editingId=null, editCart={}, editSeller='L1', editBuyer='to_consumer';
 
 function openEditModal(id){
     const order=getOrders().find(r=>r.id===id);if(!order)return;
@@ -1436,7 +1439,7 @@ function closeWelcome(){
 })();
 
 // ══ Review ══
-const REVIEW_KEY = 'dctpro_review_v1';
+var REVIEW_KEY = 'dctpro_review_v1';
 function getReviews(){return JSON.parse(localStorage.getItem(REVIEW_KEY)||'{}');}
 function saveReviews(d){localStorage.setItem(REVIEW_KEY,JSON.stringify(d));}
 
@@ -1918,6 +1921,9 @@ function deleteCurveRow(key){
     renderCurveCharts();
     showToast('已刪除');
 }
+
+
+
 
 
 
