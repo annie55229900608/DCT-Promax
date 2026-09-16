@@ -688,6 +688,7 @@
 
 
 
+
 function showCoinRain(){
     var btn=document.querySelector('.save-btn');
     var rect=btn?btn.getBoundingClientRect():{left:window.innerWidth/2-30,top:window.innerHeight-100,width:60};
@@ -1249,44 +1250,55 @@ function importAllData(e){
     var reader = new FileReader();
     reader.onload = function(ev){
         try {
-            var data = JSON.parse(ev.target.result);
+            var raw = ev.target.result;
+            var data = JSON.parse(raw);
+            if(!data || typeof data !== 'object') throw new Error('不是有效的 JSON 物件');
             var isUnified = data.version === 'unified_v1';
-            var pO  = isUnified ? (data.pro_orders  || []) : (data.orders || []);
-            var pM  = isUnified ? (data.pro_manual  || {}) : (data.manualMonths || {});
-            var pC  = isUnified ? (data.pro_curve   || {}) : (data.curveData || {});
-            var pP  = isUnified ? (data.pro_profile || {}) : (data.profile || {});
-            var pG  = isUnified ? (data.pro_goal    || '0') : (data.goal || '0');
-            var pRv = isUnified ? (data.pro_review  || {}) : {};
-            if(Array.isArray(pO) && pO.length){
-                var ex=JSON.parse(localStorage.getItem('dctpro_v1')||'[]');
+            // --- Promax data ---
+            var pO  = (isUnified ? data.pro_orders  : data.orders)      || [];
+            var pM  = (isUnified ? data.pro_manual  : data.manualMonths) || {};
+            var pC  = (isUnified ? data.pro_curve   : data.curveData)   || {};
+            var pP  = (isUnified ? data.pro_profile : data.profile)     || {};
+            var pG  = (isUnified ? data.pro_goal    : data.goal)        || '0';
+            var pRv = (isUnified ? data.pro_review  : {})               || {};
+            if(!Array.isArray(pO)) pO=[];
+            if(typeof pM!=='object'||!pM) pM={};
+            if(typeof pC!=='object'||!pC) pC={};
+            if(typeof pRv!=='object'||!pRv) pRv={};
+            if(pO.length){
+                var ex=JSON.parse(localStorage.getItem('dctpro_v1')||'[]')||[];
                 var merged=ex.slice();
-                pO.forEach(function(o){ if(!merged.find(function(m2){ return m2.id===o.id; })) merged.push(o); });
-                localStorage.setItem('dctpro_v1',JSON.stringify(merged));
+                pO.forEach(function(o){ if(o&&o.id&&!merged.find(function(x){ return x.id===o.id; })) merged.push(o); });
+                saveOrders(merged);
             }
-            if(pM && Object.keys(pM).length){ var exM=JSON.parse(localStorage.getItem('dctpro_manual')||'{}'); localStorage.setItem('dctpro_manual',JSON.stringify(Object.assign({},pM,exM))); }
-            if(pC && Object.keys(pC).length){ var exC=JSON.parse(localStorage.getItem('dctpro_curve_v1')||'{}'); localStorage.setItem('dctpro_curve_v1',JSON.stringify(Object.assign({},pC,exC)));  }
-            if(pP && pP.name && !getProfile().name) saveProfileLS(pP);
-            if(pG) localStorage.setItem('dctpro_goal',pG);
-            if(pRv && Object.keys(pRv).length){ var exR=JSON.parse(localStorage.getItem('dctpro_review_v1')||'{}'); localStorage.setItem('dctpro_review_v1',JSON.stringify(Object.assign({},pRv,exR))); }
+            if(Object.keys(pM).length){ var exM=JSON.parse(localStorage.getItem('dctpro_manual')||'{}')||{}; localStorage.setItem('dctpro_manual',JSON.stringify(Object.assign({},pM,exM))); }
+            if(Object.keys(pC).length){ var exC=JSON.parse(localStorage.getItem('dctpro_curve_v1')||'{}')||{}; localStorage.setItem('dctpro_curve_v1',JSON.stringify(Object.assign({},pC,exC))); curveDB=JSON.parse(localStorage.getItem('dctpro_curve_v1'))||{}; }
+            if(pP&&pP.name&&!getProfile().name) saveProfileLS(pP);
+            if(pG&&pG!=='0') localStorage.setItem('dctpro_goal',pG);
+            if(Object.keys(pRv).length){ var exR=JSON.parse(localStorage.getItem('dctpro_review_v1')||'{}')||{}; localStorage.setItem('dctpro_review_v1',JSON.stringify(Object.assign({},pRv,exR))); }
+            // --- Money data (cross-app) ---
             if(isUnified){
-                var mO=data.money_orders||[]; var mM=data.money_manual||{}; var mC=data.money_curve||{};
-                var mP=data.money_profile||{}; var mGl=data.money_goal||'0'; var mRv=data.money_review||{};
-                if(mO.length){ var exMO=JSON.parse(localStorage.getItem('dct_v9_ultimate')||'[]'); var mgMO=exMO.slice(); mO.forEach(function(o){ if(!mgMO.find(function(m2){ return m2.id===o.id; })) mgMO.push(o); }); localStorage.setItem('dct_v9_ultimate',JSON.stringify(mgMO)); }
-                if(Object.keys(mM).length){ var exMM=JSON.parse(localStorage.getItem('dct_manual_months')||'{}'); localStorage.setItem('dct_manual_months',JSON.stringify(Object.assign({},mM,exMM))); }
-                if(Object.keys(mC).length){ var exMC=JSON.parse(localStorage.getItem('dct_monthly_data_v1')||'{}'); localStorage.setItem('dct_monthly_data_v1',JSON.stringify(Object.assign({},mC,exMC))); }
-                if(mP && mP.name){ var exMP=JSON.parse(localStorage.getItem('dct_profile')||'{}'); if(!exMP.name) localStorage.setItem('dct_profile',JSON.stringify(mP)); }
-                if(mGl) localStorage.setItem('dct_goal',mGl);
-                if(Object.keys(mRv).length){ var exMR=JSON.parse(localStorage.getItem('dct_money_review_v1')||'{}'); localStorage.setItem('dct_money_review_v1',JSON.stringify(Object.assign({},mRv,exMR))); }
+                var mO=data.money_orders||[]; if(!Array.isArray(mO)) mO=[];
+                var mM=data.money_manual||{}; if(typeof mM!=='object'||!mM) mM={};
+                var mC=data.money_curve||{};  if(typeof mC!=='object'||!mC) mC={};
+                var mP=data.money_profile||{}; var mGl=data.money_goal||'0';
+                var mRv=data.money_review||{}; if(typeof mRv!=='object'||!mRv) mRv={};
+                if(mO.length){ var exMO=JSON.parse(localStorage.getItem('dct_v9_ultimate')||'[]')||[]; var mgMO=exMO.slice(); mO.forEach(function(o){ if(o&&o.id&&!mgMO.find(function(x){ return x.id===o.id; })) mgMO.push(o); }); localStorage.setItem('dct_v9_ultimate',JSON.stringify(mgMO)); }
+                if(Object.keys(mM).length){ var exMM=JSON.parse(localStorage.getItem('dct_manual_months')||'{}')||{}; localStorage.setItem('dct_manual_months',JSON.stringify(Object.assign({},mM,exMM))); }
+                if(Object.keys(mC).length){ var exMC=JSON.parse(localStorage.getItem('dct_monthly_data_v1')||'{}')||{}; localStorage.setItem('dct_monthly_data_v1',JSON.stringify(Object.assign({},mC,exMC))); }
+                if(mP&&mP.name){ var exMP=JSON.parse(localStorage.getItem('dct_profile')||'{}')||{}; if(!exMP.name) localStorage.setItem('dct_profile',JSON.stringify(mP)); }
+                if(mGl&&mGl!=='0'){ var exMG=localStorage.getItem('dct_goal'); if(!exMG||exMG==='0') localStorage.setItem('dct_goal',mGl); }
+                if(Object.keys(mRv).length){ var exMR=JSON.parse(localStorage.getItem('dct_money_review_v1')||'{}')||{}; localStorage.setItem('dct_money_review_v1',JSON.stringify(Object.assign({},mRv,exMR))); }
             }
             loadDashboard(); renderChart(); if(typeof renderCurveCharts==='function') renderCurveCharts();
-            showToast('✓ 還原成功！兩個 App 的資料都已合併匯入');
+            showToast('✓ 還原成功！資料已合併匯入');
         } catch(err) {
             console.error('Import error:', err);
-            showToast('⚠ 匯入失敗：' + (err.message||'格式錯誤'), '#C8748A');
+            showToast('⚠ 匯入失敗：' + (err&&err.message?err.message:'檔案格式不符'), '#C8748A');
         }
     };
     reader.readAsText(file);
-    e.target.value = '';
+    e.target.value='';
 }
 
 // ══ Manual entry ══
@@ -1906,6 +1918,7 @@ function deleteCurveRow(key){
     renderCurveCharts();
     showToast('已刪除');
 }
+
 
 
 
