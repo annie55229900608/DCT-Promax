@@ -684,6 +684,9 @@
 
 
 
+
+
+
 function showCoinRain(){
     var btn=document.querySelector('.save-btn');
     var rect=btn?btn.getBoundingClientRect():{left:window.innerWidth/2-30,top:window.innerHeight-100,width:60};
@@ -1215,8 +1218,75 @@ function updateProfileDisplay(p){document.getElementById('profileNameDisplay').i
 function updateAllBadges(){const p=getProfile();const parts=[p.name,p.level,p.upline?'上家：'+p.upline:''].filter(Boolean);const txt=parts.join(' · ');['chartProfileBadge','curveProfileBadge'].forEach(bid=>{const badge=document.getElementById(bid);const tEl=document.getElementById(bid.replace('Badge','Text'));if(badge&&tEl){if(parts.length){tEl.innerText=txt;badge.style.display='flex';}else badge.style.display='none';}});}
 
 // ══ Backup ══
-function exportAllData(){const payload={exportDate:new Date().toISOString().slice(0,10),orders:JSON.parse(localStorage.getItem('dctpro_v1')||'[]'),curveData:JSON.parse(localStorage.getItem(CURVE_KEY)||'{}'),profile:JSON.parse(localStorage.getItem('dctpro_profile')||'{}'),goal:localStorage.getItem('dctpro_goal')||'0'};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='DCT_Promax_備份_'+payload.exportDate+'.json';a.click();showToast('✓ 備份已匯出！請存至安全的地方');}
-function importAllData(e){const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{try{const data=JSON.parse(ev.target.result);if(Array.isArray(data.orders)){const ex=getOrders();const merged=Array.from(ex);data.orders.forEach(o=>{if(!merged.find(e=>e.id===o.id))merged.push(o);});saveOrders(merged);}if(data.curveData){const ex=JSON.parse(localStorage.getItem(CURVE_KEY)||'{}');localStorage.setItem(CURVE_KEY,JSON.stringify({...data.curveData,...ex}));curveDB=JSON.parse(localStorage.getItem(CURVE_KEY));}if(data.profile&&!getProfile().name){saveProfileLS(data.profile);loadProfileUI();}if(data.goal)localStorage.setItem('dctpro_goal',data.goal);loadDashboards();renderChart();renderCurveCharts();showToast('✓ 還原成功！資料已合併匯入');}catch(err){showToast('⚠ 檔案格式錯誤，請確認是正確的備份檔');}};reader.readAsText(file);e.target.value='';}
+function exportAllData(){
+    var payload = {
+        exportDate: new Date().toISOString().slice(0,10),
+        version: 'unified_v1',
+        money_orders:  JSON.parse(localStorage.getItem('dct_v9_ultimate')    || '[]'),
+        money_manual:  JSON.parse(localStorage.getItem('dct_manual_months')  || '{}'),
+        money_curve:   JSON.parse(localStorage.getItem('dct_monthly_data_v1')|| '{}'),
+        money_profile: JSON.parse(localStorage.getItem('dct_profile')        || '{}'),
+        money_goal:    localStorage.getItem('dct_goal') || '0',
+        money_review:  JSON.parse(localStorage.getItem('dct_money_review_v1')|| '{}'),
+        pro_orders:    JSON.parse(localStorage.getItem('dctpro_v1')          || '[]'),
+        pro_manual:    JSON.parse(localStorage.getItem('dctpro_manual')      || '{}'),
+        pro_curve:     JSON.parse(localStorage.getItem('dctpro_curve_v1')    || '{}'),
+        pro_profile:   JSON.parse(localStorage.getItem('dctpro_profile')     || '{}'),
+        pro_goal:      localStorage.getItem('dctpro_goal') || '0',
+        pro_review:    JSON.parse(localStorage.getItem('dctpro_review_v1')   || '{}')
+    };
+    var blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'DCT_雙App備份_' + payload.exportDate + '.json';
+    a.click();
+    showToast('✓ 已匯出！此備份可同時還原兩個 App 的所有資料');
+}
+function importAllData(e){
+    var file = e.target.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev){
+        try {
+            var data = JSON.parse(ev.target.result);
+            var isUnified = data.version === 'unified_v1';
+            var pO  = isUnified ? (data.pro_orders  || []) : (data.orders || []);
+            var pM  = isUnified ? (data.pro_manual  || {}) : (data.manualMonths || {});
+            var pC  = isUnified ? (data.pro_curve   || {}) : (data.curveData || {});
+            var pP  = isUnified ? (data.pro_profile || {}) : (data.profile || {});
+            var pG  = isUnified ? (data.pro_goal    || '0') : (data.goal || '0');
+            var pRv = isUnified ? (data.pro_review  || {}) : {};
+            if(Array.isArray(pO) && pO.length){
+                var ex=JSON.parse(localStorage.getItem('dctpro_v1')||'[]');
+                var merged=ex.slice();
+                pO.forEach(function(o){ if(!merged.find(function(m2){ return m2.id===o.id; })) merged.push(o); });
+                localStorage.setItem('dctpro_v1',JSON.stringify(merged));
+                allOrders=merged;
+            }
+            if(pM && Object.keys(pM).length){ var exM=JSON.parse(localStorage.getItem('dctpro_manual')||'{}'); localStorage.setItem('dctpro_manual',JSON.stringify(Object.assign({},pM,exM))); }
+            if(pC && Object.keys(pC).length){ var exC=JSON.parse(localStorage.getItem('dctpro_curve_v1')||'{}'); localStorage.setItem('dctpro_curve_v1',JSON.stringify(Object.assign({},pC,exC))); curveData=JSON.parse(localStorage.getItem('dctpro_curve_v1')); }
+            if(pP && pP.name && !getProfile().name) saveProfile(pP);
+            if(pG) localStorage.setItem('dctpro_goal',pG);
+            if(pRv && Object.keys(pRv).length){ var exR=JSON.parse(localStorage.getItem('dctpro_review_v1')||'{}'); localStorage.setItem('dctpro_review_v1',JSON.stringify(Object.assign({},pRv,exR))); }
+            if(isUnified){
+                var mO=data.money_orders||[]; var mM=data.money_manual||{}; var mC=data.money_curve||{};
+                var mP=data.money_profile||{}; var mGl=data.money_goal||'0'; var mRv=data.money_review||{};
+                if(mO.length){ var exMO=JSON.parse(localStorage.getItem('dct_v9_ultimate')||'[]'); var mgMO=exMO.slice(); mO.forEach(function(o){ if(!mgMO.find(function(m2){ return m2.id===o.id; })) mgMO.push(o); }); localStorage.setItem('dct_v9_ultimate',JSON.stringify(mgMO)); }
+                if(Object.keys(mM).length){ var exMM=JSON.parse(localStorage.getItem('dct_manual_months')||'{}'); localStorage.setItem('dct_manual_months',JSON.stringify(Object.assign({},mM,exMM))); }
+                if(Object.keys(mC).length){ var exMC=JSON.parse(localStorage.getItem('dct_monthly_data_v1')||'{}'); localStorage.setItem('dct_monthly_data_v1',JSON.stringify(Object.assign({},mC,exMC))); }
+                if(mP && mP.name){ var exMP=JSON.parse(localStorage.getItem('dct_profile')||'{}'); if(!exMP.name) localStorage.setItem('dct_profile',JSON.stringify(mP)); }
+                if(mGl) localStorage.setItem('dct_goal',mGl);
+                if(Object.keys(mRv).length){ var exMR=JSON.parse(localStorage.getItem('dct_money_review_v1')||'{}'); localStorage.setItem('dct_money_review_v1',JSON.stringify(Object.assign({},mRv,exMR))); }
+            }
+            loadDashboard(); renderChart(); if(typeof renderCurveCharts==='function') renderCurveCharts();
+            showToast('✓ 還原成功！兩個 App 的資料都已合併匯入');
+        } catch(err) {
+            showToast('⚠ 檔案格式錯誤，請確認是正確的備份檔');
+        }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+}
 
 // ══ Manual entry ══
 function initManualYearSelect(){
@@ -1259,53 +1329,27 @@ function openEditModal(id){
 }
 
 function renderEditModal(order,d){
-    const buyerOpts=buyersByLevel[editSeller].map(b=>`<option value="${b.id}"${b.id===editBuyer?' selected':''}>${b.name}</option>`).join('');
+    var buyerOpts=buyersByLevel[editSeller].map(function(b){ return '<option value="'+b.id+'"'+(b.id===editBuyer?' selected':'')+'>'+b.name+'</option>'; }).join('');
     // Product list
-    const allNames=Array.from(new Set([].concat(order.items.map(function(i){return i.name;}),Object.keys(editCart))));
-    let iH='';
-    allNames.forEach(n=>{
-        const q=editCart[n]||0;if(q===0&&!order.items.find(i=>i.name===n))return;
-        const cp=products[n]?products[n][editSeller]:0,sp=products[n]?getSellingPrice(n,editSeller,editBuyer):0;
-        iH+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--panel-dark);">
-            <div style="flex:1;min-width:0;"><div style="font-size:.83rem;font-weight:600;">${n}</div><div style="font-size:.7rem;color:var(--text-muted);margin-top:2px">售'+'$'+(sp.toLocaleString())+' 利'+'$'+((sp-cp).toLocaleString())+'</div></div>
-            <div class="qty-control"><button class="btn-qty" onclick="changeEditQty('${n}',-1)">−</button><div id="eq_${n.replace(/[^a-zA-Z0-9]/g,'_')}" class="qty-input">${q}</div><button class="btn-qty" onclick="changeEditQty('${n}',1)">+</button></div>
-        </div>`;
+    var allNames=Array.from(new Set([].concat(order.items.map(function(i){return i.name;}),Object.keys(editCart))));
+    var iH='';
+    allNames.forEach(function(n){
+        var q=editCart[n]||0;if(q===0&&!order.items.find(function(i){ return i.name===n; }))return;
+        var cp=products[n]?products[n][editSeller]:0,sp=products[n]?getSellingPrice(n,editSeller,editBuyer):0;
+        iH+='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--panel-dark);">'+'<div style="flex:1;min-width:0;">'+'<div style="font-size:.83rem;font-weight:600;">'+n+'</div>'+'<div style="font-size:.7rem;color:var(--text-muted);margin-top:2px">售 $'+sp.toLocaleString()+' 利 $'+(sp-cp).toLocaleString()+'</div></div>'+'<div class="qty-control">'+'<button class="btn-qty" onclick="changeEditQty(\"'+n+'\", -1)">−</button>'+'<div id="eq_'+n.replace(/[^a-zA-Z0-9]/g,'_')+'" class="qty-input" style="width:28px;text-align:center;">'+q+'</div>'+'<button class="btn-qty" onclick="changeEditQty(\"'+n+'\", 1)">+</button>'+'</div></div>';
     });
     // Product picker
-    const catOpts=['活動','纖體','美肌','保健'].map(cat=>{
+    var catOpts=['活動','纖體','美肌','保健'].map(cat=>{
         const opts=Object.keys(products).filter(n=>products[n].cat===cat).map(n=>'<option value="'+n+'">'+n+' (售$'+((products[n][editBuyer]!=null?products[n][editBuyer]:0))+')</option>').join('');
         return `<optgroup label="── ${cat} ──">${opts}</optgroup>`;
     }).join('');
     // Calc profit
-    let rev=0,cost=0;
-    allNames.forEach(n=>{const q=editCart[n]||0;if(products[n]&&q>0){rev+=getSellingPrice(n,editSeller,editBuyer)*q;cost+=products[n][editSeller]*q;}});
+    var rev=0,cost=0;
+    allNames.forEach(function(n){var q=editCart[n]||0;if(products[n]&&q>0){rev+=getSellingPrice(n,editSeller,editBuyer)*q;cost+=products[n][editSeller]*q;}});
     const extra=parseInt((document.getElementById('editExtra')||{}).value)||order.extraCost||0;
     const nurture=parseInt((document.getElementById('editNurture')||{}).value)||order.nurture||0;
     const profit=rev-cost-extra;
-    document.getElementById('editModalContent').innerHTML=`
-        <div class="input-group"><span class="input-label">訂單日期</span><input type="datetime-local" id="editDate" class="custom-input" value="${toLocalISO(d||new Date(order.orderDate||order.id))}" style="color:var(--gold-deep);"></div>
-        <div class="input-group"><span class="input-label">客戶備註</span><input type="text" id="editNote" class="custom-input" value="${order.note||''}"></div>
-        <div class="input-group"><span class="input-label">額外成本</span><input type="number" id="editExtra" class="custom-input cost-input" value="${order.extraCost||0}" oninput="recalcEdit()"></div>
-        <div class="input-group"><span class="input-label">銷售對象</span>
-            <div style="position:relative;"><select id="editBuyerSel" class="month-select" style="border-color:var(--gold-light);" onchange="editBuyer=this.value;renderEditModal(getOrders().find(r=>r.id===editingId));">${buyerOpts}</select><span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;">▾</span></div>
-        </div>
-        <div style="font-size:.75rem;font-weight:700;color:var(--gold-deep);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-shine));border-radius:1px;"></span>購買品項</div>
-        <div id="editItemList" style="margin-bottom:12px;">${iH||'<div style="font-size:.8rem;color:var(--text-muted);text-align:center;padding:8px;">無品項</div>'}</div>
-        <div style="background:var(--panel);border-radius:12px;padding:12px;margin-bottom:12px;">
-            <div style="font-size:.72rem;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">新增品項</div>
-            <div style="position:relative;margin-bottom:8px;"><select id="addProdSel" class="month-select" style="font-size:.82rem;"><option value="">— 選擇商品 —</option>${catOpts}</select><span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;">▾</span></div>
-            <button onclick="addEditProduct()" class="save-btn" style="margin-top:0;padding:11px;font-size:.82rem;">＋ 加入</button>
-        </div>
-        <div id="editProfitBox" style="background:var(--dark);border-radius:12px;padding:14px;text-align:center;margin-bottom:4px;">
-            <div style="font-size:.7rem;color:var(--gold-light);opacity:.7;margin-bottom:4px;">銷售淨利</div>
-            <div style="font-size:1.5rem;font-weight:700;background:linear-gradient(135deg,#C9A84C,#F0D882,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">'+'$'+(profit.toLocaleString())+'</div>
-            <div style="font-size:.7rem;color:var(--gold-light);opacity:.5;margin-top:4px;">售'+'$'+(rev.toLocaleString())+' 成本'+'$'+((cost+extra).toLocaleString())+'</div>
-        </div>
-        <div style="display:flex;gap:10px;margin-top:12px;">
-            <button onclick="closeEditModal()" style="flex:0 0 auto;padding:14px 18px;background:var(--panel);color:var(--text-sub);border:1px solid var(--border-soft);border-radius:12px;font-size:.9rem;cursor:pointer;font-family:inherit;">取消</button>
-            <button onclick="deleteOrder(${order.id});closeEditModal();loadHistory();" style="flex:0 0 auto;padding:14px 16px;background:transparent;color:#c55;border:1px solid #fcc;border-radius:12px;font-size:.9rem;cursor:pointer;font-family:inherit;">刪除</button>
-            <button onclick="saveEditOrder()" style="flex:1;padding:14px;background:linear-gradient(135deg,#9A7830,#C9A84C,#9A7830);color:var(--dark);border:none;border-radius:12px;font-weight:700;font-size:.9rem;cursor:pointer;font-family:inherit;">儲存</button>
-        </div>`;
+    document.getElementById('editModalContent').innerHTML='\n        <div class="input-group"><span class="input-label">訂單日期</span><input type="datetime-local" id="editDate" class="custom-input" value="'+(toLocalISO(d||new Date(order.orderDate||order.id)))+'" style="color:var(--gold-deep);"></div>\n        <div class="input-group"><span class="input-label">客戶備註</span><input type="text" id="editNote" class="custom-input" value="'+(order.note||'')+'"></div>\n        <div class="input-group"><span class="input-label">額外成本</span><input type="number" id="editExtra" class="custom-input cost-input" value="'+(order.extraCost||0)+'" oninput="recalcEdit()"></div>\n        <div class="input-group"><span class="input-label">銷售對象</span>\n            <div style="position:relative;"><select id="editBuyerSel" class="month-select" style="border-color:var(--gold-light);" onchange="editBuyer=this.value;renderEditModal(getOrders().find(r=>r.id===editingId));">'+(buyerOpts)+'</select><span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;">▾</span></div>\n        </div>\n        <div style="font-size:.75rem;font-weight:700;color:var(--gold-deep);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-shine));border-radius:1px;"></span>購買品項</div>\n        <div id="editItemList" style="margin-bottom:12px;">'+(iH||'<div style="font-size:.8rem;color:var(--text-muted);text-align:center;padding:8px;">無品項</div>')+'</div>\n        <div style="background:var(--panel);border-radius:12px;padding:12px;margin-bottom:12px;">\n            <div style="font-size:.72rem;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">新增品項</div>\n            <div style="position:relative;margin-bottom:8px;"><select id="addProdSel" class="month-select" style="font-size:.82rem;"><option value="">— 選擇商品 —</option>'+(catOpts)+'</select><span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;">▾</span></div>\n            <button onclick="addEditProduct()" class="save-btn" style="margin-top:0;padding:11px;font-size:.82rem;">＋ 加入</button>\n        </div>\n        <div id="editProfitBox" style="background:var(--dark);border-radius:12px;padding:14px;text-align:center;margin-bottom:4px;">\n            <div style="font-size:.7rem;color:var(--gold-light);opacity:.7;margin-bottom:4px;">銷售淨利</div>\n            <div style="font-size:1.5rem;font-weight:700;background:linear-gradient(135deg,#C9A84C,#F0D882,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">'+'$'+(profit.toLocaleString())+'</div>\n            <div style="font-size:.7rem;color:var(--gold-light);opacity:.5;margin-top:4px;">售'+'$'+(rev.toLocaleString())+' 成本'+'$'+((cost+extra).toLocaleString())+'</div>\n        </div>\n        <div style="display:flex;gap:10px;margin-top:12px;">\n            <button onclick="closeEditModal()" style="flex:0 0 auto;padding:14px 18px;background:var(--panel);color:var(--text-sub);border:1px solid var(--border-soft);border-radius:12px;font-size:.9rem;cursor:pointer;font-family:inherit;">取消</button>\n            <button onclick="deleteOrder('+(order.id)+');closeEditModal();loadHistory();" style="flex:0 0 auto;padding:14px 16px;background:transparent;color:#c55;border:1px solid #fcc;border-radius:12px;font-size:.9rem;cursor:pointer;font-family:inherit;">刪除</button>\n            <button onclick="saveEditOrder()" style="flex:1;padding:14px;background:linear-gradient(135deg,#9A7830,#C9A84C,#9A7830);color:var(--dark);border:none;border-radius:12px;font-weight:700;font-size:.9rem;cursor:pointer;font-family:inherit;">儲存</button>\n        </div>';
 }
 
 function changeEditQty(n,d){
@@ -1861,6 +1905,9 @@ function deleteCurveRow(key){
     renderCurveCharts();
     showToast('已刪除');
 }
+
+
+
 
 
 
